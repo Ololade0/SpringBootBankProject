@@ -1,10 +1,14 @@
 package semicolon.africa.bankproject.dto.response;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Setter
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class CustomerRegisterResponse {
     private String message;
+    private Long customerId;
+    private String customerName;
 }

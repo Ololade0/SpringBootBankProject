@@ -9,5 +9,8 @@ import lombok.*;
 @Builder
 public class BankRegisterResponse {
     private String message;
-    private  Long id;
+    private Long bankId;
+    private String bankLocation;
+//    private Long customerId;
+//    private String name;
 }

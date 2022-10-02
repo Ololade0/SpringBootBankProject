@@ -1,122 +1,130 @@
 package semicolon.africa.bankproject.services;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import semicolon.africa.bankproject.dao.model.Bank;
 import semicolon.africa.bankproject.dao.model.Customer;
-import semicolon.africa.bankproject.dao.repository.BankRepository;
-import semicolon.africa.bankproject.dao.repository.CustomerRepository;
 import semicolon.africa.bankproject.dto.request.BankRegisterRequest;
 import semicolon.africa.bankproject.dto.request.CustomerRegisterRequest;
-import semicolon.africa.bankproject.dto.request.OpenAccountRequest;
 import semicolon.africa.bankproject.dto.response.BankRegisterResponse;
 import semicolon.africa.bankproject.dto.response.CustomerRegisterResponse;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class BankServiceImplTest {
     @Autowired
     private BankService bankService;
 
-    @BeforeEach
-    void setUp() {
+//    @BeforeEach
+//    void setUp() {
+//        BankRegisterRequest bankRegisterRequest = BankRegisterRequest.builder()
+//                .bankName("Access Bank")
+//                .banklocation("Sabo")
+//                .build();
+//        BankRegisterResponse bankRegisterResponse =  bankService.registerBank(bankRegisterRequest);
 
+  //  }
 
-        BankRegisterRequest bankRegisterRequest = BankRegisterRequest
-                .builder()
-                .bankName("Access Bank")
-                .bankLOcation("Sabo")
-                .build();
-        //bankService.registerBank(bankRegisterRequest);
-
-    }
-
-    @AfterEach
-    void tearDown() {
-        bankService.deleteAll();
-    }
+//    @AfterEach
+//    void tearDown() {
+//        bankService.deleteAll();
+//    }
 
     @Test
     public void bankCanBeCreated() {
-        Bank bank = Bank
-                .builder()
-                .bankName("Access Bank")
-                .bankLocation("Sabo")
-                .build();
-        assertEquals("Access Bank", bank.getBankName());
+        Bank bank = new Bank();
+
+                bank.setBankName("Access Bank");
+               bank .setBankLocation("Sabo");
+                      assertEquals("Access Bank", bank.getBankName());
 
     }
 
     @Test
     public void CustomerCanBeCreated() {
-        Customer customer = Customer.
-                builder()
-                .customerName("Ololade")
-                .customerAge("15")
-                .build();
+        Customer customer = new Customer();
+               customer .setCustomerName("Ololade");
+               customer .setCustomerGender("15");
         assertEquals("Ololade", customer.getCustomerName());
     }
 
     @Test
     public void testThatBankCanBeRegister() {
-        BankRegisterRequest bankRegisterRequest = BankRegisterRequest
-                .builder()
+        BankRegisterRequest bankRegisterRequest = BankRegisterRequest.builder()
                 .bankName("Access Bank")
-                .bankLOcation("Sabo")
+                .banklocation("Sabo")
                 .build();
-       bankService.registerBank(bankRegisterRequest);
+        BankRegisterResponse bankRegisterResponse =  bankService.registerBank(bankRegisterRequest);
+         assertEquals("Bank successfully registered", bankRegisterResponse.getMessage());
+        assertThat(bankRegisterResponse).isNotNull();
+        assertThat(bankRegisterResponse.getBankId()).isGreaterThan(0);
 
-        assertEquals(1, bankService.totalNumbersOfBanks());
-
+    }
+   @Test
+    public void testThatAnotherBankCanBeRegister_RepositoryIncreases() {
+        BankRegisterRequest bankRegisterRequest1 = new  BankRegisterRequest ();
+        bankRegisterRequest1.setBankName("GT Bank");
+        bankRegisterRequest1.setBanklocation("Lekki");
+     BankRegisterResponse bankRegisterResponse1 =   bankService.addNewBank(bankRegisterRequest1);
+        assertEquals("Another bank successfully registered", bankRegisterResponse1.getMessage());
+        assertThat(bankRegisterResponse1).isNotNull();
 
     }
 
-    @Test
+
+
+   @Test
     public void testThatCustomerExistInABank() {
-        BankRegisterResponse bankRegisterResponse = BankRegisterResponse.builder().build();
 
-        BankRegisterRequest bankRegisterRequest = BankRegisterRequest
-                .builder()
-                .bankName("Access Bank")
-                .bankLOcation("Sabo")
-                .build();
-        bankRegisterResponse = bankService.registerBank(bankRegisterRequest);
+       BankRegisterRequest bankRegisterRequest = BankRegisterRequest.builder()
+               .bankName("Access Bank")
+               .banklocation("Sabo")
+               .build();
+       BankRegisterResponse bankRegisterResponse =  bankService.registerBank(bankRegisterRequest);
+       assertEquals("Bank successfully registered", bankRegisterResponse.getMessage());
+       assertThat(bankRegisterResponse).isNotNull();
+       assertThat(bankRegisterResponse.getBankId()).isGreaterThan(0);
 
-        CustomerRegisterRequest customerRegister = CustomerRegisterRequest
-                .builder()
-                .bankId(bankRegisterResponse.getId())
-                .customerName("Adesuyi Ololade")
-                .customerAge("34")
-                .customerGender("Female")
-                .build();
-        CustomerRegisterResponse  customerRegisterResponse = bankService.registerCustomer(customerRegister);
+//       BankRegisterRequest bankRegisterRequest = new BankRegisterRequest();
+//        BankRegisterResponse  bankRegisterResponse = bankService.registerBank(bankRegisterRequest);
+        CustomerRegisterRequest customerRegister = new CustomerRegisterRequest();
+        customerRegister.setCustomerName("olol");
+        customerRegister.setCustomerGender("f");
+        customerRegister.setCustomerAge("55");
+        customerRegister.setBankId(bankRegisterResponse.getBankId());
+        CustomerRegisterResponse customerRegisterResponse = bankService.registerCustomer(customerRegister);
+
         assertEquals("Customer successfully registered",customerRegisterResponse.getMessage());
 
-
-    }
-
-    //    @Test
+   }
+//
+     //   @Test
 //    public void testThatBankCanOPenAccountForCustomer(){
+//            BankRegisterRequest bankRegisterRequest = new BankRegisterRequest();
+//            BankRegisterResponse  bankRegisterResponse = bankService.registerBank(bankRegisterRequest);
+//            CustomerRegisterRequest customerRegister = new CustomerRegisterRequest();
+//            CustomerRegisterResponse  customerRegisterResponse = bankService.registerCustomer(customerRegister);
 //       OpenAccountRequest openAccountRequest = new OpenAccountRequest();
-//       openAccountRequest.setAccountName("olol");
+//       openAccountRequest.setAccountName("ooo");
+//       openAccountRequest.setBankId(bankRegisterResponse.getBankId());
+//       openAccountRequest.setCustomerId(customerRegisterResponse.getCustomerId());
 //       openAccountRequest.setCustomerGender("f");
 //       openAccountRequest.setCustomerAge("50");
-//       bankService.openAccount(openAccountRequest);
-//       assertEquals(1, bankService.size());
-//      // assertEquals("", bankService.findAllAccounts().get(0).getAccountName());
-//
-//
+//            OpenAccountResponse openAccountResponse =  bankService.openAccount(openAccountRequest);
+//            assertEquals("Account Succesfully opened", openAccountResponse.getMessage());
 //    }
 //
-    @Test
-    public void testThatAllBanksCanBeDeleted() {
-        bankService.deleteAll();
-        assertEquals(0, bankService.totalNumbersOfBanks());
-
-    }
+//
+//
+//    @Test
+//    public void testThatAllBanksCanBeDeleted() {
+//        bankService.deleteAll();
+//        assertEquals(0, bankService.totalNumbersOfBanks());
+//
+//    }
 
 }

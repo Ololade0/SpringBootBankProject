@@ -1,29 +1,31 @@
 package semicolon.africa.bankproject.dao.model;
 
 import lombok.*;
-import org.hibernate.annotations.Proxy;
-
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 @Setter
 @Getter
-@Entity
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
+@Entity
 public class Bank {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long bankId;
-    private String bankName;
+    private Long id;
     private String bankLocation;
+    private String bankName;
+    private Long customerId;
 
-    @OneToMany(mappedBy = "bank", fetch = FetchType.EAGER)
+   @OneToMany( fetch = FetchType.EAGER)
+ //   @Cascade(org.hibernate.annotations.CascadeType.PERSIST)
     private List<Customer> customers = new ArrayList<>();
-
 
 }
