@@ -9,8 +9,8 @@ import lombok.*;
 @Builder
 public class OpenAccountRequest {
     private Long bankId;
-    private String customerId;
-    private String accountName;
+    private Long customerId;
+    private String AccountName;
     private String customerAge;
     private String customerGender;
 

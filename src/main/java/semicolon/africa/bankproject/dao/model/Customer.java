@@ -14,15 +14,18 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity
+@ToString
+@Entity(name = "Customer")
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long customerId;
     private Long bankId;
     private String customerName;
     private String customerAge;
     private String customerGender;
-    @OneToMany(fetch = FetchType.LAZY)
+
+    @OneToMany(fetch = FetchType.EAGER)
     @Cascade(org.hibernate.annotations.CascadeType.PERSIST)
 private List<Account>accounts = new ArrayList<>();
 }

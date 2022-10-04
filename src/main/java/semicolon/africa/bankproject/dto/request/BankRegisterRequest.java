@@ -7,6 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class BankRegisterRequest {
     private Long bankId;
     private String bankName;

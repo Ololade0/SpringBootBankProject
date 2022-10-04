@@ -16,16 +16,17 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
+@ToString
 public class Bank {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String bankLocation;
     private String bankName;
-    private Long customerId;
 
-   @OneToMany( fetch = FetchType.EAGER)
- //   @Cascade(org.hibernate.annotations.CascadeType.PERSIST)
+
+   @OneToMany( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+
     private List<Customer> customers = new ArrayList<>();
 
 }

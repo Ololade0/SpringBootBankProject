@@ -7,10 +7,11 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class BankRegisterResponse {
     private String message;
     private Long bankId;
+    private Long customerId;
     private String bankLocation;
-//    private Long customerId;
-//    private String name;
+
 }
