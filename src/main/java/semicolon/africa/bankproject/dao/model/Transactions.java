@@ -10,8 +10,6 @@ import java.math.BigDecimal;
 
 @Setter
 @Getter
-
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -21,7 +19,7 @@ public class Transactions {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private BigDecimal transactionAmount;
+    private String transactionAmount;
     private String sender;
     private String benefactor;
     private String transactionType;

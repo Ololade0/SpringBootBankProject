@@ -14,15 +14,18 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Entity
+@ToString
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-
     private Long id;
     private String AccountName;
     private String age;
+    private String phoneNumber;
+    private String email;
     private String gender;
-@OneToMany
+
+@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Transactions> transactions = new ArrayList<>();
 
 

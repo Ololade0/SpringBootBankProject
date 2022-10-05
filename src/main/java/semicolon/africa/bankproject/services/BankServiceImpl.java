@@ -11,8 +11,10 @@ import semicolon.africa.bankproject.dao.repository.BankRepository;
 import semicolon.africa.bankproject.dto.request.BankRegisterRequest;
 
 import semicolon.africa.bankproject.dto.request.CustomerRegisterRequest;
+import semicolon.africa.bankproject.dto.request.UpdateBankRequest;
 import semicolon.africa.bankproject.dto.response.BankRegisterResponse;
 import semicolon.africa.bankproject.dto.response.CustomerRegisterResponse;
+import semicolon.africa.bankproject.dto.response.UpdateBankResponse;
 import semicolon.africa.bankproject.exception.BankDoesNotExistException;
 
 import java.util.List;
@@ -77,16 +79,8 @@ public class BankServiceImpl implements BankService{
         return bankRepository.count();
     }
 
-    @Override
-    public Customer findCustomerId(Long customerId) {
-       return customerService.findCustomerById(customerId);
 
-    }
 
-    @Override
-    public List<Customer> findAllCustomers() {
-        return  bankRepository.findAll().get(0).getCustomers();
-    }
 
     @Override
     public CustomerRegisterResponse saveCustomer(CustomerRegisterRequest customerRegisterRequest) {
@@ -99,7 +93,54 @@ public class BankServiceImpl implements BankService{
         CustomerRegisterResponse customerRegisterResponse = new CustomerRegisterResponse();
         customerRegisterResponse.setMessage("Customer successfully registered");
         customerRegisterResponse.setCustomerId(customer.getCustomerId());
+        customerRegisterResponse.setCustomerId(customer.getCustomerId());
         return customerRegisterResponse;
+    }
+
+    @Override
+    public List<Bank> findAllBanks() {
+       return bankRepository.findAll();
+
+    }
+
+    @Override
+    public void deleteById(Long bankId) {
+        bankRepository.deleteById(bankId);
+
+    }
+
+    @Override
+    public UpdateBankResponse updateBankProfile(UpdateBankRequest updateBankRequest) {
+        Bank foundBank = bankRepository.findBankById(updateBankRequest.getBankId());
+        if(updateBankRequest.getBankName() != null){
+            foundBank.setBankName(updateBankRequest.getBankName());
+        }
+        if(updateBankRequest.getBankLocation() != null){
+            foundBank.setBankLocation(updateBankRequest.getBankLocation());
+        }
+         bankRepository.save(foundBank);
+        return UpdateBankResponse.builder()
+                .message("Bank successfully updated")
+                .build();
+    }
+
+    @Override
+    public long findTotalNumbersOfCustomers() {
+        return customerService.totalNumberOfCustomer();
+    }
+
+  //  @Override
+    //public List<Customer> findAllCustomers() {
+      //  Bank bank = bankRepository.findBankById()
+        //return List.of(new Customer());
+
+    //}
+
+
+    @Override
+    public Customer findCustomerId(Long customerId) {
+        return customerService.findCustomerById(customerId);
+
     }
 
 }

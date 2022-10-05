@@ -9,6 +9,6 @@ import lombok.*;
 @NoArgsConstructor
 public class OpenAccountResponse {
     private String message;
-    private Long bankId;
-    private Long customerId;
+    private Long id;
+
 }

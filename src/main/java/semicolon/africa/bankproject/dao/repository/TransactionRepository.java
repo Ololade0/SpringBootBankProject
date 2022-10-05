@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 import semicolon.africa.bankproject.dao.model.Transactions;
 @Repository
 public interface TransactionRepository extends JpaRepository<Transactions, Long> {
+    Transactions findTransactionsById(Long transactionId);
 }

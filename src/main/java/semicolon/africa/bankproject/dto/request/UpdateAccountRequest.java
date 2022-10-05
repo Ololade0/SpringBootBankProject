@@ -7,13 +7,11 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OpenAccountRequest {
-    private Long bankId;
-
+@ToString
+public class UpdateAccountRequest {
+    private Long id;
     private String AccountName;
     private String age;
-    private String gender;
-    private String email;
     private String phoneNumber;
-
+    private String email;
 }
