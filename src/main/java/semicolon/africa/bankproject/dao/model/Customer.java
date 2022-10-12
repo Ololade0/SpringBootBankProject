@@ -26,7 +26,7 @@ public class Customer {
     private String customerGender;
 
     @OneToMany(fetch = FetchType.EAGER)
-    @Cascade(org.hibernate.annotations.CascadeType.PERSIST)
+  //  @Cascade(org.hibernate.annotations.CascadeType.PERSIST)
 private List<Account>accounts = new ArrayList<>();
 }
 

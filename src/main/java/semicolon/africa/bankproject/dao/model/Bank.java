@@ -25,7 +25,7 @@ public class Bank {
     private String bankName;
 
 
-   @OneToMany( fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+   @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 
     private List<Customer> customers = new ArrayList<>();
 

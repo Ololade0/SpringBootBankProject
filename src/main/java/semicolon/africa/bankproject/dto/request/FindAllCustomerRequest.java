@@ -4,13 +4,12 @@ import lombok.*;
 
 @Setter
 @Getter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateCustomerProfileRequest {
+@Builder
+@ToString
+public class FindAllCustomerRequest {
     private Long customerId;
     private Long bankId;
     private String customerName;
-    private String customerAge;
-    private String customerGender;
 }
