@@ -24,14 +24,13 @@ public class AccountServiceImpl implements AccountService{
                 .AccountName(openAccountRequest.getAccountName())
                 .age(openAccountRequest.getAge())
                 .gender(openAccountRequest.getGender())
-
                 .build();
        return accountRepository.save(newAccount);
 
     }
 
     @Override
-    public Account findAccountById(Long accountId) {
+    public Account findAccountById(String accountId) {
         return accountRepository.findAccountById(accountId);
     }
 
@@ -47,15 +46,14 @@ public class AccountServiceImpl implements AccountService{
     }
 
     @Override
-    public void deleteBYId(Long accountId) {
+    public void deleteBYId(String accountId) {
         if(accountRepository.findById(accountId).isPresent() );
         accountRepository.deleteById(accountId);
     }
 
     @Override
     public Account updateAccount(UpdateAccountRequest updateAccountRequest) {
-        Account foundAccount = accountRepository.findAccountById(updateAccountRequest.getId());
-
+        Account foundAccount = accountRepository.findAccountById(updateAccountRequest.getAccountId());
         if (updateAccountRequest.getAccountName() != null) {
             foundAccount.setAccountName(updateAccountRequest.getAccountName());
         }

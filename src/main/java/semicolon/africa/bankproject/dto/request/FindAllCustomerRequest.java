@@ -9,7 +9,7 @@ import lombok.*;
 @Builder
 @ToString
 public class FindAllCustomerRequest {
-    private Long customerId;
-    private Long bankId;
+    private String customerId;
+    private String bankId;
     private String customerName;
 }

@@ -2,9 +2,10 @@ package semicolon.africa.bankproject.dao.model;
 
 
 import lombok.*;
-import org.hibernate.annotations.Cascade;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,18 +16,15 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @ToString
-@Entity(name = "Customer")
+@Document("Customer")
 public class Customer {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long customerId;
-    private Long bankId;
+    private String customerId;
+    private String bankId;
     private String customerName;
     private String customerAge;
     private String customerGender;
-
-    @OneToMany(fetch = FetchType.EAGER)
-  //  @Cascade(org.hibernate.annotations.CascadeType.PERSIST)
+    @DBRef
 private List<Account>accounts = new ArrayList<>();
 }
 

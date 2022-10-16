@@ -6,6 +6,6 @@ import lombok.Setter;
 @Setter
 @Getter
 public class FindBankRequest {
-    private Long bankId;
-    private Long customerId;
+    private String bankId;
+    private String customerId;
 }

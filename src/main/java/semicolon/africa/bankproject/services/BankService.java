@@ -1,12 +1,10 @@
 package semicolon.africa.bankproject.services;
 
+import semicolon.africa.bankproject.dao.model.Account;
 import semicolon.africa.bankproject.dao.model.Bank;
 import semicolon.africa.bankproject.dao.model.Customer;
 import semicolon.africa.bankproject.dto.request.*;
-import semicolon.africa.bankproject.dto.response.BankRegisterResponse;
-import semicolon.africa.bankproject.dto.response.CustomerRegisterResponse;
-import semicolon.africa.bankproject.dto.response.UpdateBankResponse;
-import semicolon.africa.bankproject.dto.response.UpdateCustomerProfileResponse;
+import semicolon.africa.bankproject.dto.response.*;
 
 import java.util.List;
 
@@ -14,22 +12,19 @@ public interface BankService {
     BankRegisterResponse registerBank(BankRegisterRequest bankRegisterRequest);
 
 
-    Bank getBankById(Long bankId);
+    Bank getBankById(String bankId);
 
     void deleteAll();
 
     long totalNumbersOfBanks();
 
-  //  Customer findCustomerId(Long customerId);
-
-  //  List<Customer> findAllCustomers();
 
     CustomerRegisterResponse saveCustomer(CustomerRegisterRequest customerRegisterRequest);
 
     List<Bank> findAllBanks();
 
 
-    void deleteById(Long bankId);
+    void deleteById(String bankId);
 
     UpdateBankResponse updateBankProfile(UpdateBankRequest updateBankRequest);
 
@@ -46,5 +41,22 @@ public interface BankService {
     Customer findCustomerId(FindBankRequest findBankRequest);
 
     UpdateCustomerProfileResponse updateCustomerProfile(UpdateCustomerProfileRequest updateCustomerProfileRequest);
+
+    void deletedAllCustomers();
+
+    OpenAccountResponse openCustomerAccount(OpenAccountRequest openAccountRequest);
+
+    long findTotalNumbersOfAccounts();
+
+
+    Account findAccountById(FindAccountRequest findAccountRequest);
+
+    void deleteAllAccount();
+
+    List<Account> findAllAccounts(FindAllAccountRequest findAllAccountRequest);
+
+    String deleteAccountById(DeleteAccountRequest deleteAccountRequest);
+
+    UpdateAccountResponse updateAccountProfile(UpdateAccountRequest updateAccountRequest);
 }
 

@@ -8,8 +8,9 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @ToString
-public class DeleteCustomerRequest {
+public class DeleteAccountRequest {
     private String customerId;
-    private String customerName;
+    private String accountId;
     private String bankId;
+
 }

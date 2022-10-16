@@ -7,8 +7,10 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class OpenAccountResponse {
+    private String accountName;
     private String message;
-    private Long id;
+    private String id;
 
 }

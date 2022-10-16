@@ -8,8 +8,9 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class OpenAccountRequest {
-    private Long bankId;
-
+    private String bankId;
+    private String customerId;
+    private String customerName;
     private String AccountName;
     private String age;
     private String gender;

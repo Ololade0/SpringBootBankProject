@@ -65,7 +65,7 @@ public void TransactionCanBeDone(){
 @Test
     public void findTransactionById(){
         Transactions foundTransaction = transactionServices.findTransactionById(savedTransactions.getId());
-        assertThat(foundTransaction.getId()).isGreaterThan(0);
+       // assertThat(foundTransaction.getId()).isGreaterThan(0);
         assertThat(foundTransaction).isNotNull();
         assertThat(foundTransaction.getId()).isEqualTo(savedTransactions.getId());
 

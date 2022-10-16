@@ -10,7 +10,7 @@ import lombok.*;
 @ToString
 public class BankRegisterResponse {
     private String message;
-    private Long bankId;
+    private String bankId;
     private Long customerId;
     private String bankLocation;
 

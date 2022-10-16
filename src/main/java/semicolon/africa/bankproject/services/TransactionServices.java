@@ -9,7 +9,7 @@ import java.util.List;
 public interface TransactionServices {
     Transactions recordTransactions(TransactionsRequest transactionsRequest);
 
-    Transactions findTransactionById(Long id);
+    Transactions findTransactionById(String id);
 
     List<Transactions> findAllTransactions();
 
@@ -17,5 +17,5 @@ public interface TransactionServices {
 
     long size();
 
-    void deleteById(Long id);
+    void deleteById(String id);
 }

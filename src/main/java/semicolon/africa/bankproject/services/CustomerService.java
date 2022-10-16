@@ -1,8 +1,9 @@
 package semicolon.africa.bankproject.services;
 
+import semicolon.africa.bankproject.dao.model.Account;
 import semicolon.africa.bankproject.dao.model.Customer;
-import semicolon.africa.bankproject.dto.request.CustomerRegisterRequest;
-import semicolon.africa.bankproject.dto.request.UpdateCustomerProfileRequest;
+import semicolon.africa.bankproject.dto.request.*;
+import semicolon.africa.bankproject.dto.response.OpenAccountResponse;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,9 +13,9 @@ public interface CustomerService {
 
 
 
-    Optional<Customer> findById(Long customerId);
+    Optional<Customer> findById(String customerId);
 
-    Customer findCustomerById(Long customerId);
+    Customer findCustomerById(String customerId);
 
     List<Customer> findAllCustomers();
 
@@ -22,7 +23,29 @@ public interface CustomerService {
 
     void deleteAll();
 
-    void deleteCustomer(Long customerId);
+    void deleteCustomer(String customerId);
 
     Customer updateCustomerProfile(UpdateCustomerProfileRequest updateCustomerProfileRequest);
+
+    void deleteCustomerById(String customerId);
+
+    void deleteCustomersById(DeleteCustomerRequest deleteCustomerRequest);
+
+    OpenAccountResponse openAccount(OpenAccountRequest openAccountRequest);
+
+    long totalNumberOfAccount();
+
+    void deleteAllAccounts();
+
+    String deleteAllAccount(DeleteAllAccountRequest deleteAllAccountRequest);
+
+
+    Account findAccountById(FindAccountRequest findAccountRequest);
+
+    List<Account> findAllAccounts(FindAllAccountRequest findAllAccountRequest);
+
+    void deleteAccountById(DeleteAccountRequest deleteAccountRequest);
+
+
+    ;
 }

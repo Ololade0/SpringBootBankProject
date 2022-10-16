@@ -10,6 +10,6 @@ import lombok.*;
 @ToString
 public class CustomerRegisterResponse {
     private String message;
-    private Long customerId;
+    private String customerId;
     private String customerName;
 }

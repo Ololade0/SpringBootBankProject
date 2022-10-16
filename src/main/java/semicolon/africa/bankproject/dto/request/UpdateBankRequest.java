@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class UpdateBankRequest {
-    private Long bankId;
+    private String bankId;
     private String bankLocation;
     private String bankName;
 

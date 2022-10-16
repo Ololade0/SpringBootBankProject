@@ -8,8 +8,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateCustomerProfileRequest {
-    private Long customerId;
-    private Long bankId;
+    private String customerId;
+    private String bankId;
     private String customerName;
     private String customerAge;
     private String customerGender;

@@ -25,7 +25,7 @@ public class TransactionImpl implements TransactionServices {
     }
 
     @Override
-    public Transactions findTransactionById(Long id) {
+    public Transactions findTransactionById(String id) {
         return transactionRepository.findTransactionsById(id);
     }
 
@@ -46,7 +46,7 @@ public class TransactionImpl implements TransactionServices {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(String id) {
         transactionRepository.deleteById(id);
 
     }
