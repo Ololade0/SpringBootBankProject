@@ -2,16 +2,16 @@ package semicolon.africa.bankproject.dto.response;
 
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Setter
 @Getter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @ToString
-public class OpenAccountResponse {
-    private String accountName;
-    private String accountNumber;
+public class DepositFundResponse {
     private String message;
-    private String id;
-
+    private BigDecimal balance;
+    private String transactionId;
 }

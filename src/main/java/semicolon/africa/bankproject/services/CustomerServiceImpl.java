@@ -4,18 +4,19 @@ package semicolon.africa.bankproject.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import semicolon.africa.bankproject.dao.model.Account;
-import semicolon.africa.bankproject.dao.model.Bank;
+
 import semicolon.africa.bankproject.dao.model.Customer;
 import semicolon.africa.bankproject.dao.repository.CustomerRepository;
 import semicolon.africa.bankproject.dto.request.*;
-import semicolon.africa.bankproject.dto.response.CustomerRegisterResponse;
+
+import semicolon.africa.bankproject.dto.response.DepositFundResponse;
 import semicolon.africa.bankproject.dto.response.OpenAccountResponse;
 import semicolon.africa.bankproject.exception.AccountCannotBeFound;
-import semicolon.africa.bankproject.exception.BankDoesNotExistException;
+
 
 
 import java.util.List;
-import java.util.Objects;
+
 import java.util.Optional;
 
 @Service
@@ -174,6 +175,11 @@ public class CustomerServiceImpl implements CustomerService {
             }
         }
 
+    }
+
+    @Override
+    public DepositFundResponse depositFunds(DepositFundRequest depositFundRequest) {
+        return null;
     }
 
 }

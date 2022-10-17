@@ -6,9 +6,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import semicolon.africa.bankproject.dao.model.Account;
+import semicolon.africa.bankproject.dto.request.DepositFundRequest;
 import semicolon.africa.bankproject.dto.request.OpenAccountRequest;
 import semicolon.africa.bankproject.dto.request.UpdateAccountRequest;
+import semicolon.africa.bankproject.dto.response.DepositFundResponse;
 
+
+import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,7 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class AccountServiceImplTest {
     @Autowired
     private AccountService accountService;
-  Account savedAccount;
+    Account savedAccount;
+
     @BeforeEach
     void setUp() {
         OpenAccountRequest openAccountRequest = OpenAccountRequest.builder()
@@ -28,7 +33,7 @@ class AccountServiceImplTest {
                 .age("23")
                 .gender("female")
                 .build();
-       savedAccount = accountService.openAccount(openAccountRequest);
+        savedAccount = accountService.openAccount(openAccountRequest);
 
     }
 
@@ -38,7 +43,7 @@ class AccountServiceImplTest {
     }
 
     @Test
-    public void accountCanBeCreated(){
+    public void accountCanBeCreated() {
         Account account = Account
                 .builder()
                 .phoneNumber("08109093828")
@@ -52,32 +57,32 @@ class AccountServiceImplTest {
     }
 
     @Test
-    public void accountCanBeOpen(){
+    public void accountCanBeOpen() {
         OpenAccountRequest openAccountRequest = OpenAccountRequest.builder()
                 .phoneNumber("08109093828")
                 .email("adesuyiololade@gmail.com")
                 .AccountName("Adesuyi")
                 .age("23")
+                .balance(BigDecimal.valueOf(10_000))
                 .gender("female")
                 .build();
-       savedAccount = accountService.openAccount(openAccountRequest);
+        savedAccount = accountService.openAccount(openAccountRequest);
         assertThat(savedAccount).isNotNull();
         assertEquals(2, accountService.totalNumberOfAccount());
-        System.out.println(savedAccount.getId());
 
     }
 
     @Test
-    public void findAccountById(){
-       Account foundAccount =  accountService.findAccountById(savedAccount.getId());
+    public void findAccountById() {
+        Account foundAccount = accountService.findAccountById(savedAccount.getId());
         assertThat(foundAccount).isNotNull();
-      //  assertThat(foundAccount.getId()).isGreaterThan(0);
+        //  assertThat(foundAccount.getId()).isGreaterThan(0);
         assertThat(foundAccount.getId()).isEqualTo(savedAccount.getId());
 
     }
 
     @Test
-    public void findAllAccount(){
+    public void findAllAccount() {
         accountService.findAllAccount();
         assertEquals("Adesuyi", accountService.findAllAccount().get(0).getAccountName());
         assertEquals("adesuyiololade@gmail.com", accountService.findAllAccount().get(0).getEmail());
@@ -95,6 +100,7 @@ class AccountServiceImplTest {
         accountService.deleteBYId(savedAccount.getId());
         assertEquals(0, accountService.totalNumberOfAccount());
     }
+
     @Test
     public void testThatAccountCanBeUpdated() {
         UpdateAccountRequest updateAccountRequest = UpdateAccountRequest.builder()
@@ -108,4 +114,24 @@ class AccountServiceImplTest {
         assertEquals("demilade@gmail.com", accountService.findAllAccount().get(0).getEmail());
         assertEquals("70", accountService.findAllAccount().get(0).getAge());
     }
+
+    @Test
+    public void testThatAccountCanPerformDepositFundTransaction() {
+        DepositFundRequest depositFundRequest = DepositFundRequest
+                .builder()
+
+                .accountNumber("0782807561")
+                .funds(BigDecimal.valueOf(50000))
+                .accountId(savedAccount.getId())
+                .balance(BigDecimal.valueOf(10000))
+                .build();
+        DepositFundResponse depositFundResponse = accountService.depositFundsIntoAccount(depositFundRequest);
+        assertEquals("Transaction successful", depositFundResponse.getMessage());
+        assertEquals(BigDecimal.valueOf(60000), depositFundResponse.getBalance());
+    }
+
+    @Test
+    public void testThatSenderCanSendFundToBeneficiaryAccountWithValidPin() {
+    }
+
 }

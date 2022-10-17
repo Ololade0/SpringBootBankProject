@@ -1,8 +1,10 @@
 package semicolon.africa.bankproject.services;
 
 import semicolon.africa.bankproject.dao.model.Account;
+import semicolon.africa.bankproject.dto.request.DepositFundRequest;
 import semicolon.africa.bankproject.dto.request.OpenAccountRequest;
 import semicolon.africa.bankproject.dto.request.UpdateAccountRequest;
+import semicolon.africa.bankproject.dto.response.DepositFundResponse;
 import semicolon.africa.bankproject.dto.response.OpenAccountResponse;
 import semicolon.africa.bankproject.dto.response.UpdateAccountResponse;
 
@@ -19,4 +21,6 @@ public interface AccountService {
 
 
     long totalNumberOfAccount();
+
+ DepositFundResponse depositFundsIntoAccount(DepositFundRequest depositFundRequest);
 }

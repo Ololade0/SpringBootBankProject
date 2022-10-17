@@ -94,8 +94,8 @@ class BankServiceImplTest {
 
     @Test
     public void testThatBankCanBeFindById() {
-        Bank foundBank = bankService.getBankById(savedBank.getBankId());
-        Bank foundBank1 = bankService.getBankById(savedBank1.getBankId());
+        Bank foundBank = bankService.findBankById(savedBank.getBankId());
+        Bank foundBank1 = bankService.findBankById(savedBank1.getBankId());
         assertThat(foundBank).isNotNull();
         assertThat(foundBank1).isNotNull();
         assertThat(foundBank.getId()).isEqualTo(savedBank.getBankId());
@@ -150,10 +150,10 @@ class BankServiceImplTest {
 
     @Test
     public void testThatBankCanFindCustomerById() {
-        FindBankRequest findBankRequest = new FindBankRequest();
-        findBankRequest.setBankId(savedBank.getBankId());
-        findBankRequest.setCustomerId(savedCustomer.getCustomerId());
-        Customer foundCustomer = bankService.findCustomerId(findBankRequest);
+        FindCustomerRequest findCustomerRequest = new FindCustomerRequest();
+        findCustomerRequest.setBankId(savedBank.getBankId());
+       findCustomerRequest.setCustomerId(savedCustomer.getCustomerId());
+        Customer foundCustomer = bankService.findCustomerId(findCustomerRequest);
         assertThat(foundCustomer.getCustomerId()).isEqualTo(savedCustomer.getCustomerId());
     }
 
@@ -161,8 +161,8 @@ class BankServiceImplTest {
     public void testThatBankCanFindAllCustomer() {
         FindAllCustomerRequest findAllCustomerRequest = FindAllCustomerRequest.builder()
                 .bankId(savedBank1.getBankId())
-                .customerId(savedCustomer.getCustomerId())
-                .customerName(savedCustomer.getCustomerName())
+               // .customerId(savedCustomer.getCustomerId())
+               // .customerName(savedCustomer.getCustomerName())
                 .build();
         List<Customer> foundCustomer = bankService.findAllCustomers(findAllCustomerRequest);
         assertEquals("Ololade", bankService.findAllCustomers(findAllCustomerRequest).get(0).getCustomerName());
@@ -195,8 +195,8 @@ class BankServiceImplTest {
 
         FindAllCustomerRequest findAllCustomerRequest = FindAllCustomerRequest.builder()
                 .bankId(savedBank1.getBankId())
-                .customerId(savedCustomer.getCustomerId())
-                .customerName(savedCustomer.getCustomerName())
+             //   .customerId(savedCustomer.getCustomerId())
+              //  .customerName(savedCustomer.getCustomerName())
                 .build();
         List<Customer> foundCustomer = bankService.findAllCustomers(findAllCustomerRequest);
 
@@ -222,6 +222,7 @@ class BankServiceImplTest {
                 .age("60")
                 .email("ololade@gmail.com")
                 .phoneNumber("08109093828")
+                .accountNumber("0782807561")
                 .build();
         OpenAccountResponse foundAccount = bankService.openCustomerAccount(openAccountRequest);
         assertThat(foundAccount).isNotNull();

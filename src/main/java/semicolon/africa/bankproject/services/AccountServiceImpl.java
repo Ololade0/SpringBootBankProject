@@ -5,14 +5,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import semicolon.africa.bankproject.dao.model.Account;
 import semicolon.africa.bankproject.dao.repository.AccountRepository;
+import semicolon.africa.bankproject.dto.request.DepositFundRequest;
 import semicolon.africa.bankproject.dto.request.OpenAccountRequest;
 import semicolon.africa.bankproject.dto.request.UpdateAccountRequest;
+import semicolon.africa.bankproject.dto.response.DepositFundResponse;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 
 @Service
-public class AccountServiceImpl implements AccountService{
+public class AccountServiceImpl implements AccountService {
     @Autowired
     private AccountRepository accountRepository;
 
@@ -24,8 +27,9 @@ public class AccountServiceImpl implements AccountService{
                 .AccountName(openAccountRequest.getAccountName())
                 .age(openAccountRequest.getAge())
                 .gender(openAccountRequest.getGender())
+                .balance(openAccountRequest.getBalance())
                 .build();
-       return accountRepository.save(newAccount);
+        return accountRepository.save(newAccount);
 
     }
 
@@ -47,7 +51,7 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public void deleteBYId(String accountId) {
-        if(accountRepository.findById(accountId).isPresent() );
+        if (accountRepository.findById(accountId).isPresent()) ;
         accountRepository.deleteById(accountId);
     }
 
@@ -75,6 +79,26 @@ public class AccountServiceImpl implements AccountService{
         return accountRepository.count();
     }
 
+    @Override
+    public DepositFundResponse depositFundsIntoAccount(DepositFundRequest depositFundRequest) {
+        Account newAccount = Account
+                .builder()
+                .balance(depositFundRequest.getBalance())
+                .accountNumber(depositFundRequest.getAccountNumber())
+                .funds(depositFundRequest.getFunds())
+                .build();
+        Account account = accountRepository.findAccountById(depositFundRequest.getAccountId());
+        if (account != null) ;
+        BigDecimal total = depositFundRequest.getBalance().add(depositFundRequest.getFunds());
+        accountRepository.save(newAccount);
+        return DepositFundResponse.builder()
+                .message("Transaction successful")
+                .balance(total)
+                .build();
+
+    }
 
 }
+
+
 

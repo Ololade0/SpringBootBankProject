@@ -39,23 +39,26 @@ public class BankServiceImpl implements BankService {
         BankRegisterResponse bankRegisterResponse = new BankRegisterResponse();
         bankRegisterResponse.setMessage("Bank successfully registered");
         bankRegisterResponse.setBankId(savedBank.getId());
+        bankRegisterResponse.setBankLocation(bank.getBankLocation());
         return bankRegisterResponse;
     }
 
 
     @Override
-    public Bank getBankById(String bankId) {
-        return bankRepository.findById(bankId).orElseThrow(
-                () -> new BankDoesNotExistException(
-                        String.format("bank with id %d not found", bankId)
-                )
-        );
+    public Bank findBankById(String bankId) {
+        return bankRepository.findBankById(bankId);
+//        return bankRepository.findById(bankId).orElseThrow(
+//                () -> new BankDoesNotExistException(
+//                        String.format("bank with id %d not found", bankId)
+//                )
+//        );
 
     }
 
     @Override
-    public void deleteAll() {
+    public String deleteAll() {
         bankRepository.deleteAll();
+        return "All Banks successfully deleted";
 
     }
 
@@ -72,8 +75,9 @@ public class BankServiceImpl implements BankService {
     }
 
     @Override
-    public void deleteById(String bankId) {
+    public String deleteById(String bankId) {
         bankRepository.deleteById(bankId);
+        return "Bank successfully deleted";
 
     }
 
@@ -104,7 +108,8 @@ public class BankServiceImpl implements BankService {
         CustomerRegisterResponse customerRegisterResponse = new CustomerRegisterResponse();
         customerRegisterResponse.setMessage("Customer successfully registered");
         customerRegisterResponse.setCustomerId(customer.getCustomerId());
-        customerRegisterResponse.setCustomerId(customer.getCustomerId());
+        customerRegisterResponse.setCustomerName(customer.getCustomerName());
+
         return customerRegisterResponse;
     }
 
@@ -123,7 +128,7 @@ public class BankServiceImpl implements BankService {
     }
 
     @Override
-    public void deleteCustomerById(DeleteCustomerRequest deleteCustomerRequest) {
+    public String deleteCustomerById(DeleteCustomerRequest deleteCustomerRequest) {
         Bank foundBank = bankRepository.findBankById(deleteCustomerRequest.getBankId());
         if (foundBank != null) {
             List<Customer> customers = foundBank.getCustomers();
@@ -135,7 +140,9 @@ public class BankServiceImpl implements BankService {
                 }
 //
             }
+            return "Customer successfully deleted";
         }
+        return "error";
     }
 
 
@@ -151,10 +158,10 @@ public class BankServiceImpl implements BankService {
 
 
     @Override
-    public Customer findCustomerId(FindBankRequest findBankRequest) {
-        Bank foundBank = bankRepository.findBankById(findBankRequest.getBankId());
+    public Customer findCustomerId(FindCustomerRequest findCustomerRequest) {
+        Bank foundBank = bankRepository.findBankById(findCustomerRequest.getBankId());
         if (foundBank != null) {
-            return customerService.findCustomerById(findBankRequest.getCustomerId());
+            return customerService.findCustomerById(findCustomerRequest.getCustomerId());
         }
         throw new BankDoesNotExistException("Bank cannot be found");
     }
@@ -214,10 +221,10 @@ public class BankServiceImpl implements BankService {
     }
 
     @Override
-    public void deleteAllAccount() {
+    public String deleteAllAccount() {
         customerService.deleteAllAccounts();
         accountService.deleteAll();
-
+        return "All account successfully deleted";
     }
 
     @Override
@@ -234,13 +241,12 @@ public class BankServiceImpl implements BankService {
     public String deleteAccountById(DeleteAccountRequest deleteAccountRequest) {
         Bank foundBank = bankRepository.findBankById(deleteAccountRequest.getBankId());
         Customer foundCustomer = customerService.findCustomerById(deleteAccountRequest.getCustomerId());
-        // if(foundBank != null && foundCustomer != null){
         if (foundBank != null) {
             List<Account> accounts = foundCustomer.getAccounts();
             for (int i = 0; i < accounts.size(); i++) {
                 if (accounts.get(i).getId().equalsIgnoreCase(deleteAccountRequest.getAccountId())) {
-                 //   customerService.deleteAccountById(deleteAccountRequest);
-                    accountService.deleteBYId(deleteAccountRequest.getAccountId());
+                    customerService.deleteAccountById(deleteAccountRequest);
+                  //  accountService.deleteBYId(deleteAccountRequest.getAccountId());
                     accounts.remove(accounts.get(i));
                     bankRepository.save(foundBank);
                     return " Account successfully deleted";

@@ -12,9 +12,9 @@ public interface BankService {
     BankRegisterResponse registerBank(BankRegisterRequest bankRegisterRequest);
 
 
-    Bank getBankById(String bankId);
+    Bank findBankById(String bankId);
 
-    void deleteAll();
+    String deleteAll();
 
     long totalNumbersOfBanks();
 
@@ -24,7 +24,7 @@ public interface BankService {
     List<Bank> findAllBanks();
 
 
-    void deleteById(String bankId);
+    String deleteById(String bankId);
 
     UpdateBankResponse updateBankProfile(UpdateBankRequest updateBankRequest);
 
@@ -33,12 +33,12 @@ public interface BankService {
     List<Customer> findAllCustomers(FindAllCustomerRequest findAllCustomerRequest);
 
 
-    void deleteCustomerById(DeleteCustomerRequest deleteCustomerRequest);
+    String deleteCustomerById(DeleteCustomerRequest deleteCustomerRequest);
 
 
     String deleteALLCustomers(DeleteAllCustomerRequest deleteAllCustomerRequest);
 
-    Customer findCustomerId(FindBankRequest findBankRequest);
+    Customer findCustomerId(FindCustomerRequest findCustomerRequest);
 
     UpdateCustomerProfileResponse updateCustomerProfile(UpdateCustomerProfileRequest updateCustomerProfileRequest);
 
@@ -51,7 +51,7 @@ public interface BankService {
 
     Account findAccountById(FindAccountRequest findAccountRequest);
 
-    void deleteAllAccount();
+    String deleteAllAccount();
 
     List<Account> findAllAccounts(FindAllAccountRequest findAllAccountRequest);
 

@@ -9,15 +9,12 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OpenAccountRequest {
+@ToString
+public class DepositFundRequest {
     private String bankId;
     private String customerId;
-    private String AccountName;
+    private String accountId;
     private String accountNumber;
     private BigDecimal balance;
-    private String age;
-    private String gender;
-    private String email;
-    private String phoneNumber;
-
+    private BigDecimal funds;
 }

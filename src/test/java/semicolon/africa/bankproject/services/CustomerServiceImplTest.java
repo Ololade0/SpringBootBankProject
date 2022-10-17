@@ -10,6 +10,7 @@ import semicolon.africa.bankproject.dao.model.Customer;
 import semicolon.africa.bankproject.dto.request.*;
 import semicolon.africa.bankproject.dto.response.OpenAccountResponse;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
@@ -173,5 +174,16 @@ class CustomerServiceImplTest {
                 .build();
         customerService.deleteAccountById(deleteAccountRequest);
         assertEquals(0, customerService.totalNumberOfAccount());
+    }
+
+    @Test
+    public void customerCanDepositFunds(){
+        DepositFundRequest depositFundRequest = DepositFundRequest.builder()
+                        .funds(BigDecimal.valueOf(3000))
+                                .customerId(savedCustomer.getCustomerId())
+                                        .accountId(savedAccount.getId())
+                                                .build();
+        customerService.depositFunds(depositFundRequest);
+
     }
 }

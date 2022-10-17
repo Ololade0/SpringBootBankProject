@@ -1,8 +1,8 @@
 package semicolon.africa.bankproject.services;
-
 import semicolon.africa.bankproject.dao.model.Account;
 import semicolon.africa.bankproject.dao.model.Customer;
 import semicolon.africa.bankproject.dto.request.*;
+import semicolon.africa.bankproject.dto.response.DepositFundResponse;
 import semicolon.africa.bankproject.dto.response.OpenAccountResponse;
 
 import java.util.List;
@@ -45,6 +45,8 @@ public interface CustomerService {
     List<Account> findAllAccounts(FindAllAccountRequest findAllAccountRequest);
 
     void deleteAccountById(DeleteAccountRequest deleteAccountRequest);
+
+     DepositFundResponse depositFunds(DepositFundRequest depositFundRequest);
 
 
     ;
