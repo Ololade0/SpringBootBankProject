@@ -1,6 +1,4 @@
 package semicolon.africa.bankproject.services;
-
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import semicolon.africa.bankproject.dao.model.Account;
@@ -8,7 +6,9 @@ import semicolon.africa.bankproject.dao.repository.AccountRepository;
 import semicolon.africa.bankproject.dto.request.DepositFundRequest;
 import semicolon.africa.bankproject.dto.request.OpenAccountRequest;
 import semicolon.africa.bankproject.dto.request.UpdateAccountRequest;
+import semicolon.africa.bankproject.dto.request.WithdrawalFundRequest;
 import semicolon.africa.bankproject.dto.response.DepositFundResponse;
+import semicolon.africa.bankproject.dto.response.WithdrawalFundResponse;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -25,9 +25,10 @@ public class AccountServiceImpl implements AccountService {
                 .email(openAccountRequest.getEmail())
                 .phoneNumber(openAccountRequest.getPhoneNumber())
                 .AccountName(openAccountRequest.getAccountName())
+                .beneficiaryAccountNumber(openAccountRequest.getAccountNumber())
                 .age(openAccountRequest.getAge())
                 .gender(openAccountRequest.getGender())
-                .balance(openAccountRequest.getBalance())
+                .currentBalance(openAccountRequest.getBalance())
                 .build();
         return accountRepository.save(newAccount);
 
@@ -80,22 +81,39 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public DepositFundResponse depositFundsIntoAccount(DepositFundRequest depositFundRequest) {
+    public BigDecimal depositFundsIntoAccount(DepositFundRequest depositFundRequest) {
         Account newAccount = Account
                 .builder()
-                .balance(depositFundRequest.getBalance())
-                .accountNumber(depositFundRequest.getAccountNumber())
-                .funds(depositFundRequest.getFunds())
+                .currentBalance(depositFundRequest.getCurrentBalance())
+                .senderAccountNumber(depositFundRequest.getSenderAccountNumber())
+                .beneficiaryAccountNumber(depositFundRequest.getBeneficiaryAccount())
+                .pin(depositFundRequest.getPin())
+                .funds(depositFundRequest.getDepositFunds())
                 .build();
-        Account account = accountRepository.findAccountById(depositFundRequest.getAccountId());
+        Account account= accountRepository.findAccountByBeneficiaryAccountNumber(depositFundRequest.getBeneficiaryAccount());
         if (account != null) ;
-        BigDecimal total = depositFundRequest.getBalance().add(depositFundRequest.getFunds());
-        accountRepository.save(newAccount);
-        return DepositFundResponse.builder()
-                .message("Transaction successful")
-                .balance(total)
-                .build();
+        BigDecimal total =  depositFundRequest.getCurrentBalance().add(depositFundRequest.getDepositFunds());
+        return total;
 
+    }
+
+    @Override
+    public WithdrawalFundResponse TransferFundsithValidPin(WithdrawalFundRequest withdrawalFundRequest) {
+        Account newAccount = Account
+                .builder()
+                .currentBalance(withdrawalFundRequest.getCurrentBalance())
+                .beneficiaryAccountNumber(withdrawalFundRequest.getBeneficiaryAccountNumber())
+                .senderAccountNumber(withdrawalFundRequest.getSenderAccountNumber())
+                .pin(withdrawalFundRequest.getPin())
+                .funds(withdrawalFundRequest.getWithdrawalAmount())
+                .build();
+        Account account = accountRepository.findAccountByBeneficiaryAccountNumber(withdrawalFundRequest.getBeneficiaryAccountNumber());
+        if (account != null);
+        BigDecimal totalBalance = withdrawalFundRequest.getCurrentBalance().subtract(withdrawalFundRequest.getWithdrawalAmount());
+        return WithdrawalFundResponse.builder()
+                .message("Transaction successful")
+                .currentBalance(totalBalance)
+                .build();
     }
 
 }

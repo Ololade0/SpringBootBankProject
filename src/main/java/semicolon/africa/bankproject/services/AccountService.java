@@ -4,12 +4,12 @@ import semicolon.africa.bankproject.dao.model.Account;
 import semicolon.africa.bankproject.dto.request.DepositFundRequest;
 import semicolon.africa.bankproject.dto.request.OpenAccountRequest;
 import semicolon.africa.bankproject.dto.request.UpdateAccountRequest;
+import semicolon.africa.bankproject.dto.request.WithdrawalFundRequest;
 import semicolon.africa.bankproject.dto.response.DepositFundResponse;
-import semicolon.africa.bankproject.dto.response.OpenAccountResponse;
-import semicolon.africa.bankproject.dto.response.UpdateAccountResponse;
+import semicolon.africa.bankproject.dto.response.WithdrawalFundResponse;
 
+import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 public interface AccountService {
    Account  openAccount(OpenAccountRequest openAccountRequest);
@@ -22,5 +22,6 @@ public interface AccountService {
 
     long totalNumberOfAccount();
 
- DepositFundResponse depositFundsIntoAccount(DepositFundRequest depositFundRequest);
+BigDecimal depositFundsIntoAccount(DepositFundRequest depositFundRequest);
+ WithdrawalFundResponse TransferFundsithValidPin(WithdrawalFundRequest withdrawalFundRequest);
 }

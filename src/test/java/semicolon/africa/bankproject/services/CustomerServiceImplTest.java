@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import semicolon.africa.bankproject.dao.model.Account;
 import semicolon.africa.bankproject.dao.model.Customer;
 import semicolon.africa.bankproject.dto.request.*;
+import semicolon.africa.bankproject.dto.response.DepositFundResponse;
 import semicolon.africa.bankproject.dto.response.OpenAccountResponse;
 
 import java.math.BigDecimal;
@@ -27,6 +28,7 @@ class CustomerServiceImplTest {
         CustomerRegisterRequest customerRegister = new CustomerRegisterRequest();
         customerRegister.setCustomerName("Adesuyi");
         customerRegister.setCustomerGender("female");
+        customerRegister.setCustomerAccountNumber("34567");
         customerRegister.setCustomerAge("55");
         savedCustomer = customerService.saveNewCustomer(customerRegister);
 
@@ -177,13 +179,19 @@ class CustomerServiceImplTest {
     }
 
     @Test
-    public void customerCanDepositFunds(){
+    public void customerCanDepositFundToAnotherCustomerAccount_BeneficairyBalanceIncreases(){
         DepositFundRequest depositFundRequest = DepositFundRequest.builder()
-                        .funds(BigDecimal.valueOf(3000))
-                                .customerId(savedCustomer.getCustomerId())
-                                        .accountId(savedAccount.getId())
+                        .depositFunds(BigDecimal.valueOf(3000))
+                .currentBalance(BigDecimal.valueOf(10000))
+                .beneficiaryAccount(savedAccount.getAccountNumber())
+                .senderAccountNumber("12345")
+                .pin(1234)
+                .customerId(savedCustomer.getCustomerId())
+                .accountId(savedAccount.getId())
                                                 .build();
-        customerService.depositFunds(depositFundRequest);
+        DepositFundResponse depositFundResponse = customerService.depositFunds(depositFundRequest);
+        assertEquals("Fund sucessfully deposited", depositFundResponse.getMessage());
+        assertEquals(BigDecimal.valueOf(13000), depositFundResponse.getCurrentBalance());
 
     }
 }

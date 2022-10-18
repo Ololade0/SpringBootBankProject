@@ -20,6 +20,7 @@ import java.util.List;
 public class Customer {
     @Id
     private String customerId;
+    private String customerAccountNumber;
     private String bankId;
     private String customerName;
     private String customerAge;

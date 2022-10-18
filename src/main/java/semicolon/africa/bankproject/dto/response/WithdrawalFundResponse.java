@@ -10,8 +10,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Builder
 @ToString
-public class DepositFundResponse {
+public class WithdrawalFundResponse {
     private String message;
     private BigDecimal currentBalance;
-    private String transactionId;
 }

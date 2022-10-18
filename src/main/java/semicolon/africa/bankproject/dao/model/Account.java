@@ -20,11 +20,13 @@ public class Account {
     @Id
     private String id;
     private String AccountName;
-    private String accountNumber;
+    private String beneficiaryAccountNumber;
+    private String senderAccountNumber;
+    private int pin;
     private String age;
     private String phoneNumber;
     private String email;
-    private BigDecimal balance;
+    private BigDecimal currentBalance;
     private BigDecimal funds;
     private String gender;
     @DBRef

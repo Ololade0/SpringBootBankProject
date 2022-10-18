@@ -9,7 +9,9 @@ import semicolon.africa.bankproject.dao.model.Account;
 import semicolon.africa.bankproject.dto.request.DepositFundRequest;
 import semicolon.africa.bankproject.dto.request.OpenAccountRequest;
 import semicolon.africa.bankproject.dto.request.UpdateAccountRequest;
-import semicolon.africa.bankproject.dto.response.DepositFundResponse;
+import semicolon.africa.bankproject.dto.request.WithdrawalFundRequest;
+
+import semicolon.africa.bankproject.dto.response.WithdrawalFundResponse;
 
 
 import java.math.BigDecimal;
@@ -76,7 +78,6 @@ class AccountServiceImplTest {
     public void findAccountById() {
         Account foundAccount = accountService.findAccountById(savedAccount.getId());
         assertThat(foundAccount).isNotNull();
-        //  assertThat(foundAccount.getId()).isGreaterThan(0);
         assertThat(foundAccount.getId()).isEqualTo(savedAccount.getId());
 
     }
@@ -119,19 +120,31 @@ class AccountServiceImplTest {
     public void testThatAccountCanPerformDepositFundTransaction() {
         DepositFundRequest depositFundRequest = DepositFundRequest
                 .builder()
-
-                .accountNumber("0782807561")
-                .funds(BigDecimal.valueOf(50000))
+                .beneficiaryAccount("0782807561")
+                .depositFunds(BigDecimal.valueOf(60000))
                 .accountId(savedAccount.getId())
-                .balance(BigDecimal.valueOf(10000))
+                .currentBalance(BigDecimal.valueOf(10000))
                 .build();
-        DepositFundResponse depositFundResponse = accountService.depositFundsIntoAccount(depositFundRequest);
-        assertEquals("Transaction successful", depositFundResponse.getMessage());
-        assertEquals(BigDecimal.valueOf(60000), depositFundResponse.getBalance());
+     BigDecimal depositFundResponse = accountService.depositFundsIntoAccount(depositFundRequest);
+        assertEquals(BigDecimal.valueOf(70000), depositFundResponse);
+
     }
 
     @Test
-    public void testThatSenderCanSendFundToBeneficiaryAccountWithValidPin() {
+    public void testThatSenderCanTransferFundToBeneficiaryAccountWithValidPin() {
+        WithdrawalFundRequest withdrawalFundRequest = WithdrawalFundRequest
+                .builder()
+                .pin(12345)
+                .senderAccountNumber("45678")
+                .beneficiaryAccountNumber("0782807561")
+                .currentBalance(BigDecimal.valueOf(10000))
+                .withdrawalAmount(BigDecimal.valueOf(5000))
+                .build();
+        WithdrawalFundResponse withdrawalFundResponse = accountService.TransferFundsithValidPin(withdrawalFundRequest);
+        assertEquals("Transaction successful", withdrawalFundResponse.getMessage());
+        assertEquals(BigDecimal.valueOf(5000), withdrawalFundResponse.getCurrentBalance());
     }
+
+
 
 }

@@ -10,13 +10,11 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Builder
 @ToString
-public class DepositFundRequest {
-    private String bankId;
-    private String customerId;
-    private String accountId;
-    private String beneficiaryAccount;
+public class WithdrawalFundRequest {
+    private String beneficiaryAccountNumber;
+    private BigDecimal withdrawalAmount;
     private String senderAccountNumber;
-    private int pin;
     private BigDecimal currentBalance;
-    private BigDecimal depositFunds;
+    private int pin;
+   // private
 }

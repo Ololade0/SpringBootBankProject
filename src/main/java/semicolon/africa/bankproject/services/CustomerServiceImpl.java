@@ -13,8 +13,7 @@ import semicolon.africa.bankproject.dto.response.DepositFundResponse;
 import semicolon.africa.bankproject.dto.response.OpenAccountResponse;
 import semicolon.africa.bankproject.exception.AccountCannotBeFound;
 
-
-
+import java.math.BigDecimal;
 import java.util.List;
 
 import java.util.Optional;
@@ -32,6 +31,7 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer saveNewCustomer(CustomerRegisterRequest customerRegister) {
         Customer newCustomer = Customer.builder().
                 customerName(customerRegister.getCustomerName())
+                //.customerAccountNumber(customerRegister.getCustomerAccountNumber())
                 .customerGender(customerRegister.getCustomerGender())
                 .customerAge(customerRegister.getCustomerAge())
                 .build();
@@ -122,6 +122,19 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public DepositFundResponse depositFunds(DepositFundRequest depositFundRequest) {
+        Customer foundCustomer = customerRepository.findCustomerByCustomerAccountNumber(depositFundRequest.getBeneficiaryAccount());
+        if (foundCustomer != null) {
+            BigDecimal balance = accountService.depositFundsIntoAccount(depositFundRequest);
+            return DepositFundResponse.builder()
+                    .message("Fund sucessfully deposited")
+                    .currentBalance(balance)
+                    .build();
+        }
+        return null;
+    }
+
+    @Override
     public long totalNumberOfAccount() {
         return accountService.totalNumberOfAccount();
     }
@@ -174,12 +187,5 @@ public class CustomerServiceImpl implements CustomerService {
 
             }
         }
-
     }
-
-    @Override
-    public DepositFundResponse depositFunds(DepositFundRequest depositFundRequest) {
-        return null;
-    }
-
 }

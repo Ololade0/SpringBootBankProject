@@ -246,7 +246,7 @@ public class BankServiceImpl implements BankService {
             for (int i = 0; i < accounts.size(); i++) {
                 if (accounts.get(i).getId().equalsIgnoreCase(deleteAccountRequest.getAccountId())) {
                     customerService.deleteAccountById(deleteAccountRequest);
-                  //  accountService.deleteBYId(deleteAccountRequest.getAccountId());
+                    accountService.deleteBYId(deleteAccountRequest.getAccountId());
                     accounts.remove(accounts.get(i));
                     bankRepository.save(foundBank);
                     return " Account successfully deleted";
