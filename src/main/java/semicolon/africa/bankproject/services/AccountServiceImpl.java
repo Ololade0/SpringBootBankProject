@@ -7,11 +7,12 @@ import semicolon.africa.bankproject.dto.request.DepositFundRequest;
 import semicolon.africa.bankproject.dto.request.OpenAccountRequest;
 import semicolon.africa.bankproject.dto.request.UpdateAccountRequest;
 import semicolon.africa.bankproject.dto.request.WithdrawalFundRequest;
-import semicolon.africa.bankproject.dto.response.DepositFundResponse;
-import semicolon.africa.bankproject.dto.response.WithdrawalFundResponse;
+import semicolon.africa.bankproject.exception.AccountAmountExceeded;
+import semicolon.africa.bankproject.exception.AccountCannotBeFound;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 
 
 @Service
@@ -90,15 +91,14 @@ public class AccountServiceImpl implements AccountService {
                 .pin(depositFundRequest.getPin())
                 .funds(depositFundRequest.getDepositFunds())
                 .build();
-        Account account= accountRepository.findAccountByBeneficiaryAccountNumber(depositFundRequest.getBeneficiaryAccount());
+        Account account = accountRepository.findAccountByBeneficiaryAccountNumber(depositFundRequest.getBeneficiaryAccount());
         if (account != null) ;
-        BigDecimal total =  depositFundRequest.getCurrentBalance().add(depositFundRequest.getDepositFunds());
-        return total;
+        return depositFundRequest.getCurrentBalance().add(depositFundRequest.getDepositFunds());
 
     }
 
     @Override
-    public WithdrawalFundResponse TransferFundsithValidPin(WithdrawalFundRequest withdrawalFundRequest) {
+    public BigDecimal TransferFundsithValidPin(WithdrawalFundRequest withdrawalFundRequest) {
         Account newAccount = Account
                 .builder()
                 .currentBalance(withdrawalFundRequest.getCurrentBalance())
@@ -108,12 +108,9 @@ public class AccountServiceImpl implements AccountService {
                 .funds(withdrawalFundRequest.getWithdrawalAmount())
                 .build();
         Account account = accountRepository.findAccountByBeneficiaryAccountNumber(withdrawalFundRequest.getBeneficiaryAccountNumber());
-        if (account != null);
-        BigDecimal totalBalance = withdrawalFundRequest.getCurrentBalance().subtract(withdrawalFundRequest.getWithdrawalAmount());
-        return WithdrawalFundResponse.builder()
-                .message("Transaction successful")
-                .currentBalance(totalBalance)
-                .build();
+        if (account != null) ;
+        return withdrawalFundRequest.getCurrentBalance().subtract(withdrawalFundRequest.getWithdrawalAmount());
+        //   if(withdrawalFundRequest.getWithdrawalAmount().compareTo(withdrawalFundRequest.getCurrentBalance()))
     }
 
 }

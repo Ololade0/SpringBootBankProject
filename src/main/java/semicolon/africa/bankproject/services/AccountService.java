@@ -23,5 +23,5 @@ public interface AccountService {
     long totalNumberOfAccount();
 
 BigDecimal depositFundsIntoAccount(DepositFundRequest depositFundRequest);
- WithdrawalFundResponse TransferFundsithValidPin(WithdrawalFundRequest withdrawalFundRequest);
+ BigDecimal TransferFundsithValidPin(WithdrawalFundRequest withdrawalFundRequest);
 }

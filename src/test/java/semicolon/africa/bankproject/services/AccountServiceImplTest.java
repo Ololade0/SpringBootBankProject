@@ -127,7 +127,6 @@ class AccountServiceImplTest {
                 .build();
      BigDecimal depositFundResponse = accountService.depositFundsIntoAccount(depositFundRequest);
         assertEquals(BigDecimal.valueOf(70000), depositFundResponse);
-
     }
 
     @Test
@@ -140,9 +139,8 @@ class AccountServiceImplTest {
                 .currentBalance(BigDecimal.valueOf(10000))
                 .withdrawalAmount(BigDecimal.valueOf(5000))
                 .build();
-        WithdrawalFundResponse withdrawalFundResponse = accountService.TransferFundsithValidPin(withdrawalFundRequest);
-        assertEquals("Transaction successful", withdrawalFundResponse.getMessage());
-        assertEquals(BigDecimal.valueOf(5000), withdrawalFundResponse.getCurrentBalance());
+        BigDecimal withdrawalFundResponse = accountService.TransferFundsithValidPin(withdrawalFundRequest);
+        assertEquals(BigDecimal.valueOf(5000), withdrawalFundResponse);
     }
 
 

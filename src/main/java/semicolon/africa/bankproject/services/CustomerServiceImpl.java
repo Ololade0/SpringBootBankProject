@@ -11,6 +11,7 @@ import semicolon.africa.bankproject.dto.request.*;
 
 import semicolon.africa.bankproject.dto.response.DepositFundResponse;
 import semicolon.africa.bankproject.dto.response.OpenAccountResponse;
+import semicolon.africa.bankproject.dto.response.WithdrawalFundResponse;
 import semicolon.africa.bankproject.exception.AccountCannotBeFound;
 
 import java.math.BigDecimal;
@@ -134,6 +135,18 @@ public class CustomerServiceImpl implements CustomerService {
         return null;
     }
 
+    @Override
+    public WithdrawalFundResponse WithdrawFund(WithdrawalFundRequest withdrawalFundRequest) {
+        Customer foundCustomer = customerRepository.findCustomerByCustomerAccountNumber(withdrawalFundRequest.getSenderAccountNumber());
+        if (foundCustomer != null) {
+                  BigDecimal balance = accountService.TransferFundsithValidPin(withdrawalFundRequest);
+            return WithdrawalFundResponse.builder()
+                    .message("Transaction successful")
+                    .currentBalance(balance)
+                    .build();
+    }
+        return null;
+        }
     @Override
     public long totalNumberOfAccount() {
         return accountService.totalNumberOfAccount();

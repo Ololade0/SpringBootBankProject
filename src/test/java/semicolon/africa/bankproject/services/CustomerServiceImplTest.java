@@ -10,6 +10,7 @@ import semicolon.africa.bankproject.dao.model.Customer;
 import semicolon.africa.bankproject.dto.request.*;
 import semicolon.africa.bankproject.dto.response.DepositFundResponse;
 import semicolon.africa.bankproject.dto.response.OpenAccountResponse;
+import semicolon.africa.bankproject.dto.response.WithdrawalFundResponse;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -179,7 +180,7 @@ class CustomerServiceImplTest {
     }
 
     @Test
-    public void customerCanDepositFundToAnotherCustomerAccount_BeneficairyBalanceIncreases(){
+    public void customerCanTransfertFundToAnotherCustomerAccount_BeneficairyBalanceIncreases(){
         DepositFundRequest depositFundRequest = DepositFundRequest.builder()
                         .depositFunds(BigDecimal.valueOf(3000))
                 .currentBalance(BigDecimal.valueOf(10000))
@@ -194,4 +195,19 @@ class CustomerServiceImplTest {
         assertEquals(BigDecimal.valueOf(13000), depositFundResponse.getCurrentBalance());
 
     }
+    @Test
+    public void customerCanTransfetFundToAnotherCustomerAccount_SenderBalanceDecrease(){
+        WithdrawalFundRequest withdrawalFundRequest = WithdrawalFundRequest
+                .builder()
+                .withdrawalAmount(BigDecimal.valueOf(10000))
+                .currentBalance(BigDecimal.valueOf(100000))
+                .senderAccountNumber(savedAccount.getAccountNumber())
+                .pin(1234)
+                .build();
+        WithdrawalFundResponse withdrawalFundResponse = customerService.WithdrawFund(withdrawalFundRequest);
+        assertEquals(BigDecimal.valueOf(7000), withdrawalFundResponse.getCurrentBalance());
+
+    }
+
+
 }
