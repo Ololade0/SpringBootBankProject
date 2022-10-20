@@ -165,6 +165,9 @@ public class BankController {
         return new ResponseEntity<>(deletedAllAccounts, HttpStatus.ACCEPTED);
     }
     @PutMapping("/accountprofile")
+    //REVIEW
+    //FINDCUSTOMER/FINDALLCUSTOMER
+    //DELETEACAOUNTBYID
     public ResponseEntity<?> updateAccountProfile(@RequestBody UpdateAccountRequest updateAccountRequest) {
         try {
            UpdateAccountResponse updateAccountResponse = bankService.updateAccountProfile(updateAccountRequest);

@@ -26,6 +26,7 @@ public class AccountServiceImpl implements AccountService {
                 .email(openAccountRequest.getEmail())
                 .phoneNumber(openAccountRequest.getPhoneNumber())
                 .AccountName(openAccountRequest.getAccountName())
+               // .beneficiaryAccountNumber(openAccountRequest.getAccountNumber())
                 .beneficiaryAccountNumber(openAccountRequest.getAccountNumber())
                 .age(openAccountRequest.getAge())
                 .gender(openAccountRequest.getGender())
@@ -60,9 +61,9 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account updateAccount(UpdateAccountRequest updateAccountRequest) {
         Account foundAccount = accountRepository.findAccountById(updateAccountRequest.getAccountId());
-        if (updateAccountRequest.getAccountName() != null) {
-            foundAccount.setAccountName(updateAccountRequest.getAccountName());
-        }
+//        if (updateAccountRequest.getAccountName() != null) {
+           // foundAccount.setAccountName(updateAccountRequest.getAccountName());
+//        }
         if (updateAccountRequest.getEmail() != null) {
             foundAccount.setEmail(updateAccountRequest.getEmail());
         }

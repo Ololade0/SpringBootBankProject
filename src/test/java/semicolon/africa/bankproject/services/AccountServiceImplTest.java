@@ -64,6 +64,7 @@ class AccountServiceImplTest {
                 .phoneNumber("08109093828")
                 .email("adesuyiololade@gmail.com")
                 .AccountName("Adesuyi")
+                .accountNumber("234677")
                 .age("23")
                 .balance(BigDecimal.valueOf(10_000))
                 .gender("female")
@@ -105,9 +106,9 @@ class AccountServiceImplTest {
     @Test
     public void testThatAccountCanBeUpdated() {
         UpdateAccountRequest updateAccountRequest = UpdateAccountRequest.builder()
-                .AccountName("Demilade")
+//                .AccountName("Demilade")
                 .email("demilade@gmail.com")
-                .AccountName("09031807593")
+//                .AccountName("09031807593")
                 .age("70")
                 .build();
         updateAccountRequest.setAccountId(savedAccount.getId());

@@ -193,13 +193,13 @@ public class BankServiceImpl implements BankService {
         Bank foundBank = bankRepository.findBankById(openAccountRequest.getBankId());
         Customer foundCustomer = customerService.findCustomerById(openAccountRequest.getCustomerId());
         if (foundBank != null) {
+//            customerService.openAccount(openAccountRequest);
             foundBank.getCustomers().add(foundCustomer);
             foundCustomer.getAccounts().add(newAccount);
             bankRepository.save(foundBank);
         }
         return OpenAccountResponse.builder()
                 .message("Account suuccessfully registered")
-                .accountName(newAccount.getAccountName())
                 .id(newAccount.getId())
                 .build();
 
@@ -245,7 +245,7 @@ public class BankServiceImpl implements BankService {
             List<Account> accounts = foundCustomer.getAccounts();
             for (int i = 0; i < accounts.size(); i++) {
                 if (accounts.get(i).getId().equalsIgnoreCase(deleteAccountRequest.getAccountId())) {
-                    customerService.deleteAccountById(deleteAccountRequest);
+                   // customerService.deleteAccountById(deleteAccountRequest);
                     accountService.deleteBYId(deleteAccountRequest.getAccountId());
                     accounts.remove(accounts.get(i));
                     bankRepository.save(foundBank);

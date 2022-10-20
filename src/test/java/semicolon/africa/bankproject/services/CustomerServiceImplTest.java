@@ -205,7 +205,7 @@ class CustomerServiceImplTest {
                 .pin(1234)
                 .build();
         WithdrawalFundResponse withdrawalFundResponse = customerService.WithdrawFund(withdrawalFundRequest);
-        assertEquals(BigDecimal.valueOf(7000), withdrawalFundResponse.getCurrentBalance());
+        assertEquals(BigDecimal.valueOf(90000), withdrawalFundResponse.getCurrentBalance());
 
     }
 

@@ -9,9 +9,11 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 public class OpenAccountResponse {
-    private String accountName;
+//    private String accountName;
     private String accountNumber;
     private String message;
     private String id;
 
+//    public String getAccountNumber() {
+//    }
 }
