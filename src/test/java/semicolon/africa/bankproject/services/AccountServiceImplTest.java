@@ -11,8 +11,6 @@ import semicolon.africa.bankproject.dto.request.OpenAccountRequest;
 import semicolon.africa.bankproject.dto.request.UpdateAccountRequest;
 import semicolon.africa.bankproject.dto.request.WithdrawalFundRequest;
 
-import semicolon.africa.bankproject.dto.response.WithdrawalFundResponse;
-
 
 import java.math.BigDecimal;
 
@@ -50,7 +48,7 @@ class AccountServiceImplTest {
                 .builder()
                 .phoneNumber("08109093828")
                 .email("adesuyiololade@gmail.com")
-                .AccountName("Adesuyi")
+                .accountName("Adesuyi")
                 .age("23")
                 .gender("female")
                 .build();
@@ -82,6 +80,20 @@ class AccountServiceImplTest {
         assertThat(foundAccount.getId()).isEqualTo(savedAccount.getId());
 
     }
+    @Test
+    public void findAccountByAccountName() {
+        Account foundAccount = accountService.findAccountByAccountName(savedAccount.getAccountName());
+        assertThat(foundAccount).isNotNull();
+        assertThat(foundAccount.getAccountName()).isEqualTo(savedAccount.getAccountName());
+
+    }
+    @Test
+    public void findAccountByAccountNumber() {
+        Account foundAccount = accountService.findAccountByAccountNUmber(savedAccount.getBeneficiaryAccountNumber());
+        assertThat(foundAccount).isNotNull();
+        assertThat(foundAccount.getId()).isEqualTo(savedAccount.getId());
+
+    }
 
     @Test
     public void findAllAccount() {
@@ -106,12 +118,12 @@ class AccountServiceImplTest {
     @Test
     public void testThatAccountCanBeUpdated() {
         UpdateAccountRequest updateAccountRequest = UpdateAccountRequest.builder()
-//                .AccountName("Demilade")
+                .accountName("Demilade")
                 .email("demilade@gmail.com")
-//                .AccountName("09031807593")
+               .phoneNumber("09031807593")
                 .age("70")
                 .build();
-        updateAccountRequest.setAccountId(savedAccount.getId());
+        updateAccountRequest.setAccountNumber(savedAccount.getBeneficiaryAccountNumber());
         accountService.updateAccount(updateAccountRequest);
         assertEquals("demilade@gmail.com", accountService.findAllAccount().get(0).getEmail());
         assertEquals("70", accountService.findAllAccount().get(0).getAge());

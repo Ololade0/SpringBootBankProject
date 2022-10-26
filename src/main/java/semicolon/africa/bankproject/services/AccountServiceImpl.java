@@ -7,12 +7,9 @@ import semicolon.africa.bankproject.dto.request.DepositFundRequest;
 import semicolon.africa.bankproject.dto.request.OpenAccountRequest;
 import semicolon.africa.bankproject.dto.request.UpdateAccountRequest;
 import semicolon.africa.bankproject.dto.request.WithdrawalFundRequest;
-import semicolon.africa.bankproject.exception.AccountAmountExceeded;
-import semicolon.africa.bankproject.exception.AccountCannotBeFound;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Objects;
 
 
 @Service
@@ -25,7 +22,7 @@ public class AccountServiceImpl implements AccountService {
         Account newAccount = Account.builder()
                 .email(openAccountRequest.getEmail())
                 .phoneNumber(openAccountRequest.getPhoneNumber())
-                .AccountName(openAccountRequest.getAccountName())
+                .accountName(openAccountRequest.getAccountName())
                // .beneficiaryAccountNumber(openAccountRequest.getAccountNumber())
                 .beneficiaryAccountNumber(openAccountRequest.getAccountNumber())
                 .age(openAccountRequest.getAge())
@@ -60,7 +57,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account updateAccount(UpdateAccountRequest updateAccountRequest) {
-        Account foundAccount = accountRepository.findAccountById(updateAccountRequest.getAccountId());
+        Account foundAccount = accountRepository.findAccountByBeneficiaryAccountNumber(updateAccountRequest.getAccountNumber());
 //        if (updateAccountRequest.getAccountName() != null) {
            // foundAccount.setAccountName(updateAccountRequest.getAccountName());
 //        }
@@ -112,6 +109,16 @@ public class AccountServiceImpl implements AccountService {
         if (account != null) ;
         return withdrawalFundRequest.getCurrentBalance().subtract(withdrawalFundRequest.getWithdrawalAmount());
         //   if(withdrawalFundRequest.getWithdrawalAmount().compareTo(withdrawalFundRequest.getCurrentBalance()))
+    }
+
+    @Override
+    public Account findAccountByAccountName(String accountName) {
+        return accountRepository.findAccountByAccountName(accountName);
+    }
+
+    @Override
+    public Account findAccountByAccountNUmber(String beneficiaryAccountNumber) {
+        return accountRepository.findAccountByBeneficiaryAccountNumber(beneficiaryAccountNumber);
     }
 
 }

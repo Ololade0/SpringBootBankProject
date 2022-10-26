@@ -9,7 +9,7 @@ import lombok.*;
 @Builder
 public class CustomerRegisterRequest {
     private String bankId;
-    private String customerId;
+//    private String customerId;
     private String customerName;
     private String customerAccountNumber;
     private String customerAge;

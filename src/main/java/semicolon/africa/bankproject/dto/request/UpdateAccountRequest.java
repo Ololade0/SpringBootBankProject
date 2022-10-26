@@ -11,8 +11,8 @@ import lombok.*;
 public class UpdateAccountRequest {
     private String bankId;
     private String customerId;
-    private String accountId;
-//    private String AccountName;
+    private String accountNumber;
+    private String accountName;
     private String age;
     private String phoneNumber;
     private String email;

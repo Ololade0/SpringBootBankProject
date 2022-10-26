@@ -1,6 +1,7 @@
 package semicolon.africa.bankproject.services;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Service;
 
 import semicolon.africa.bankproject.dao.model.Account;
@@ -98,7 +99,7 @@ public class BankServiceImpl implements BankService {
     }
 
     @Override
-    public CustomerRegisterResponse saveCustomer(CustomerRegisterRequest customerRegisterRequest) {
+    public CustomerRegisterResponse saveCustomer(CustomerRegisterRequest customerRegisterRequest)  {
         var customer = customerService.saveNewCustomer(customerRegisterRequest);
         Bank foundBank = bankRepository.findBankById(customerRegisterRequest.getBankId());
         if (foundBank != null) {

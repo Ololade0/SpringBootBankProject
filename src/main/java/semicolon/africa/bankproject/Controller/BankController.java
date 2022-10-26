@@ -3,6 +3,7 @@ package semicolon.africa.bankproject.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
 import semicolon.africa.bankproject.dao.model.Account;
 import semicolon.africa.bankproject.dao.model.Customer;
@@ -73,7 +74,7 @@ public class BankController {
 
     }
 
-    @PostMapping("/customers")
+    @PostMapping("/customer")
     public ResponseEntity<?> saveCustomers(@RequestBody CustomerRegisterRequest customerRegisterRequest) {
         try {
             CustomerRegisterResponse customerRegisterResponse = bankService.saveCustomer(customerRegisterRequest);

@@ -24,4 +24,8 @@ public interface AccountService {
 
 BigDecimal depositFundsIntoAccount(DepositFundRequest depositFundRequest);
  BigDecimal TransferFundsithValidPin(WithdrawalFundRequest withdrawalFundRequest);
+
+ Account findAccountByAccountName(String accountName);
+
+ Account findAccountByAccountNUmber(String beneficiaryAccountNumber);
 }

@@ -8,4 +8,5 @@ import semicolon.africa.bankproject.dao.model.Account;
 public interface AccountRepository extends MongoRepository<Account, String> {
     Account findAccountById(String id);
     Account findAccountByBeneficiaryAccountNumber(String accountNumber);
+    Account findAccountByAccountName(String accountName);
 }

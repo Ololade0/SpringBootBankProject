@@ -19,7 +19,7 @@ import java.util.List;
 public class Account {
     @Id
     private String id;
-    private String AccountName;
+    private String accountName;
     private String beneficiaryAccountNumber;
     private String senderAccountNumber;
     private int pin;

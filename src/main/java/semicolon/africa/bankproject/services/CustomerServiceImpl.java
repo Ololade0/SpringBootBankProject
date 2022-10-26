@@ -13,6 +13,7 @@ import semicolon.africa.bankproject.dto.response.DepositFundResponse;
 import semicolon.africa.bankproject.dto.response.OpenAccountResponse;
 import semicolon.africa.bankproject.dto.response.WithdrawalFundResponse;
 import semicolon.africa.bankproject.exception.AccountCannotBeFound;
+import semicolon.africa.bankproject.utils.Utils;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -28,14 +29,19 @@ public class CustomerServiceImpl implements CustomerService {
     @Autowired
     private AccountService accountService;
 
+    @Autowired
+    Utils utils;
+
+
     @Override
     public Customer saveNewCustomer(CustomerRegisterRequest customerRegister) {
         Customer newCustomer = Customer.builder().
                 customerName(customerRegister.getCustomerName())
-                //.customerAccountNumber(customerRegister.getCustomerAccountNumber())
                 .customerGender(customerRegister.getCustomerGender())
                 .customerAge(customerRegister.getCustomerAge())
                 .build();
+        String customerAcctNum = utils.generateCustomerAccountNumber(10);
+        newCustomer.setCustomerAccountNumber(customerAcctNum);
         return customerRepository.save(newCustomer);
 
     }

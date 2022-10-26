@@ -1,5 +1,6 @@
 package semicolon.africa.bankproject.services;
 
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import semicolon.africa.bankproject.dao.model.Account;
 import semicolon.africa.bankproject.dao.model.Bank;
 import semicolon.africa.bankproject.dao.model.Customer;
@@ -19,7 +20,7 @@ public interface BankService {
     long totalNumbersOfBanks();
 
 
-    CustomerRegisterResponse saveCustomer(CustomerRegisterRequest customerRegisterRequest);
+    CustomerRegisterResponse saveCustomer(CustomerRegisterRequest customerRegisterRequest) throws HttpMessageNotReadableException;
 
     List<Bank> findAllBanks();
 

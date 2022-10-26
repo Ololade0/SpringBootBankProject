@@ -11,6 +11,7 @@ import semicolon.africa.bankproject.dto.request.*;
 import semicolon.africa.bankproject.dto.response.DepositFundResponse;
 import semicolon.africa.bankproject.dto.response.OpenAccountResponse;
 import semicolon.africa.bankproject.dto.response.WithdrawalFundResponse;
+import semicolon.africa.bankproject.utils.Utils;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -21,6 +22,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class CustomerServiceImplTest {
     @Autowired
     private CustomerService customerService;
+    @Autowired
+    Utils utils;
     Customer savedCustomer;
     OpenAccountResponse savedAccount;
 
@@ -69,10 +72,13 @@ class CustomerServiceImplTest {
         customerRegisterRequest.setCustomerName("Adesuyi");
         customerRegisterRequest.setCustomerGender("female");
         customerRegisterRequest.setCustomerAge("55");
+        String customerAcctNum = utils.generateCustomerAccountNumber(10);
+        customerRegisterRequest.setCustomerAccountNumber(customerAcctNum);
+        System.out.println(customerRegisterRequest.getCustomerAccountNumber());
         Customer customer = customerService.saveNewCustomer(customerRegisterRequest);
         assertThat(customer.getCustomerId()).isNotNull();
         assertEquals(2, customerService.totalNumberOfCustomer());
-        System.out.println(customer.getCustomerId());
+
 
     }
 
