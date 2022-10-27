@@ -273,6 +273,16 @@ public class BankServiceImpl implements BankService {
                 .build();
     }
 
+    @Override
+    public Account findAccountByAccountName(String accountName) {
+        return accountService.findAccountByAccountName(accountName);
+    }
+
+    @Override
+    public Account findAccountByAccountNUmber(String accountNumber) {
+        return accountService.findAccountByAccountNUmber(accountNumber);
+    }
+
 }
 
 

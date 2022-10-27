@@ -131,15 +131,15 @@ public class BankController {
 
     }
 
-    @PostMapping("/account")
-    public ResponseEntity<?> openAccountForCustomer(@RequestBody OpenAccountRequest openAccountRequest) {
-        try {
-          OpenAccountResponse openAccountResponse = bankService.openCustomerAccount(openAccountRequest);
-            return new ResponseEntity<>(openAccountResponse, HttpStatus.CREATED);
-        } catch (AccountCannotBeFound e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
+//    @PostMapping("/account")
+//    public ResponseEntity<?> openAccountForCustomer(@RequestBody OpenAccountRequest openAccountRequest) {
+//        try {
+//          OpenAccountResponse openAccountResponse = bankService.openCustomerAccount(openAccountRequest);
+//            return new ResponseEntity<>(openAccountResponse, HttpStatus.CREATED);
+//        } catch (AccountCannotBeFound e) {
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
     @GetMapping("/accountId")
     public ResponseEntity<?> FindAccountById(@RequestBody FindAccountRequest findAccountRequest) {
@@ -150,6 +150,16 @@ public class BankController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+//    @GetMapping("/accountId")
+//    public ResponseEntity<?> FindAccountByAccountNumber(@RequestBody FindAccountRequest findAccountRequest) {
+//        try {
+//            Account foundAccount  = bankService.findAccountById(findAccountRequest);
+//            return new ResponseEntity<>(foundAccount, HttpStatus.CREATED);
+//        } catch (AccountCannotBeFound e) {
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
     @GetMapping("/all-account")
     public ResponseEntity<?> FindAllAccounts(@RequestBody FindAllAccountRequest findAllAccountRequest) {
@@ -178,6 +188,8 @@ public class BankController {
         }
 
     }
+
+
 
 
 }

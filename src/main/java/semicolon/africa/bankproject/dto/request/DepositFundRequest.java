@@ -1,8 +1,10 @@
 package semicolon.africa.bankproject.dto.request;
 
 import lombok.*;
+import semicolon.africa.bankproject.dao.model.TransactionType;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Setter
 @Getter
@@ -11,12 +13,12 @@ import java.math.BigDecimal;
 @Builder
 @ToString
 public class DepositFundRequest {
-    private String bankId;
-    private String customerId;
-    private String accountId;
+    private LocalDateTime transactionDate;
     private String beneficiaryAccount;
-    private String senderAccountNumber;
-    private int pin;
+    private String pin;
     private BigDecimal currentBalance;
-    private BigDecimal depositFunds;
+    private TransactionType transactionType;
+    private BigDecimal transactionAmount;
+
+
 }

@@ -59,5 +59,9 @@ public interface BankService {
     String deleteAccountById(DeleteAccountRequest deleteAccountRequest);
 
     UpdateAccountResponse updateAccountProfile(UpdateAccountRequest updateAccountRequest);
+
+    Account findAccountByAccountName(String accountName);
+
+    Account findAccountByAccountNUmber(String accountNumber);
 }
 

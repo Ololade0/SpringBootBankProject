@@ -10,6 +10,7 @@ import semicolon.africa.bankproject.dto.request.DepositFundRequest;
 import semicolon.africa.bankproject.dto.request.OpenAccountRequest;
 import semicolon.africa.bankproject.dto.request.UpdateAccountRequest;
 import semicolon.africa.bankproject.dto.request.WithdrawalFundRequest;
+import semicolon.africa.bankproject.dto.response.DepositFundResponse;
 
 
 import java.math.BigDecimal;
@@ -30,11 +31,11 @@ class AccountServiceImplTest {
                 .phoneNumber("08109093828")
                 .email("adesuyiololade@gmail.com")
                 .AccountName("Adesuyi")
+                .accountNumber("1234455")
                 .age("23")
                 .gender("female")
                 .build();
         savedAccount = accountService.openAccount(openAccountRequest);
-
     }
 
     @AfterEach
@@ -102,7 +103,6 @@ class AccountServiceImplTest {
         assertEquals("adesuyiololade@gmail.com", accountService.findAllAccount().get(0).getEmail());
     }
 
-
     @Test
     public void testThatAllAccountCanBeDeleted() {
         accountService.deleteAll();
@@ -130,12 +130,11 @@ class AccountServiceImplTest {
     }
 
     @Test
-    public void testThatAccountCanPerformDepositFundTransaction() {
+    public void customerCanTransfertFundToAnotherCustomerAccount_BeneficairyBalanceIncreases()throws Exception {
         DepositFundRequest depositFundRequest = DepositFundRequest
                 .builder()
-                .beneficiaryAccount("0782807561")
-                .depositFunds(BigDecimal.valueOf(60000))
-                .accountId(savedAccount.getId())
+                .beneficiaryAccount(savedAccount.getBeneficiaryAccountNumber())
+                .transactionAmount(BigDecimal.valueOf(60000))
                 .currentBalance(BigDecimal.valueOf(10000))
                 .build();
      BigDecimal depositFundResponse = accountService.depositFundsIntoAccount(depositFundRequest);
@@ -143,16 +142,15 @@ class AccountServiceImplTest {
     }
 
     @Test
-    public void testThatSenderCanTransferFundToBeneficiaryAccountWithValidPin() {
+    public void accountCanTransferFundToAnotherAccount_SenderBalanceDecrease(){
         WithdrawalFundRequest withdrawalFundRequest = WithdrawalFundRequest
                 .builder()
-                .pin(12345)
-                .senderAccountNumber("45678")
-                .beneficiaryAccountNumber("0782807561")
+                .pin("12345")
+                .accountNumber("45678")
                 .currentBalance(BigDecimal.valueOf(10000))
                 .withdrawalAmount(BigDecimal.valueOf(5000))
                 .build();
-        BigDecimal withdrawalFundResponse = accountService.TransferFundsithValidPin(withdrawalFundRequest);
+        BigDecimal withdrawalFundResponse = accountService.WithdrawFundFromAccount(withdrawalFundRequest);
         assertEquals(BigDecimal.valueOf(5000), withdrawalFundResponse);
     }
 

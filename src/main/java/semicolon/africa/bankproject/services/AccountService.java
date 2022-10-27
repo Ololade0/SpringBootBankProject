@@ -22,10 +22,14 @@ public interface AccountService {
 
     long totalNumberOfAccount();
 
-BigDecimal depositFundsIntoAccount(DepositFundRequest depositFundRequest);
- BigDecimal TransferFundsithValidPin(WithdrawalFundRequest withdrawalFundRequest);
+BigDecimal depositFundsIntoAccount(DepositFundRequest depositFundRequest) throws Exception;
+
 
  Account findAccountByAccountName(String accountName);
 
  Account findAccountByAccountNUmber(String beneficiaryAccountNumber);
+
+ BigDecimal WithdrawFundFromAccount(WithdrawalFundRequest withdrawalFundRequest);
+
+
 }

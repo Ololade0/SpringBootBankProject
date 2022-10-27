@@ -129,31 +129,6 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public DepositFundResponse depositFunds(DepositFundRequest depositFundRequest) {
-        Customer foundCustomer = customerRepository.findCustomerByCustomerAccountNumber(depositFundRequest.getBeneficiaryAccount());
-        if (foundCustomer != null) {
-            BigDecimal balance = accountService.depositFundsIntoAccount(depositFundRequest);
-            return DepositFundResponse.builder()
-                    .message("Fund sucessfully deposited")
-                    .currentBalance(balance)
-                    .build();
-        }
-        return null;
-    }
-
-    @Override
-    public WithdrawalFundResponse WithdrawFund(WithdrawalFundRequest withdrawalFundRequest) {
-        Customer foundCustomer = customerRepository.findCustomerByCustomerAccountNumber(withdrawalFundRequest.getSenderAccountNumber());
-        if (foundCustomer != null) {
-                  BigDecimal balance = accountService.TransferFundsithValidPin(withdrawalFundRequest);
-            return WithdrawalFundResponse.builder()
-                    .message("Transaction successful")
-                    .currentBalance(balance)
-                    .build();
-    }
-        return null;
-        }
-    @Override
     public long totalNumberOfAccount() {
         return accountService.totalNumberOfAccount();
     }

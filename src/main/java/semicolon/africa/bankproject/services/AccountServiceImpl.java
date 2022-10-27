@@ -1,12 +1,16 @@
 package semicolon.africa.bankproject.services;
+import jdk.jshell.execution.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import semicolon.africa.bankproject.dao.model.Account;
+
 import semicolon.africa.bankproject.dao.repository.AccountRepository;
 import semicolon.africa.bankproject.dto.request.DepositFundRequest;
 import semicolon.africa.bankproject.dto.request.OpenAccountRequest;
 import semicolon.africa.bankproject.dto.request.UpdateAccountRequest;
 import semicolon.africa.bankproject.dto.request.WithdrawalFundRequest;
+import semicolon.africa.bankproject.utils.Utils;
+
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -16,6 +20,10 @@ import java.util.List;
 public class AccountServiceImpl implements AccountService {
     @Autowired
     private AccountRepository accountRepository;
+    @Autowired
+    private TransactionServices transactionServices;
+    @Autowired
+    private Utils utils;
 
     @Override
     public Account openAccount(OpenAccountRequest openAccountRequest) {
@@ -23,12 +31,13 @@ public class AccountServiceImpl implements AccountService {
                 .email(openAccountRequest.getEmail())
                 .phoneNumber(openAccountRequest.getPhoneNumber())
                 .accountName(openAccountRequest.getAccountName())
-               // .beneficiaryAccountNumber(openAccountRequest.getAccountNumber())
                 .beneficiaryAccountNumber(openAccountRequest.getAccountNumber())
                 .age(openAccountRequest.getAge())
                 .gender(openAccountRequest.getGender())
                 .currentBalance(openAccountRequest.getBalance())
                 .build();
+        String customerAcctNum = utils.generateCustomerAccountNumber(10);
+        newAccount.setBeneficiaryAccountNumber(customerAcctNum);
         return accountRepository.save(newAccount);
 
     }
@@ -58,9 +67,9 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account updateAccount(UpdateAccountRequest updateAccountRequest) {
         Account foundAccount = accountRepository.findAccountByBeneficiaryAccountNumber(updateAccountRequest.getAccountNumber());
-//        if (updateAccountRequest.getAccountName() != null) {
-           // foundAccount.setAccountName(updateAccountRequest.getAccountName());
-//        }
+        if (updateAccountRequest.getAccountName() != null) {
+            foundAccount.setAccountName(updateAccountRequest.getAccountName());
+        }
         if (updateAccountRequest.getEmail() != null) {
             foundAccount.setEmail(updateAccountRequest.getEmail());
         }
@@ -80,36 +89,14 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public BigDecimal depositFundsIntoAccount(DepositFundRequest depositFundRequest) {
-        Account newAccount = Account
-                .builder()
-                .currentBalance(depositFundRequest.getCurrentBalance())
-                .senderAccountNumber(depositFundRequest.getSenderAccountNumber())
-                .beneficiaryAccountNumber(depositFundRequest.getBeneficiaryAccount())
-                .pin(depositFundRequest.getPin())
-                .funds(depositFundRequest.getDepositFunds())
-                .build();
-        Account account = accountRepository.findAccountByBeneficiaryAccountNumber(depositFundRequest.getBeneficiaryAccount());
-        if (account != null) ;
-        return depositFundRequest.getCurrentBalance().add(depositFundRequest.getDepositFunds());
-
+    public BigDecimal depositFundsIntoAccount(DepositFundRequest depositFundRequest) throws Exception {
+        Account foundAccount = accountRepository.findAccountByBeneficiaryAccountNumber(depositFundRequest.getBeneficiaryAccount());
+        if (foundAccount != null) {
+          return  transactionServices.depositFunds(depositFundRequest);
+        }
+       throw new RuntimeException("Transaction Unsuccessful");
     }
 
-    @Override
-    public BigDecimal TransferFundsithValidPin(WithdrawalFundRequest withdrawalFundRequest) {
-        Account newAccount = Account
-                .builder()
-                .currentBalance(withdrawalFundRequest.getCurrentBalance())
-                .beneficiaryAccountNumber(withdrawalFundRequest.getBeneficiaryAccountNumber())
-                .senderAccountNumber(withdrawalFundRequest.getSenderAccountNumber())
-                .pin(withdrawalFundRequest.getPin())
-                .funds(withdrawalFundRequest.getWithdrawalAmount())
-                .build();
-        Account account = accountRepository.findAccountByBeneficiaryAccountNumber(withdrawalFundRequest.getBeneficiaryAccountNumber());
-        if (account != null) ;
-        return withdrawalFundRequest.getCurrentBalance().subtract(withdrawalFundRequest.getWithdrawalAmount());
-        //   if(withdrawalFundRequest.getWithdrawalAmount().compareTo(withdrawalFundRequest.getCurrentBalance()))
-    }
 
     @Override
     public Account findAccountByAccountName(String accountName) {
@@ -121,7 +108,17 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.findAccountByBeneficiaryAccountNumber(beneficiaryAccountNumber);
     }
 
+    @Override
+    public BigDecimal WithdrawFundFromAccount(WithdrawalFundRequest withdrawalFundRequest) {
+        Account foundAccount = accountRepository.findAccountBySenderAccountNumber(withdrawalFundRequest.getAccountNumber());
+        if (foundAccount != null) {
+            return  transactionServices.TransferFund(withdrawalFundRequest);
+        }
+        throw new RuntimeException("Transaction Unsuccessful");
+
+    }
 }
+
 
 
 

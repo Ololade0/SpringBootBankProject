@@ -47,10 +47,10 @@ public interface CustomerService {
 
     void deleteAccountById(DeleteAccountRequest deleteAccountRequest);
 
-     DepositFundResponse depositFunds(DepositFundRequest depositFundRequest);
-
-    WithdrawalFundResponse WithdrawFund(WithdrawalFundRequest withdrawalFundRequest);
-
+//     DepositFundResponse depositFunds(DepositFundRequest depositFundRequest);
+//
+//    WithdrawalFundResponse WithdrawFund(WithdrawalFundRequest withdrawalFundRequest);
+//
 
     ;
 }

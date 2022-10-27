@@ -184,36 +184,29 @@ class CustomerServiceImplTest {
         customerService.deleteAccountById(deleteAccountRequest);
         assertEquals(0, customerService.totalNumberOfAccount());
     }
+//
+//    @Test
+//    public void customerCanTransfertFundToAnotherCustomerAccount_BeneficairyBalanceIncreases(){
 
-    @Test
-    public void customerCanTransfertFundToAnotherCustomerAccount_BeneficairyBalanceIncreases(){
-        DepositFundRequest depositFundRequest = DepositFundRequest.builder()
-                        .depositFunds(BigDecimal.valueOf(3000))
-                .currentBalance(BigDecimal.valueOf(10000))
-                .beneficiaryAccount(savedAccount.getAccountNumber())
-                .senderAccountNumber("12345")
-                .pin(1234)
-                .customerId(savedCustomer.getCustomerId())
-                .accountId(savedAccount.getId())
-                                                .build();
-        DepositFundResponse depositFundResponse = customerService.depositFunds(depositFundRequest);
-        assertEquals("Fund sucessfully deposited", depositFundResponse.getMessage());
-        assertEquals(BigDecimal.valueOf(13000), depositFundResponse.getCurrentBalance());
-
-    }
-    @Test
-    public void customerCanTransfetFundToAnotherCustomerAccount_SenderBalanceDecrease(){
-        WithdrawalFundRequest withdrawalFundRequest = WithdrawalFundRequest
-                .builder()
-                .withdrawalAmount(BigDecimal.valueOf(10000))
-                .currentBalance(BigDecimal.valueOf(100000))
-                .senderAccountNumber(savedAccount.getAccountNumber())
-                .pin(1234)
-                .build();
-        WithdrawalFundResponse withdrawalFundResponse = customerService.WithdrawFund(withdrawalFundRequest);
-        assertEquals(BigDecimal.valueOf(90000), withdrawalFundResponse.getCurrentBalance());
-
-    }
-
+//                                                .build();
+//        DepositFundResponse depositFundResponse = customerService.depositFunds(depositFundRequest);
+//        assertEquals("Fund sucessfully deposited", depositFundResponse.getMessage());
+//        assertEquals(BigDecimal.valueOf(13000), depositFundResponse.getCurrentBalance());
+//
+//    }
+//    @Test
+//    public void customerCanTransfetFundToAnotherCustomerAccount_SenderBalanceDecrease(){
+//        WithdrawalFundRequest withdrawalFundRequest = WithdrawalFundRequest
+//                .builder()
+//                .withdrawalAmount(BigDecimal.valueOf(10000))
+//                .currentBalance(BigDecimal.valueOf(100000))
+//                .senderAccountNumber(savedAccount.getAccountNumber())
+//                .pin(1234)
+//                .build();
+//        WithdrawalFundResponse withdrawalFundResponse = customerService.WithdrawFund(withdrawalFundRequest);
+//        assertEquals(BigDecimal.valueOf(90000), withdrawalFundResponse.getCurrentBalance());
+//
+//    }
+//
 
 }
