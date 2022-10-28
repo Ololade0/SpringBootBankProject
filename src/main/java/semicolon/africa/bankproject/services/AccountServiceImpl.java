@@ -1,5 +1,4 @@
 package semicolon.africa.bankproject.services;
-import jdk.jshell.execution.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import semicolon.africa.bankproject.dao.model.Account;
@@ -9,6 +8,7 @@ import semicolon.africa.bankproject.dto.request.DepositFundRequest;
 import semicolon.africa.bankproject.dto.request.OpenAccountRequest;
 import semicolon.africa.bankproject.dto.request.UpdateAccountRequest;
 import semicolon.africa.bankproject.dto.request.WithdrawalFundRequest;
+import semicolon.africa.bankproject.dto.response.DepositFundResponse;
 import semicolon.africa.bankproject.utils.Utils;
 
 
@@ -89,12 +89,18 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public BigDecimal depositFundsIntoAccount(DepositFundRequest depositFundRequest) throws Exception {
+    public DepositFundResponse depositFundsIntoAccount(DepositFundRequest depositFundRequest) throws Exception {
+
         Account foundAccount = accountRepository.findAccountByBeneficiaryAccountNumber(depositFundRequest.getBeneficiaryAccount());
-        if (foundAccount != null) {
-          return  transactionServices.depositFunds(depositFundRequest);
-        }
-       throw new RuntimeException("Transaction Unsuccessful");
+        if (foundAccount != null)
+            accountRepository.save(foundAccount);
+      BigDecimal currentBalance =  transactionServices.depositFunds(depositFundRequest);
+        DepositFundResponse depositFundResponse  = new DepositFundResponse();
+        depositFundResponse.setMessage("FUnd successfully deposited");
+        depositFundResponse.setCurrentBalance(String.valueOf(currentBalance));
+        depositFundResponse.setId(depositFundResponse.getId());
+        return depositFundResponse;
+//       throw new RuntimeException("Transaction Unsuccessful");
     }
 
 

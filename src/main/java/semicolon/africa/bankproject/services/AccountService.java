@@ -22,7 +22,7 @@ public interface AccountService {
 
     long totalNumberOfAccount();
 
-BigDecimal depositFundsIntoAccount(DepositFundRequest depositFundRequest) throws Exception;
+DepositFundResponse depositFundsIntoAccount(DepositFundRequest depositFundRequest) throws Exception;
 
 
  Account findAccountByAccountName(String accountName);

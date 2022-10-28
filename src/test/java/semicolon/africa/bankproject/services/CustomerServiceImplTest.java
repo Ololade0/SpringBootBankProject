@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import semicolon.africa.bankproject.dao.model.Account;
 import semicolon.africa.bankproject.dao.model.Customer;
+import semicolon.africa.bankproject.dao.repository.CustomerRepository;
 import semicolon.africa.bankproject.dto.request.*;
 import semicolon.africa.bankproject.dto.response.DepositFundResponse;
 import semicolon.africa.bankproject.dto.response.OpenAccountResponse;
@@ -15,6 +16,7 @@ import semicolon.africa.bankproject.utils.Utils;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,6 +24,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class CustomerServiceImplTest {
     @Autowired
     private CustomerService customerService;
+    @Autowired
+    private CustomerRepository customerRepository;
     @Autowired
     Utils utils;
     Customer savedCustomer;
@@ -32,8 +36,10 @@ class CustomerServiceImplTest {
         CustomerRegisterRequest customerRegister = new CustomerRegisterRequest();
         customerRegister.setCustomerName("Adesuyi");
         customerRegister.setCustomerGender("female");
+        customerRegister.setCustomerEmail("Ololadedemilade@gmail.com");
         customerRegister.setCustomerAccountNumber("34567");
         customerRegister.setCustomerAge("55");
+        customerRegister.setCustomerPassword("1235");
         savedCustomer = customerService.saveNewCustomer(customerRegister);
 
         OpenAccountRequest openAccountRequest = OpenAccountRequest.builder()
@@ -127,21 +133,7 @@ class CustomerServiceImplTest {
     }
 
 
-    @Test
-    public void CustomerCanOpenAccount() {
-        OpenAccountRequest openAccountRequest = OpenAccountRequest.builder()
-                .phoneNumber("08109093828")
-                .email("adesuyiololade@gmail.com")
-                .AccountName(savedCustomer.getCustomerName())
-                .age(savedCustomer.getCustomerAge())
-                .gender(savedCustomer.getCustomerGender())
-                .customerId(savedCustomer.getCustomerId())
-                .build();
-        OpenAccountResponse savedAccount = customerService.openAccount(openAccountRequest);
-        assertThat(savedAccount).isNotNull();
-        assertEquals(2, customerService.totalNumberOfAccount());
 
-    }
 
     @Test
     void customerCanDeleteAllAccounts() {
@@ -184,29 +176,24 @@ class CustomerServiceImplTest {
         customerService.deleteAccountById(deleteAccountRequest);
         assertEquals(0, customerService.totalNumberOfAccount());
     }
-//
-//    @Test
-//    public void customerCanTransfertFundToAnotherCustomerAccount_BeneficairyBalanceIncreases(){
 
-//                                                .build();
-//        DepositFundResponse depositFundResponse = customerService.depositFunds(depositFundRequest);
-//        assertEquals("Fund sucessfully deposited", depositFundResponse.getMessage());
-//        assertEquals(BigDecimal.valueOf(13000), depositFundResponse.getCurrentBalance());
+    @Test
+    public void testThatCustomerCanLogin() {
+        LoginRest loginRest = new LoginRest();
+        loginRest.setPassword(savedCustomer.getPassword());
+        loginRest.setEmail(savedCustomer.getCustomerEmail());
+        var email = customerService.login(loginRest);
+        assertEquals("Ololadedemilade0909", email.getEmail());
+    }
+
+    @Test
+    public void testThatfindCustomerBYEmail() {
+      Customer foundCustomer = customerService.findCustomerByEmail(savedCustomer.getCustomerEmail());
+       assertEquals("Ololadedemilade@gmail.com", foundCustomer.getCustomerEmail());
+
+    }
+
 //
-//    }
-//    @Test
-//    public void customerCanTransfetFundToAnotherCustomerAccount_SenderBalanceDecrease(){
-//        WithdrawalFundRequest withdrawalFundRequest = WithdrawalFundRequest
-//                .builder()
-//                .withdrawalAmount(BigDecimal.valueOf(10000))
-//                .currentBalance(BigDecimal.valueOf(100000))
-//                .senderAccountNumber(savedAccount.getAccountNumber())
-//                .pin(1234)
-//                .build();
-//        WithdrawalFundResponse withdrawalFundResponse = customerService.WithdrawFund(withdrawalFundRequest);
-//        assertEquals(BigDecimal.valueOf(90000), withdrawalFundResponse.getCurrentBalance());
-//
-//    }
-//
+
 
 }

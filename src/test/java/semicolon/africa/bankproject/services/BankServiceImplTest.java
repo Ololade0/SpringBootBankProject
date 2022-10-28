@@ -211,21 +211,21 @@ class BankServiceImplTest {
 
     }
 
-//    @Test
-//    public void testThatBankCanOpenAccount() {
-//        OpenAccountRequest openAccountRequest = OpenAccountRequest.builder()
-//                .bankId(savedBank.getBankId())
-//                .customerId(savedCustomer.getCustomerId())
-//                .AccountName(savedCustomer.getCustomerName())
-//                .age("60")
-//                .email("ololade@gmail.com")
-//                .phoneNumber("08109093828")
-//                .accountNumber("0782807561")
-//                .build();
-//        OpenAccountResponse foundAccount = bankService.openCustomerAccount(openAccountRequest);
-//        assertThat(foundAccount).isNotNull();
-//        assertEquals(2, bankService.findTotalNumbersOfAccounts());
-//    }
+    @Test
+    public void testThatBankCanOpenAccount() {
+        OpenAccountRequest openAccountRequest = OpenAccountRequest.builder()
+                .bankId(savedBank.getBankId())
+                .customerId(savedCustomer.getCustomerId())
+                .AccountName(savedCustomer.getCustomerName())
+                .age("60")
+                .email("ololade@gmail.com")
+                .phoneNumber("08109093828")
+                .accountNumber("0782807561")
+                .build();
+        OpenAccountResponse foundAccount = bankService.openCustomerAccount(openAccountRequest);
+        assertThat(foundAccount).isNotNull();
+        assertEquals(2, bankService.findTotalNumbersOfAccounts());
+    }
 
     @Test
     public void testThatBankCanFindAccountById() {

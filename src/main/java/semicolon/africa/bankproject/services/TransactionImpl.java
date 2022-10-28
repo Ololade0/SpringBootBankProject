@@ -63,19 +63,14 @@ public class TransactionImpl implements TransactionServices {
     @Override
     public BigDecimal depositFunds(DepositFundRequest depositFundRequest) {
         Transactions newTransaction = Transactions.builder()
-                .transactionDate(LocalDateTime.now())
-                .currentBalance(depositFundRequest.getCurrentBalance())
-                .transactionType(depositFundRequest.getTransactionType())
+               .currentBalance(depositFundRequest.getCurrentBalance())
                 .accountNumber(depositFundRequest.getBeneficiaryAccount())
                 .transactionAmount(depositFundRequest.getTransactionAmount())
-                .pin(depositFundRequest.getPin())
+                .id(depositFundRequest.getId())
                 .build();
-
-            return depositFundRequest.getTransactionAmount().add(depositFundRequest.getCurrentBalance());
-
-
-
-
+            BigDecimal bigDecimal = depositFundRequest.getTransactionAmount().add(depositFundRequest.getCurrentBalance());
+            transactionRepository.save(newTransaction);
+            return bigDecimal;
 
 
 }

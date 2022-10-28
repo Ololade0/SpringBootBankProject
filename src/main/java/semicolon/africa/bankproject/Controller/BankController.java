@@ -2,6 +2,7 @@ package semicolon.africa.bankproject.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
@@ -12,14 +13,19 @@ import semicolon.africa.bankproject.dto.response.*;
 import semicolon.africa.bankproject.exception.AccountCannotBeFound;
 import semicolon.africa.bankproject.exception.BankDoesNotExistException;
 import semicolon.africa.bankproject.exception.CustomerCannotBeFound;
+import semicolon.africa.bankproject.services.AccountService;
 import semicolon.africa.bankproject.services.BankService;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
 public class BankController {
     @Autowired
     private BankService bankService;
+
+    @Autowired
+    private AccountService accountServices;
 
     @PostMapping("/banks")
     public ResponseEntity<?> registerBank(@RequestBody BankRegisterRequest bankRegisterRequest) {
@@ -93,37 +99,41 @@ public class BankController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
     @GetMapping("/all-customer")
     public ResponseEntity<?> FindAllCustomers(@RequestBody FindAllCustomerRequest findAllCustomerRequest) {
         try {
-            List<Customer> customers  = bankService.findAllCustomers(findAllCustomerRequest);
+            List<Customer> customers = bankService.findAllCustomers(findAllCustomerRequest);
             return new ResponseEntity<>(customers, HttpStatus.CREATED);
         } catch (CustomerCannotBeFound e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
     @DeleteMapping("/customers")
     public ResponseEntity<?> DeleteCustomerById(@RequestBody DeleteCustomerRequest deleteCustomerRequest) {
         try {
-           String deletedCustomer =  bankService.deleteCustomerById(deleteCustomerRequest);
+            String deletedCustomer = bankService.deleteCustomerById(deleteCustomerRequest);
             return new ResponseEntity<>(deletedCustomer, HttpStatus.CREATED);
         } catch (CustomerCannotBeFound e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
     @DeleteMapping("/all-customers")
     public ResponseEntity<?> DeleteAllCustomers(@RequestBody DeleteAllCustomerRequest deleteAllCustomerRequest) {
         try {
-            String deletedAllCustomer =  bankService.deleteALLCustomers(deleteAllCustomerRequest);
+            String deletedAllCustomer = bankService.deleteALLCustomers(deleteAllCustomerRequest);
             return new ResponseEntity<>(deletedAllCustomer, HttpStatus.CREATED);
         } catch (CustomerCannotBeFound e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
     @PutMapping("/customerprofile")
     public ResponseEntity<?> updateCustomerProfile(@RequestBody UpdateCustomerProfileRequest updateCustomerProfileRequest) {
         try {
-          UpdateCustomerProfileResponse updateCustomerProfileResponse = bankService.updateCustomerProfile(updateCustomerProfileRequest);
+            UpdateCustomerProfileResponse updateCustomerProfileResponse = bankService.updateCustomerProfile(updateCustomerProfileRequest);
             return new ResponseEntity<>(updateCustomerProfileResponse, HttpStatus.ACCEPTED);
         } catch (CustomerCannotBeFound e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -131,20 +141,20 @@ public class BankController {
 
     }
 
-//    @PostMapping("/account")
-//    public ResponseEntity<?> openAccountForCustomer(@RequestBody OpenAccountRequest openAccountRequest) {
-//        try {
-//          OpenAccountResponse openAccountResponse = bankService.openCustomerAccount(openAccountRequest);
-//            return new ResponseEntity<>(openAccountResponse, HttpStatus.CREATED);
-//        } catch (AccountCannotBeFound e) {
-//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-//        }
-//    }
+    @PostMapping("/account")
+    public ResponseEntity<?> openAccountForCustomer(@RequestBody OpenAccountRequest openAccountRequest) {
+        try {
+            OpenAccountResponse openAccountResponse = bankService.openCustomerAccount(openAccountRequest);
+            return new ResponseEntity<>(openAccountResponse, HttpStatus.CREATED);
+        } catch (AccountCannotBeFound e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
 
     @GetMapping("/accountId")
     public ResponseEntity<?> FindAccountById(@RequestBody FindAccountRequest findAccountRequest) {
         try {
-          Account foundAccount  = bankService.findAccountById(findAccountRequest);
+            Account foundAccount = bankService.findAccountById(findAccountRequest);
             return new ResponseEntity<>(foundAccount, HttpStatus.CREATED);
         } catch (AccountCannotBeFound e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -164,24 +174,23 @@ public class BankController {
     @GetMapping("/all-account")
     public ResponseEntity<?> FindAllAccounts(@RequestBody FindAllAccountRequest findAllAccountRequest) {
         try {
-            List<Account> accounts  = bankService.findAllAccounts(findAllAccountRequest);
+            List<Account> accounts = bankService.findAllAccounts(findAllAccountRequest);
             return new ResponseEntity<>(accounts, HttpStatus.CREATED);
         } catch (AccountCannotBeFound e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
     @DeleteMapping("/delete-all-accounts")
     public ResponseEntity<?> deleteAllAccounts() {
-        String deletedAllAccounts= bankService.deleteAllAccount();
+        String deletedAllAccounts = bankService.deleteAllAccount();
         return new ResponseEntity<>(deletedAllAccounts, HttpStatus.ACCEPTED);
     }
+
     @PutMapping("/accountprofile")
-    //REVIEW
-    //FINDCUSTOMER/FINDALLCUSTOMER
-    //DELETEACAOUNTBYID
     public ResponseEntity<?> updateAccountProfile(@RequestBody UpdateAccountRequest updateAccountRequest) {
         try {
-           UpdateAccountResponse updateAccountResponse = bankService.updateAccountProfile(updateAccountRequest);
+            UpdateAccountResponse updateAccountResponse = bankService.updateAccountProfile(updateAccountRequest);
             return new ResponseEntity<>(updateAccountResponse, HttpStatus.ACCEPTED);
         } catch (AccountCannotBeFound e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -190,6 +199,21 @@ public class BankController {
     }
 
 
+//    @PostMapping(path = "/account-deposit", consumes="application/json", )
+    //    @PostMapping(value = "/accountdeposit")
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    @ExceptionHandler(HttpMessageNotReadableException.class)
+@PostMapping(value = "/{account-deposit}",
+        produces ={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<?> accountCanDeposit(@RequestBody DepositFundRequest depositFundRequest) {
+        try {
+            DepositFundResponse openAccountResponse = accountServices.depositFundsIntoAccount(depositFundRequest);
+            return new ResponseEntity<>(openAccountResponse, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+
+        }
 
 
+    }
 }

@@ -12,10 +12,9 @@ import semicolon.africa.bankproject.dto.request.TransactionsRequest;
 import semicolon.africa.bankproject.dto.request.WithdrawalFundRequest;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+
 import java.time.LocalDateTime;
-import java.time.Year;
-import java.time.format.DateTimeFormatter;
+
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -105,11 +104,12 @@ public void TransactionCanBeDone(){
     public void customerCanTransfertFundToAnotherCustomerAccount_BeneficairyBalanceIncreases() throws Exception {
         DepositFundRequest depositFundRequest = DepositFundRequest.builder()
                 .transactionAmount(BigDecimal.valueOf(10000))
-                .transactionDate(LocalDateTime.now())
-                .transactionType(TransactionType.DEPOSIT)
+//                .transactionDate(LocalDateTime.now())
+//                .transactionType(TransactionType.DEPOSIT)
                 .currentBalance(BigDecimal.valueOf(3000))
+                .id(savedTransactions.getId())
                 .beneficiaryAccount("12345")
-                .pin("2345")
+//                .pin("2345")
                 .build();
       var savedTransactions = transactionServices.depositFunds(depositFundRequest);
         assertEquals(BigDecimal.valueOf(13000), savedTransactions);

@@ -13,12 +13,8 @@ import java.time.LocalDateTime;
 @Builder
 @ToString
 public class DepositFundRequest {
-    private LocalDateTime transactionDate;
     private String beneficiaryAccount;
-    private String pin;
-    private BigDecimal currentBalance;
-    private TransactionType transactionType;
+  private BigDecimal currentBalance;
     private BigDecimal transactionAmount;
-
-
+    private String id;
 }

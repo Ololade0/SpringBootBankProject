@@ -137,8 +137,8 @@ class AccountServiceImplTest {
                 .transactionAmount(BigDecimal.valueOf(60000))
                 .currentBalance(BigDecimal.valueOf(10000))
                 .build();
-     BigDecimal depositFundResponse = accountService.depositFundsIntoAccount(depositFundRequest);
-        assertEquals(BigDecimal.valueOf(70000), depositFundResponse);
+     DepositFundResponse depositFundResponse = accountService.depositFundsIntoAccount(depositFundRequest);
+        assertEquals("70000", depositFundResponse.getCurrentBalance());
     }
 
     @Test

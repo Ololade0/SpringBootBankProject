@@ -1,5 +1,6 @@
 package semicolon.africa.bankproject.exception.EXceptionHandler;
 import com.mongodb.lang.Nullable;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,35 +16,39 @@ import semicolon.africa.bankproject.exception.CustomerCannotBeFound;
 import java.util.Date;
 
 @ControllerAdvice
+@Slf4j
 public class BankExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(value = {BankDoesNotExistException.class})
-    public ResponseEntity<Object> handleBankServiceException(BankDoesNotExistException exception, WebRequest request){
-       ErrorMessage errorMessage = new ErrorMessage(exception.getMessage(), new Date());
+    public ResponseEntity<Object> handleBankServiceException(BankDoesNotExistException exception, WebRequest request) {
+        ApiError errorMessage = new ApiError(exception.getMessage(), new Date());
         return new ResponseEntity<>(errorMessage.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
 
 
     @ExceptionHandler(value = {AccountCannotBeFound.class})
-    public ResponseEntity<Object> handleAccountServiceException(AccountCannotBeFound exception, WebRequest request){
-        ErrorMessage errorMessage = new ErrorMessage(exception.getMessage(), new Date());
+    public ResponseEntity<Object> handleAccountServiceException(AccountCannotBeFound exception, WebRequest request) {
+        ApiError errorMessage = new ApiError(exception.getMessage(), new Date());
         return new ResponseEntity<>(errorMessage.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
 
     @ExceptionHandler(value = {CustomerCannotBeFound.class})
-    public ResponseEntity<Object> handleCustomerServiceException(CustomerCannotBeFound exception, WebRequest request){
-        ErrorMessage errorMessage = new ErrorMessage(exception.getMessage(), new Date());
+    public ResponseEntity<Object> handleCustomerServiceException(CustomerCannotBeFound exception, HttpStatus status, WebRequest request) {
+
+        ApiError errorMessage = new ApiError(exception.getMessage(), new Date());
         return new ResponseEntity<>(errorMessage.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
-//    @ExceptionHandler(value = {HttpMessageNotReadableException.class})
-    public ResponseEntity<Object> HttpMessageNotReadableException(HttpMessageNotReadableException exception, @Nullable WebRequest request){
-        final String error = exception.getMessage() + " not readable";
-        ErrorMessage errorMessage = new ErrorMessage(error, new Date());
-        return new ResponseEntity<>(errorMessage.getMessage(), new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+
+    public ResponseEntity<Object> HttpMessageNotReadableException(HttpMessageNotReadableException exception, HttpStatus status, @Nullable WebRequest request) {
+        logger.info(exception.getClass().getName());
+        String error = exception.getHttpInputMessage() + "No HttpInputMessage available - use non-deprecated constructors";
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, exception.getLocalizedMessage(), error);
+        return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
 
     }
+
 }
 
 

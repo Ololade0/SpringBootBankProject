@@ -10,9 +10,11 @@ import semicolon.africa.bankproject.dao.repository.CustomerRepository;
 import semicolon.africa.bankproject.dto.request.*;
 
 import semicolon.africa.bankproject.dto.response.DepositFundResponse;
+import semicolon.africa.bankproject.dto.response.LoginResponse;
 import semicolon.africa.bankproject.dto.response.OpenAccountResponse;
 import semicolon.africa.bankproject.dto.response.WithdrawalFundResponse;
 import semicolon.africa.bankproject.exception.AccountCannotBeFound;
+import semicolon.africa.bankproject.exception.CustomerCannotBeFound;
 import semicolon.africa.bankproject.utils.Utils;
 
 import java.math.BigDecimal;
@@ -29,19 +31,18 @@ public class CustomerServiceImpl implements CustomerService {
     @Autowired
     private AccountService accountService;
 
-    @Autowired
-    Utils utils;
+//    @Autowired
+//    Utils utils;
 
 
     @Override
     public Customer saveNewCustomer(CustomerRegisterRequest customerRegister) {
         Customer newCustomer = Customer.builder().
                 customerName(customerRegister.getCustomerName())
+                .customerEmail(customerRegister.getCustomerEmail())
                 .customerGender(customerRegister.getCustomerGender())
                 .customerAge(customerRegister.getCustomerAge())
                 .build();
-        String customerAcctNum = utils.generateCustomerAccountNumber(10);
-        newCustomer.setCustomerAccountNumber(customerAcctNum);
         return customerRepository.save(newCustomer);
 
     }
@@ -173,13 +174,47 @@ public class CustomerServiceImpl implements CustomerService {
         if (foundCustomer != null) {
             List<Account> accounts = foundCustomer.getAccounts();
             for (int i = 0; i < accounts.size(); i++) {
-                if(accounts.get(i).getId().equalsIgnoreCase(deleteAccountRequest.getAccountId())){
+                if (accounts.get(i).getId().equalsIgnoreCase(deleteAccountRequest.getAccountId())) {
                     accountService.deleteBYId(deleteAccountRequest.getAccountId());
                     accounts.remove(accounts.get(i));
                     customerRepository.save(foundCustomer);
                 }
-
             }
         }
     }
+
+    @Override
+    public Customer findCustomerByEmail(String customerEmail) {
+        Optional<Customer> foundCustomer = customerRepository.findCustomerByCustomerEmail(customerEmail);
+        if (foundCustomer.isEmpty()) {
+            throw new CustomerCannotBeFound("Customer cannot be found");
+        }
+        return foundCustomer.get();
+
+    }
+
+    @Override
+    public LoginResponse login(LoginRest loginRest) {
+        Customer savedCustomer = findCustomerByEmail(loginRest.getEmail());
+        savedCustomer.setPassword(loginRest.getPassword());
+        if (!savedCustomer.getPassword().equalsIgnoreCase(loginRest.getPassword())) {
+            throw new CustomerCannotBeFound("Incorrect Password");
+        }
+        LoginResponse loginResponse = new LoginResponse();
+        loginResponse.setMessage("Login successful");
+        return loginResponse;
+    }
 }
+
+
+//    @Override
+//    public LoginUserResponse login(LoginUserRequest request) {
+//        LoginUserResponse loginUserResponse = new LoginUserResponse();
+//        User savedUser = getUserByEmail(request.getEmail());
+//        if (!savedUser.getPassword().equalsIgnoreCase(request.getPassword())) {
+//            throw new UserExistsException(request + "incorrect password");
+//        }
+//        loginUserResponse.setMessage("lOGIN SUCCESSFUL");
+//        return loginUserResponse;
+//    }
+

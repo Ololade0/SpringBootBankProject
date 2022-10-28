@@ -6,10 +6,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import semicolon.africa.bankproject.dao.model.Account;
 import semicolon.africa.bankproject.dto.request.BankRegisterRequest;
 import semicolon.africa.bankproject.dto.request.OpenAccountRequest;
 import semicolon.africa.bankproject.dto.request.TransactionsRequest;
 import semicolon.africa.bankproject.dto.response.BankRegisterResponse;
+import semicolon.africa.bankproject.dto.response.OpenAccountResponse;
 import semicolon.africa.bankproject.exception.BankDoesNotExistException;
 import semicolon.africa.bankproject.services.AccountService;
 ;
@@ -19,13 +21,13 @@ public class AccountController {
 //    @Autowired
 //    private AccountService accountServices;
 //    @PostMapping("/banks")
-//    public ResponseEntity<?> OPenAccount(@RequestBody TransactionsRequest transactionRequest) {
+//    public ResponseEntity<?> OpenAccount(@RequestBody OpenAccountRequest openAccountRequest) {
 //        try {
-////            BankRegisterResponse bankRegisterResponse = accountServices.(openAccountRequest);
+//            Account openAccountResponse= accountServices.openAccount(openAccountRequest);
 //            return new ResponseEntity<>(bankRegisterResponse, HttpStatus.CREATED);
 //        } catch (BankDoesNotExistException e) {
 //            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 //        }
 //    }
-
+//
 }

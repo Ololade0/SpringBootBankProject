@@ -190,11 +190,10 @@ public class BankServiceImpl implements BankService {
 
     @Override
     public OpenAccountResponse openCustomerAccount(OpenAccountRequest openAccountRequest) {
-        Account newAccount = accountService.openAccount(openAccountRequest);
         Bank foundBank = bankRepository.findBankById(openAccountRequest.getBankId());
         Customer foundCustomer = customerService.findCustomerById(openAccountRequest.getCustomerId());
+        Account newAccount = accountService.openAccount(openAccountRequest);
         if (foundBank != null) {
-//            customerService.openAccount(openAccountRequest);
             foundBank.getCustomers().add(foundCustomer);
             foundCustomer.getAccounts().add(newAccount);
             bankRepository.save(foundBank);

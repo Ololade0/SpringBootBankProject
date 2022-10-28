@@ -3,6 +3,7 @@ import semicolon.africa.bankproject.dao.model.Account;
 import semicolon.africa.bankproject.dao.model.Customer;
 import semicolon.africa.bankproject.dto.request.*;
 import semicolon.africa.bankproject.dto.response.DepositFundResponse;
+import semicolon.africa.bankproject.dto.response.LoginResponse;
 import semicolon.africa.bankproject.dto.response.OpenAccountResponse;
 import semicolon.africa.bankproject.dto.response.WithdrawalFundResponse;
 
@@ -11,6 +12,7 @@ import java.util.Optional;
 
 public interface CustomerService {
     Customer saveNewCustomer(CustomerRegisterRequest customerRegisterRequest);
+
 
 
 
@@ -47,10 +49,12 @@ public interface CustomerService {
 
     void deleteAccountById(DeleteAccountRequest deleteAccountRequest);
 
-//     DepositFundResponse depositFunds(DepositFundRequest depositFundRequest);
-//
-//    WithdrawalFundResponse WithdrawFund(WithdrawalFundRequest withdrawalFundRequest);
-//
+    LoginResponse login(LoginRest loginRest);
+
+    Customer findCustomerByEmail(String customerEmail);
+
+
+
 
     ;
 }
