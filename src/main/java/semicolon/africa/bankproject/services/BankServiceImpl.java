@@ -120,7 +120,7 @@ public class BankServiceImpl implements BankService {
     }
 
     @Override
-    public List<Customer> findAllCustomers(FindAllCustomerRequest findAllCustomerRequest) {
+    public List<Customer> findAllCustomers(FindAllCustomerRequest findAllCustomerRequest) throws BankDoesNotExistException{
         Bank foundBank = bankRepository.findBankById(findAllCustomerRequest.getBankId());
         if (foundBank != null) {
             return customerService.findAllCustomers();

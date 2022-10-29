@@ -106,8 +106,8 @@ public void TransactionCanBeDone(){
                 .transactionAmount(BigDecimal.valueOf(10000))
 //                .transactionDate(LocalDateTime.now())
 //                .transactionType(TransactionType.DEPOSIT)
-                .currentBalance(BigDecimal.valueOf(3000))
-                .id(savedTransactions.getId())
+//                .currentBalance(BigDecimal.valueOf(3000))
+//                .id(savedTransactions.getId())
                 .beneficiaryAccount("12345")
 //                .pin("2345")
                 .build();

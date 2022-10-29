@@ -3,6 +3,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import semicolon.africa.bankproject.dao.model.Account;
 
+import semicolon.africa.bankproject.dao.model.Transactions;
 import semicolon.africa.bankproject.dao.repository.AccountRepository;
 import semicolon.africa.bankproject.dto.request.DepositFundRequest;
 import semicolon.africa.bankproject.dto.request.OpenAccountRequest;
@@ -89,18 +90,37 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public DepositFundResponse depositFundsIntoAccount(DepositFundRequest depositFundRequest) throws Exception {
-
+    public BigDecimal depositFundsIntoAccount(DepositFundRequest depositFundRequest) throws Exception {
         Account foundAccount = accountRepository.findAccountByBeneficiaryAccountNumber(depositFundRequest.getBeneficiaryAccount());
-        if (foundAccount != null)
-            accountRepository.save(foundAccount);
-      BigDecimal currentBalance =  transactionServices.depositFunds(depositFundRequest);
-        DepositFundResponse depositFundResponse  = new DepositFundResponse();
-        depositFundResponse.setMessage("FUnd successfully deposited");
-        depositFundResponse.setCurrentBalance(String.valueOf(currentBalance));
-        depositFundResponse.setId(depositFundResponse.getId());
-        return depositFundResponse;
-//       throw new RuntimeException("Transaction Unsuccessful");
+//        Account newAccount = Account.builder()
+//                .currentBalance(depositFundRequest.getCurrentBalance())
+//                .beneficiaryAccountNumber(depositFundRequest.getBeneficiaryAccount())
+//               .funds(depositFundRequest.getTransactionAmount())
+////                .id(depositFundRequest.getId())
+//                .build();
+//        BigDecimal bigDecimal = depositFundRequest.getTransactionAmount().add(depositFundRequest.getCurrentBalance());
+        foundAccount.setCurrentBalance(foundAccount.getCurrentBalance().add(depositFundRequest.getTransactionAmount()));
+        System.out.println(foundAccount.getCurrentBalance());
+        System.out.println(depositFundRequest.getTransactionAmount());
+       accountRepository.save(foundAccount);
+        return foundAccount.getCurrentBalance();
+
+////        Account newAccount = new Account();
+//        if (foundAccount != null) {
+//            return depositFundRequest.getTransactionAmount().add(depositFundRequest.getCurrentBalance());
+//        }
+//        throw new RuntimeException("Account is null");    }
+
+//        Account foundAccount = accountRepository.findAccountByBeneficiaryAccountNumber(depositFundRequest.getBeneficiaryAccount());
+//        if (foundAccount != null)
+//            accountRepository.save(foundAccount);
+//      BigDecimal currentBalance =  transactionServices.depositFunds(depositFundRequest);
+//        DepositFundResponse depositFundResponse  = new DepositFundResponse();
+//        depositFundResponse.setMessage("FUnd successfully deposited");
+//        depositFundResponse.setCurrentBalance(String.valueOf(currentBalance));
+//        depositFundResponse.setId(depositFundResponse.getId());
+//        return depositFundResponse;
+////       throw new RuntimeException("Transaction Unsuccessful");
     }
 
 

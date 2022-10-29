@@ -32,6 +32,7 @@ class AccountServiceImplTest {
                 .email("adesuyiololade@gmail.com")
                 .AccountName("Adesuyi")
                 .accountNumber("1234455")
+                .balance(BigDecimal.valueOf(30000))
                 .age("23")
                 .gender("female")
                 .build();
@@ -135,10 +136,9 @@ class AccountServiceImplTest {
                 .builder()
                 .beneficiaryAccount(savedAccount.getBeneficiaryAccountNumber())
                 .transactionAmount(BigDecimal.valueOf(60000))
-                .currentBalance(BigDecimal.valueOf(10000))
                 .build();
-     DepositFundResponse depositFundResponse = accountService.depositFundsIntoAccount(depositFundRequest);
-        assertEquals("70000", depositFundResponse.getCurrentBalance());
+     BigDecimal depositFundResponse = accountService.depositFundsIntoAccount(depositFundRequest);
+        assertEquals(BigDecimal.valueOf(90000), depositFundResponse);
     }
 
     @Test

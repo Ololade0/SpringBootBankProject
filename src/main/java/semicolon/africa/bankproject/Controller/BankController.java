@@ -79,7 +79,6 @@ public class BankController {
         }
 
     }
-
     @PostMapping("/customer")
     public ResponseEntity<?> saveCustomers(@RequestBody CustomerRegisterRequest customerRegisterRequest) {
         try {
@@ -202,12 +201,12 @@ public class BankController {
 //    @PostMapping(path = "/account-deposit", consumes="application/json", )
     //    @PostMapping(value = "/accountdeposit")
 //    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    @ExceptionHandler(HttpMessageNotReadableException.class)
+
 @PostMapping(value = "/{account-deposit}",
         produces ={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> accountCanDeposit(@RequestBody DepositFundRequest depositFundRequest) {
         try {
-            DepositFundResponse openAccountResponse = accountServices.depositFundsIntoAccount(depositFundRequest);
+            BigDecimal openAccountResponse = accountServices.depositFundsIntoAccount(depositFundRequest);
             return new ResponseEntity<>(openAccountResponse, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);

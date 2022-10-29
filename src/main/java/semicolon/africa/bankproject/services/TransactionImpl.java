@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+
 public class TransactionImpl implements TransactionServices {
     @Autowired
     private TransactionRepository transactionRepository;
@@ -63,17 +64,17 @@ public class TransactionImpl implements TransactionServices {
     @Override
     public BigDecimal depositFunds(DepositFundRequest depositFundRequest) {
         Transactions newTransaction = Transactions.builder()
-               .currentBalance(depositFundRequest.getCurrentBalance())
-                .accountNumber(depositFundRequest.getBeneficiaryAccount())
-                .transactionAmount(depositFundRequest.getTransactionAmount())
-                .id(depositFundRequest.getId())
+//               .currentBalance(depositFundRequest.getCurrentBalance())
+//                .accountNumber(depositFundRequest.getBeneficiaryAccount())
+//                .transactionAmount(depositFundRequest.getTransactionAmount())
+////                .id(depositFundRequest.getId())
                 .build();
-            BigDecimal bigDecimal = depositFundRequest.getTransactionAmount().add(depositFundRequest.getCurrentBalance());
-            transactionRepository.save(newTransaction);
-            return bigDecimal;
+//            BigDecimal bigDecimal = depositFundRequest.getTransactionAmount().add(depositFundRequest.getCurrentBalance())
+//            transactionRepository.save(newTransaction);
+            return null;
 
+    }
 
-}
 
     @Override
     public BigDecimal TransferFund(WithdrawalFundRequest withdrawalFundRequest) {
