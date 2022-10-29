@@ -1,5 +1,6 @@
 package semicolon.africa.bankproject.services;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Service;
@@ -20,15 +21,12 @@ import java.util.List;
 
 
 @Service
-@AllArgsConstructor
-
+@RequiredArgsConstructor
 public class BankServiceImpl implements BankService {
-    @Autowired
     private final BankRepository bankRepository;
-    @Autowired
     private final CustomerService customerService;
-    @Autowired
     private final AccountService accountService;
+
 
 
     @Override
@@ -40,7 +38,7 @@ public class BankServiceImpl implements BankService {
         BankRegisterResponse bankRegisterResponse = new BankRegisterResponse();
         bankRegisterResponse.setMessage("Bank successfully registered");
         bankRegisterResponse.setBankId(savedBank.getId());
-        bankRegisterResponse.setBankLocation(bank.getBankLocation());
+        bankRegisterResponse.setBankLocation(savedBank.getBankLocation());
         return bankRegisterResponse;
     }
 

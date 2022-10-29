@@ -9,7 +9,7 @@ import lombok.*;
 @Builder
 @ToString
 public class BankRegisterRequest {
-    private Long bankId;
+    private String bankId;
     private String bankName;
     private String banklocation;
 }
