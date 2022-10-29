@@ -1,10 +1,7 @@
 package semicolon.africa.bankproject.services;
 
 import semicolon.africa.bankproject.dao.model.Account;
-import semicolon.africa.bankproject.dto.request.DepositFundRequest;
-import semicolon.africa.bankproject.dto.request.OpenAccountRequest;
-import semicolon.africa.bankproject.dto.request.UpdateAccountRequest;
-import semicolon.africa.bankproject.dto.request.WithdrawalFundRequest;
+import semicolon.africa.bankproject.dto.request.*;
 import semicolon.africa.bankproject.dto.response.DepositFundResponse;
 import semicolon.africa.bankproject.dto.response.WithdrawalFundResponse;
 
@@ -32,4 +29,5 @@ BigDecimal depositFundsIntoAccount(DepositFundRequest depositFundRequest) throws
  BigDecimal WithdrawFundFromAccount(WithdrawalFundRequest withdrawalFundRequest);
 
 
+ void recordTransactions(TransactionsRequest transactionsRequest);
 }

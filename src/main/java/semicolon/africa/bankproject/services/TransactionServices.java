@@ -25,5 +25,9 @@ public interface TransactionServices {
 
   BigDecimal depositFunds(DepositFundRequest depositFundRequest) throws Exception;
 
-    BigDecimal TransferFund(WithdrawalFundRequest withdrawalFundRequest);
+//    BigDecimal TransferFund(WithdrawalFundRequest withdrawalFundRequest);
+
+//    BigDecimal depositFund(BigDecimal currentBalance, DepositFundRequest depositFundRequest);
+
+//    BigDecimal depositFund(BigDecimal currentBalance, BigDecimal transactionAmount, String accountNumber);
 }

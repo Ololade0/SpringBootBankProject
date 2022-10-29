@@ -21,7 +21,7 @@ public class Account {
     private String id;
     private String accountName;
     private String beneficiaryAccountNumber;
-    private String senderAccountNumber;
+//    private String senderAccountNumber;
     private int pin;
     private String age;
     private String phoneNumber;

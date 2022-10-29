@@ -6,10 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import semicolon.africa.bankproject.dao.model.Account;
-import semicolon.africa.bankproject.dto.request.DepositFundRequest;
-import semicolon.africa.bankproject.dto.request.OpenAccountRequest;
-import semicolon.africa.bankproject.dto.request.UpdateAccountRequest;
-import semicolon.africa.bankproject.dto.request.WithdrawalFundRequest;
+import semicolon.africa.bankproject.dao.model.TransactionType;
+import semicolon.africa.bankproject.dto.request.*;
 import semicolon.africa.bankproject.dto.response.DepositFundResponse;
 
 
@@ -145,13 +143,22 @@ class AccountServiceImplTest {
     public void accountCanTransferFundToAnotherAccount_SenderBalanceDecrease(){
         WithdrawalFundRequest withdrawalFundRequest = WithdrawalFundRequest
                 .builder()
-                .pin("12345")
-                .accountNumber("45678")
-                .currentBalance(BigDecimal.valueOf(10000))
+                .accountNumber(savedAccount.getBeneficiaryAccountNumber())
                 .withdrawalAmount(BigDecimal.valueOf(5000))
                 .build();
-        BigDecimal withdrawalFundResponse = accountService.WithdrawFundFromAccount(withdrawalFundRequest);
-        assertEquals(BigDecimal.valueOf(5000), withdrawalFundResponse);
+      BigDecimal withdrawalFundResponse = accountService.WithdrawFundFromAccount(withdrawalFundRequest);
+        assertEquals(BigDecimal.valueOf(25000), withdrawalFundResponse);
+    }
+
+    @Test
+    void recordTransaction(){
+        TransactionsRequest transactionsRequest = new TransactionsRequest();
+        transactionsRequest.setTransactionAmount(BigDecimal.valueOf(40000));
+        transactionsRequest.setAccountNumber("23456");
+        transactionsRequest.setCurrentBalance(BigDecimal.valueOf(90000));
+        transactionsRequest.setTransactionType(TransactionType.DEPOSIT);
+        accountService.recordTransactions(transactionsRequest);
+
     }
 
 

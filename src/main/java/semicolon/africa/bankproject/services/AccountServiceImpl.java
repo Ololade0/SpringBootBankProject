@@ -5,10 +5,7 @@ import semicolon.africa.bankproject.dao.model.Account;
 
 import semicolon.africa.bankproject.dao.model.Transactions;
 import semicolon.africa.bankproject.dao.repository.AccountRepository;
-import semicolon.africa.bankproject.dto.request.DepositFundRequest;
-import semicolon.africa.bankproject.dto.request.OpenAccountRequest;
-import semicolon.africa.bankproject.dto.request.UpdateAccountRequest;
-import semicolon.africa.bankproject.dto.request.WithdrawalFundRequest;
+import semicolon.africa.bankproject.dto.request.*;
 import semicolon.africa.bankproject.dto.response.DepositFundResponse;
 import semicolon.africa.bankproject.utils.Utils;
 
@@ -89,40 +86,6 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.count();
     }
 
-    @Override
-    public BigDecimal depositFundsIntoAccount(DepositFundRequest depositFundRequest) throws Exception {
-        Account foundAccount = accountRepository.findAccountByBeneficiaryAccountNumber(depositFundRequest.getBeneficiaryAccount());
-//        Account newAccount = Account.builder()
-//                .currentBalance(depositFundRequest.getCurrentBalance())
-//                .beneficiaryAccountNumber(depositFundRequest.getBeneficiaryAccount())
-//               .funds(depositFundRequest.getTransactionAmount())
-////                .id(depositFundRequest.getId())
-//                .build();
-//        BigDecimal bigDecimal = depositFundRequest.getTransactionAmount().add(depositFundRequest.getCurrentBalance());
-        foundAccount.setCurrentBalance(foundAccount.getCurrentBalance().add(depositFundRequest.getTransactionAmount()));
-        System.out.println(foundAccount.getCurrentBalance());
-        System.out.println(depositFundRequest.getTransactionAmount());
-       accountRepository.save(foundAccount);
-        return foundAccount.getCurrentBalance();
-
-////        Account newAccount = new Account();
-//        if (foundAccount != null) {
-//            return depositFundRequest.getTransactionAmount().add(depositFundRequest.getCurrentBalance());
-//        }
-//        throw new RuntimeException("Account is null");    }
-
-//        Account foundAccount = accountRepository.findAccountByBeneficiaryAccountNumber(depositFundRequest.getBeneficiaryAccount());
-//        if (foundAccount != null)
-//            accountRepository.save(foundAccount);
-//      BigDecimal currentBalance =  transactionServices.depositFunds(depositFundRequest);
-//        DepositFundResponse depositFundResponse  = new DepositFundResponse();
-//        depositFundResponse.setMessage("FUnd successfully deposited");
-//        depositFundResponse.setCurrentBalance(String.valueOf(currentBalance));
-//        depositFundResponse.setId(depositFundResponse.getId());
-//        return depositFundResponse;
-////       throw new RuntimeException("Transaction Unsuccessful");
-    }
-
 
     @Override
     public Account findAccountByAccountName(String accountName) {
@@ -134,15 +97,41 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.findAccountByBeneficiaryAccountNumber(beneficiaryAccountNumber);
     }
 
+
+
+
+
+    @Override
+    public BigDecimal depositFundsIntoAccount(DepositFundRequest depositFundRequest) throws Exception {
+        Account foundAccount = accountRepository.findAccountByBeneficiaryAccountNumber(depositFundRequest.getBeneficiaryAccount());
+        if ((foundAccount!= null)) {
+            foundAccount.setCurrentBalance(foundAccount.getCurrentBalance().add(depositFundRequest.getTransactionAmount()));
+            accountRepository.save(foundAccount);
+            return foundAccount.getCurrentBalance();
+
+        }
+        throw new RuntimeException("Transaction unsuccessful");
+//
+    }
+
     @Override
     public BigDecimal WithdrawFundFromAccount(WithdrawalFundRequest withdrawalFundRequest) {
-        Account foundAccount = accountRepository.findAccountBySenderAccountNumber(withdrawalFundRequest.getAccountNumber());
-        if (foundAccount != null) {
-            return  transactionServices.TransferFund(withdrawalFundRequest);
-        }
-        throw new RuntimeException("Transaction Unsuccessful");
+        Account foundAccount = accountRepository.findAccountByBeneficiaryAccountNumber(withdrawalFundRequest.getAccountNumber());
+        if (foundAccount != null){
+            foundAccount.setCurrentBalance(foundAccount.getCurrentBalance().subtract(withdrawalFundRequest.getWithdrawalAmount()));
+         accountRepository.save(foundAccount);
+            return foundAccount.getCurrentBalance();
+       }
+      throw new RuntimeException("Transaction Unsuccessful");
 
     }
+
+    @Override
+    public void recordTransactions(TransactionsRequest transactionsRequest) {
+
+    }
+
+
 }
 
 

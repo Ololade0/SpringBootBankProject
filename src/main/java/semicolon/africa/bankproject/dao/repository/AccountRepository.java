@@ -9,5 +9,4 @@ public interface AccountRepository extends MongoRepository<Account, String> {
     Account findAccountById(String id);
     Account findAccountByBeneficiaryAccountNumber(String accountNumber);
     Account findAccountByAccountName(String accountName);
-    Account findAccountBySenderAccountNumber(String accountNumber);
 }

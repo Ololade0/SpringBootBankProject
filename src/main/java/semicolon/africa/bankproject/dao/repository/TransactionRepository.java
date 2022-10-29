@@ -7,4 +7,5 @@ import semicolon.africa.bankproject.dao.model.Transactions;
 @Repository
 public interface TransactionRepository extends MongoRepository<Transactions, String> {
     Transactions findTransactionsById(String transactionId);
+    Transactions findTransactionsByAccountNumber(String accountNumber);
 }

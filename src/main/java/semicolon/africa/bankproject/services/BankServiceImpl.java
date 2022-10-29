@@ -46,11 +46,7 @@ public class BankServiceImpl implements BankService {
     @Override
     public Bank findBankById(String bankId) {
         return bankRepository.findBankById(bankId);
-//        return bankRepository.findById(bankId).orElseThrow(
-//                () -> new BankDoesNotExistException(
-//                        String.format("bank with id %d not found", bankId)
-//                )
-//        );
+
 
     }
 

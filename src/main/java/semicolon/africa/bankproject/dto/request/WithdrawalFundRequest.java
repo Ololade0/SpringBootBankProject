@@ -13,12 +13,10 @@ import java.time.LocalDateTime;
 @Builder
 @ToString
 public class WithdrawalFundRequest {
-    private String transactionId;
     private BigDecimal withdrawalAmount;
     private String accountNumber;
-    private LocalDateTime transactionDate;
-    private TransactionType transactionType;
-    private BigDecimal currentBalance;
-    private String pin;
-   // private
+//    private LocalDateTime transactionDate;
+//    private TransactionType transactionType;
+//    private String pin;
+
 }

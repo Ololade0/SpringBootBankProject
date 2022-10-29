@@ -14,7 +14,5 @@ import java.time.LocalDateTime;
 @ToString
 public class DepositFundRequest {
     private String beneficiaryAccount;
-//  private BigDecimal currentBalance;
     private BigDecimal transactionAmount;
-//    private String id;
 }

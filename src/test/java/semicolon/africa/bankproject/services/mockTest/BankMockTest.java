@@ -50,11 +50,13 @@ public class BankMockTest {
                 .bankName(bankRegisterRequest.getBankName())
                 .build();
 
+
         when(bankRepository.save(any(Bank.class))).thenReturn(bankToReturn);
         BankRegisterResponse response = bankService.registerBank(bankRegisterRequest);
-        System.out.println(response);
+        System.out.println(response.getBankId());
         assertThat(response.getBankLocation()).isEqualTo("Ikeja");
         assertThat(response.getMessage()).isEqualTo("Bank successfully registered");
     }
+
 
 }
