@@ -1,4 +1,5 @@
 package semicolon.africa.bankproject.services;
+import org.springframework.data.domain.Page;
 import semicolon.africa.bankproject.dao.model.Account;
 import semicolon.africa.bankproject.dao.model.Customer;
 import semicolon.africa.bankproject.dto.request.*;
@@ -20,7 +21,7 @@ public interface CustomerService {
 
     Customer findCustomerById(String customerId);
 
-    List<Customer> findAllCustomers();
+    Page<Customer> findAllCustomers(FindAllCustomerRequest findAllCustomerRequest);
 
     long totalNumberOfCustomer();
 
@@ -34,20 +35,14 @@ public interface CustomerService {
 
     void deleteCustomersById(DeleteCustomerRequest deleteCustomerRequest);
 
-    OpenAccountResponse openAccount(OpenAccountRequest openAccountRequest);
 
     long totalNumberOfAccount();
 
-    void deleteAllAccounts();
 
-    String deleteAllAccount(DeleteAllAccountRequest deleteAllAccountRequest);
+//    Account findAccountById(FindAccountRequest findAccountRequest);
 
+//    List<Account> findAllAccounts(FindAllAccountRequest findAllAccountRequest);
 
-    Account findAccountById(FindAccountRequest findAccountRequest);
-
-    List<Account> findAllAccounts(FindAllAccountRequest findAllAccountRequest);
-
-    void deleteAccountById(DeleteAccountRequest deleteAccountRequest);
 
     LoginResponse login(LoginRest loginRest);
 

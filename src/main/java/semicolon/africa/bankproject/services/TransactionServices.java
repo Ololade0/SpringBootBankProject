@@ -1,7 +1,9 @@
 package semicolon.africa.bankproject.services;
 
+import org.springframework.data.domain.Page;
 import semicolon.africa.bankproject.dao.model.Transactions;
 import semicolon.africa.bankproject.dto.request.DepositFundRequest;
+import semicolon.africa.bankproject.dto.request.FindAllTransaction;
 import semicolon.africa.bankproject.dto.request.TransactionsRequest;
 import semicolon.africa.bankproject.dto.request.WithdrawalFundRequest;
 
@@ -14,7 +16,7 @@ public interface TransactionServices {
 
     Transactions findTransactionById(String id);
 
-    List<Transactions> findAllTransactions();
+    Page<Transactions> findAllTransactions(FindAllTransaction findAllTransaction);
 
     void deleteAll();
 

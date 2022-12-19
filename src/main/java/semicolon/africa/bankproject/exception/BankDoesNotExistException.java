@@ -1,5 +1,7 @@
 package semicolon.africa.bankproject.exception;
 
+import java.util.Date;
+
 public class BankDoesNotExistException extends RuntimeException {
 
 
@@ -7,4 +9,5 @@ public class BankDoesNotExistException extends RuntimeException {
 
         super(message);
     }
+
 }

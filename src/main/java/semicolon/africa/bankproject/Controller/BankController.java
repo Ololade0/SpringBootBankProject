@@ -1,10 +1,10 @@
 package semicolon.africa.bankproject.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
 import semicolon.africa.bankproject.dao.model.Account;
 import semicolon.africa.bankproject.dao.model.Customer;
@@ -38,19 +38,15 @@ public class BankController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<?> findBankById(@PathVariable String id) {
-        try {
+    public ResponseEntity<?> findBankById(@PathVariable String id) throws BankDoesNotExistException{
             return new ResponseEntity<>(bankService.findBankById(id), HttpStatus.ACCEPTED);
-        } catch (BankDoesNotExistException ex) {
-            return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
 
-        }
-
+//        }
     }
 
     @GetMapping("/all-bank")
-    public ResponseEntity<?> findAllBanks() {
-        return new ResponseEntity<>(bankService.findAllBanks(), HttpStatus.ACCEPTED);
+    public ResponseEntity<?> findAllBanks(@RequestBody FindAllBankRequest findAllBankRequest) {
+        return new ResponseEntity<>(bankService.findAllBanks(findAllBankRequest), HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping("{id}")
@@ -102,7 +98,7 @@ public class BankController {
     @GetMapping("/all-customer")
     public ResponseEntity<?> FindAllCustomers(@RequestBody FindAllCustomerRequest findAllCustomerRequest) {
         try {
-            List<Customer> customers = bankService.findAllCustomers(findAllCustomerRequest);
+            Page<Customer> customers = bankService.findAllCustomers(findAllCustomerRequest);
             return new ResponseEntity<>(customers, HttpStatus.CREATED);
         } catch (CustomerCannotBeFound e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -150,35 +146,25 @@ public class BankController {
         }
     }
 
-    @GetMapping("/accountId")
-    public ResponseEntity<?> FindAccountById(@RequestBody FindAccountRequest findAccountRequest) {
-        try {
-            Account foundAccount = bankService.findAccountById(findAccountRequest);
-            return new ResponseEntity<>(foundAccount, HttpStatus.CREATED);
-        } catch (AccountCannotBeFound e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
 //    @GetMapping("/accountId")
-//    public ResponseEntity<?> FindAccountByAccountNumber(@RequestBody FindAccountRequest findAccountRequest) {
+//    public ResponseEntity<?> FindAccountById(@RequestBody FindAccountRequest findAccountRequest) {
 //        try {
-//            Account foundAccount  = bankService.findAccountById(findAccountRequest);
+//            Account foundAccount = bankService.findAccountById(findAccountRequest);
 //            return new ResponseEntity<>(foundAccount, HttpStatus.CREATED);
 //        } catch (AccountCannotBeFound e) {
 //            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 //        }
 //    }
 
-    @GetMapping("/all-account")
-    public ResponseEntity<?> FindAllAccounts(@RequestBody FindAllAccountRequest findAllAccountRequest) {
-        try {
-            List<Account> accounts = bankService.findAllAccounts(findAllAccountRequest);
-            return new ResponseEntity<>(accounts, HttpStatus.CREATED);
-        } catch (AccountCannotBeFound e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
+//    @GetMapping("/all-account")
+//    public ResponseEntity<?> FindAllAccounts(@RequestBody FindAllAccountRequest findAllAccountRequest) {
+//        try {
+//            List<Account> accounts = bankService.findAllAccounts(findAllAccountRequest);
+//            return new ResponseEntity<>(accounts, HttpStatus.CREATED);
+//        } catch (AccountCannotBeFound e) {
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
     @DeleteMapping("/delete-all-accounts")
     public ResponseEntity<?> deleteAllAccounts() {
@@ -197,13 +183,8 @@ public class BankController {
 
     }
 
-
-//    @PostMapping(path = "/account-deposit", consumes="application/json", )
-    //    @PostMapping(value = "/accountdeposit")
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-
-@PostMapping(value = "/{account-deposit}",
-        produces ={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+@PostMapping(value = "/account-deposit",
+       produces ={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> accountCanDeposit(@RequestBody DepositFundRequest depositFundRequest) {
         try {
             BigDecimal openAccountResponse = accountServices.depositFundsIntoAccount(depositFundRequest);
@@ -216,8 +197,9 @@ public class BankController {
 
     }
 
-    @PostMapping(value = "/{withdraw}",
-            produces ={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+
+    @PostMapping(value = "/withdraw")
+//            produces ={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<?> accountCanWithdraw(@RequestBody WithdrawalFundRequest withdrawalFundRequest) {
         try {
             BigDecimal openAccountResponse = accountServices.WithdrawFundFromAccount(withdrawalFundRequest);
@@ -226,8 +208,6 @@ public class BankController {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 
         }
-
-
     }
 
 

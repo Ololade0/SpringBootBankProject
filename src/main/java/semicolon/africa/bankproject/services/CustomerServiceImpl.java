@@ -1,7 +1,11 @@
 package semicolon.africa.bankproject.services;
 
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import semicolon.africa.bankproject.dao.model.Account;
 
@@ -31,19 +35,16 @@ public class CustomerServiceImpl implements CustomerService {
     @Autowired
     private AccountService accountService;
 
+
 //    @Autowired
 //    Utils utils;
 
 
     @Override
     public Customer saveNewCustomer(CustomerRegisterRequest customerRegister) {
-        Customer newCustomer = Customer.builder().
-                customerName(customerRegister.getCustomerName())
-                .customerEmail(customerRegister.getCustomerEmail())
-                .customerGender(customerRegister.getCustomerGender())
-                .customerAge(customerRegister.getCustomerAge())
-                .build();
-        return customerRepository.save(newCustomer);
+        ModelMapper modelMapper = new ModelMapper();
+     Customer customer =    modelMapper.map(customerRegister, Customer.class);
+        return customerRepository.save(customer);
 
     }
 
@@ -60,8 +61,10 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public List<Customer> findAllCustomers() {
-        return customerRepository.findAll();
+    public Page<Customer> findAllCustomers(FindAllCustomerRequest findAllCustomerRequest) {
+        Pageable pageable = PageRequest.of(findAllCustomerRequest.getPageNumber()-1, findAllCustomerRequest.getNumberOfPages());
+        return customerRepository.findAll(pageable);
+
     }
 
     @Override
@@ -114,74 +117,34 @@ public class CustomerServiceImpl implements CustomerService {
 
     }
 
-    @Override
-    public OpenAccountResponse openAccount(OpenAccountRequest openAccountRequest) {
-        Account foundAccount = accountService.openAccount(openAccountRequest);
-        Customer foundCustomer = customerRepository.findCustomerByCustomerId(openAccountRequest.getCustomerId());
-        if (foundCustomer != null) {
-            foundCustomer.getAccounts().add(foundAccount);
-            customerRepository.save(foundCustomer);
-        }
-        return OpenAccountResponse.builder()
-                .message("Account successfully opened")
-                .id(foundAccount.getId())
-                .build();
 
-    }
 
     @Override
     public long totalNumberOfAccount() {
         return accountService.totalNumberOfAccount();
     }
 
-    @Override
-    public void deleteAllAccounts() {
-        accountService.deleteAll();
 
-    }
 
-    @Override
-    public String deleteAllAccount(DeleteAllAccountRequest deleteAllAccountRequest) {
-        Customer foundCustomer = customerRepository.findCustomerByCustomerId(deleteAllAccountRequest.getCustomerId());
-        if (foundCustomer != null) {
-            accountService.deleteAll();
-            return "Account successfully deleted";
-        }
-        return "error";
-    }
 
-    @Override
-    public Account findAccountById(FindAccountRequest findAccountRequest) {
-        Customer customer = customerRepository.findCustomerByCustomerId(findAccountRequest.getCustomerId());
-        if (customer != null) {
-            return accountService.findAccountById(findAccountRequest.getAccoundId());
-        }
-        throw new AccountCannotBeFound("Account does not exist");
-    }
+//    @Override
+//    public Account findAccountById(FindAccountRequest findAccountRequest) {
+//        Customer customer = customerRepository.findCustomerByCustomerId(findAccountRequest.getCustomerId());
+//        if (customer != null) {
+//            return accountService.findAccountById(findAccountRequest.getAccoundId());
+//        }
+//        throw new AccountCannotBeFound("Account does not exist");
+//    }
 
-    @Override
-    public List<Account> findAllAccounts(FindAllAccountRequest findAllAccountRequest) {
-        Customer foundCustomer = customerRepository.findCustomerByCustomerId(findAllAccountRequest.getCustomerId());
-        if (foundCustomer != null) {
-            return accountService.findAllAccount();
-        }
-        throw new AccountCannotBeFound("Accounts does not exist");
-    }
+//    @Override
+//    public List<Account> findAllAccounts(FindAllAccountRequest findAllAccountRequest) {
+//        Customer foundCustomer = customerRepository.findCustomerByCustomerId(findAllAccountRequest.getCustomerId());
+//        if (foundCustomer != null) {
+//            return accountService.findAllAccount();
+//        }
+//        throw new AccountCannotBeFound("Accounts does not exist");
+//    }
 
-    @Override
-    public void deleteAccountById(DeleteAccountRequest deleteAccountRequest) {
-        Customer foundCustomer = customerRepository.findCustomerByCustomerId(deleteAccountRequest.getCustomerId());
-        if (foundCustomer != null) {
-            List<Account> accounts = foundCustomer.getAccounts();
-            for (int i = 0; i < accounts.size(); i++) {
-                if (accounts.get(i).getId().equalsIgnoreCase(deleteAccountRequest.getAccountId())) {
-                    accountService.deleteBYId(deleteAccountRequest.getAccountId());
-                    accounts.remove(accounts.get(i));
-                    customerRepository.save(foundCustomer);
-                }
-            }
-        }
-    }
 
     @Override
     public Customer findCustomerByEmail(String customerEmail) {
@@ -195,26 +158,24 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public LoginResponse login(LoginRest loginRest) {
-        Customer savedCustomer = findCustomerByEmail(loginRest.getEmail());
-        savedCustomer.setPassword(loginRest.getPassword());
-        if (!savedCustomer.getPassword().equalsIgnoreCase(loginRest.getPassword())) {
-            throw new CustomerCannotBeFound("Incorrect Password");
-        }
-        LoginResponse loginResponse = new LoginResponse();
-        loginResponse.setMessage("Login successful");
-        return loginResponse;
+        var foundCustomer = customerRepository.findCustomerByCustomerEmail(loginRest.getEmail());
+//        if (foundCustomer.isPresent() && foundCustomer.get().getPassword().equals(loginRest.getPassword()))
+       return buildSuccessfulLoginResponse(foundCustomer.get());
+
+////    return LoginResponse.builder()
+//            .code(400)
+//            .message("Login failed")
+//            .build();
+    }
+
+
+    private LoginResponse buildSuccessfulLoginResponse(Customer customer) {
+        return LoginResponse.builder()
+                .code(200)
+                .message("Login successful")
+                .build();
     }
 }
 
 
-//    @Override
-//    public LoginUserResponse login(LoginUserRequest request) {
-//        LoginUserResponse loginUserResponse = new LoginUserResponse();
-//        User savedUser = getUserByEmail(request.getEmail());
-//        if (!savedUser.getPassword().equalsIgnoreCase(request.getPassword())) {
-//            throw new UserExistsException(request + "incorrect password");
-//        }
-//        loginUserResponse.setMessage("lOGIN SUCCESSFUL");
-//        return loginUserResponse;
-//    }
 

@@ -64,13 +64,29 @@
 			<scope>provided</scope>
 		</dependency>
 
-<!--		&lt;!&ndash; https://mvnrepository.com/artifact/org.modelmapper/modelmapper &ndash;&gt;-->
+		<!-- https://mvnrepository.com/artifact/org.modelmapper/modelmapper -->
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version>3.1.0</version>
+		</dependency>
+
+<!--		&lt;!&ndash; https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security &ndash;&gt;-->
 <!--		<dependency>-->
-<!--			<groupId>org.modelmapper</groupId>-->
-<!--			<artifactId>modelmapper</artifactId>-->
-<!--			<version>3.1.0</version>-->
+<!--			<groupId>org.springframework.boot</groupId>-->
+<!--			<artifactId>spring-boot-starter-security</artifactId>-->
+<!--			<version>2.7.4</version>-->
 <!--		</dependency>-->
-<!--		&lt;!&ndash; https://mvnrepository.com/artifact/org.hamcrest/hamcrest-junit &ndash;&gt;-->
+
+
+<!--		&lt;!&ndash; https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt &ndash;&gt;-->
+<!--		<dependency>-->
+<!--			<groupId>io.jsonwebtoken</groupId>-->
+<!--			<artifactId>jjwt</artifactId>-->
+<!--			<version>0.9.1</version>-->
+<!--		</dependency>-->
+
+		<!--		&lt;!&ndash; https://mvnrepository.com/artifact/org.hamcrest/hamcrest-junit &ndash;&gt;-->
 <!--		<dependency>-->
 <!--			<groupId>org.hamcrest</groupId>-->
 <!--			<artifactId>hamcrest-junit</artifactId>-->

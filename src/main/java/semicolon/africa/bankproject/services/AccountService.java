@@ -24,6 +24,9 @@ BigDecimal depositFundsIntoAccount(DepositFundRequest depositFundRequest) throws
 
  Account findAccountByAccountName(String accountName);
 
+ Account findAccountByAccountNames(String accountName);
+
+
  Account findAccountByAccountNUmber(String beneficiaryAccountNumber);
 
  BigDecimal WithdrawFundFromAccount(WithdrawalFundRequest withdrawalFundRequest);

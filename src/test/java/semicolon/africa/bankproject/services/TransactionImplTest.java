@@ -5,9 +5,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import semicolon.africa.bankproject.dao.model.TransactionType;
 import semicolon.africa.bankproject.dao.model.Transactions;
 import semicolon.africa.bankproject.dto.request.DepositFundRequest;
+import semicolon.africa.bankproject.dto.request.FindAllTransaction;
 import semicolon.africa.bankproject.dto.request.TransactionsRequest;
 import semicolon.africa.bankproject.dto.request.WithdrawalFundRequest;
 
@@ -23,9 +25,6 @@ class TransactionImplTest {
 
 @Autowired
 private TransactionServices transactionServices;
-
-
-
 Transactions savedTransactions;
 
     @BeforeEach
@@ -61,7 +60,7 @@ Transactions savedTransactions;
 public void TransactionCanBeDone(){
     TransactionsRequest transactionsRequest = TransactionsRequest.builder()
             .accountNumber("8976544789")
-            .currentBalance(BigDecimal.valueOf(9000))
+//            .currentBalance(BigDecimal.valueOf(9000))
 //            .transactionAmount(BigDecimal.valueOf(40000))
             .transactionType(TransactionType.DEPOSIT)
             .transactionDate(LocalDateTime.now())
@@ -82,67 +81,19 @@ public void TransactionCanBeDone(){
     }
 
     @Test
-    public void findAllTransaction(){
-        transactionServices.findAllTransactions();
-        assertEquals(BigDecimal.valueOf(90000), transactionServices.findAllTransactions().get(0).getTransactionAmount());
-        assertEquals("0782384748", transactionServices.findAllTransactions().get(0).getAccountNumber());
-
-        }
-
-        @Test
-        public void testThatAllTransactionCanBeDeleted() {
-       transactionServices.deleteAll();
-       assertEquals(0, transactionServices.size());
-        }
-
-    @Test
-    public void testThatTransactionCanBeDeletedById() {
-        transactionServices.deleteById(savedTransactions.getId());
-        assertEquals(0, transactionServices.size());
-
-    }
-
-//        @Test
-//    public void customerCanTransfertFundToAnotherCustomerAccount_BeneficairyBalanceIncreases() throws Exception {
-//
-//            TransactionsRequest transactionsRequest = TransactionsRequest.builder()
-//                    .accountNumber("8976544789")
-//                    .currentBalance(BigDecimal.valueOf(9000))
-//                    .transactionAmount(BigDecimal.valueOf(40000))
-//                    .transactionType(TransactionType.DEPOSIT)
-//                    .transactionDate(LocalDateTime.now())
-//                    .build();
-//            Transactions transactions = transactionServices.recordTransactions(transactionsRequest);
-//            assertThat(transactions).isNotNull();
-//            System.out.println(transactions);
-//
-//                DepositFundRequest depositFundRequest = DepositFundRequest
-//                        .builder()
-//                        .beneficiaryAccount(savedTransactions.getAccountNumber())
-//                        .transactionAmount(BigDecimal.valueOf(60000))
-////                        .transactionId(savedTransactions.getId())
-//                        .build();
-////               BigDecimal depositFundResponse = transactionServices.depositFunds(depositFundRequest);
-//                BigDecimal depositFundResponse = transactionServices.depositFunds(transactions.getCurrentBalance(), depositFundRequest);
-//                assertEquals(BigDecimal.valueOf(70000), depositFundResponse);
-//            }
-
-    @Test
-    public void customerCanTransferFundToAnotherCustomerAccount_SenderBalanceDecrease(){
-        WithdrawalFundRequest withdrawalFundRequest = WithdrawalFundRequest
-                .builder()
-                .accountNumber("1234")
-                .transactionDate(LocalDateTime.now())
-                .transactionType(TransactionType.DEPOSIT)
-                .withdrawalAmount(BigDecimal.valueOf(10000))
-//                .currentBalance(BigDecimal.valueOf(100000))
-                .pin("1234")
+    public void findAllTransaction() {
+        FindAllTransaction findAllTransaction = FindAllTransaction.builder()
+                .numberOfPerPages(2)
+                .pageNumber(1)
                 .build();
-//        BigDecimal savedTransaction  = transactionServices.TransferFund(withdrawalFundRequest);
-//        assertEquals(BigDecimal.valueOf(90000), savedTransaction);
+        Page<Transactions> transactionPage = transactionServices.findAllTransactions(findAllTransaction);
+        assertThat(transactionPage).isNotNull();
+        assertThat(transactionPage.getTotalElements()).isGreaterThan(0);
+        assertEquals(1L, transactionServices.findAllTransactions(findAllTransaction).getTotalElements());
+
+
 
     }
-
     }
 
 

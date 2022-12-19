@@ -8,5 +8,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class UpdateBankResponse {
+
     private String message;
+    private String bankName;
 }

@@ -22,11 +22,10 @@ public class Customer {
     private String customerId;
     private String customerEmail;
     private String customerAccountNumber;
-    private String bankId;
+//    private String bankId;
     private String customerName;
     private String customerAge;
     private String customerGender;
-    private String password;
     @DBRef
 private List<Account>accounts = new ArrayList<>();
 

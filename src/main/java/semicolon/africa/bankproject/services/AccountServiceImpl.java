@@ -93,6 +93,12 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public Account findAccountByAccountNames(String accountName) {
+        return accountRepository.findFirstByAccountName(accountName);
+    }
+
+
+    @Override
     public Account findAccountByAccountNUmber(String beneficiaryAccountNumber) {
         return accountRepository.findAccountByBeneficiaryAccountNumber(beneficiaryAccountNumber);
     }

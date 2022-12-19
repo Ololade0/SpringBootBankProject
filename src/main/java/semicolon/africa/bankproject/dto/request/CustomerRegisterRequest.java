@@ -1,6 +1,9 @@
 package semicolon.africa.bankproject.dto.request;
 
 import lombok.*;
+import semicolon.africa.bankproject.dao.model.Account;
+
+import java.util.List;
 
 @Setter
 @Getter
@@ -16,6 +19,8 @@ public class CustomerRegisterRequest {
     private String customerAccountNumber;
     private String customerAge;
     private String customerGender;
+    private BankRegisterRequest bankRegisterRequest;
+//    private List<OpenAccountRequest> openAccountRequests;
 
 
 

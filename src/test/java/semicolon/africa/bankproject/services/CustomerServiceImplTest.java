@@ -1,10 +1,12 @@
 package semicolon.africa.bankproject.services;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import semicolon.africa.bankproject.dao.model.Account;
 import semicolon.africa.bankproject.dao.model.Customer;
 import semicolon.africa.bankproject.dao.repository.CustomerRepository;
@@ -25,8 +27,6 @@ class CustomerServiceImplTest {
     @Autowired
     private CustomerService customerService;
     @Autowired
-    private CustomerRepository customerRepository;
-    @Autowired
     Utils utils;
     Customer savedCustomer;
     OpenAccountResponse savedAccount;
@@ -42,23 +42,13 @@ class CustomerServiceImplTest {
         customerRegister.setCustomerPassword("1235");
         savedCustomer = customerService.saveNewCustomer(customerRegister);
 
-        OpenAccountRequest openAccountRequest = OpenAccountRequest.builder()
-                .phoneNumber("")
-                .email("adesuyiololade@gmail.com")
-                .AccountName(savedCustomer.getCustomerName())
-                .age(savedCustomer.getCustomerAge())
-                .gender(savedCustomer.getCustomerGender())
-                .customerId(savedCustomer.getCustomerId())
-                .build();
-        savedAccount = customerService.openAccount(openAccountRequest);
     }
 
     @AfterEach
     void tearDown() {
 
         customerService.deleteAll();
-        //  customerService.deleteAllAccount();
-        customerService.deleteAllAccounts();
+
 
     }
 
@@ -78,9 +68,6 @@ class CustomerServiceImplTest {
         customerRegisterRequest.setCustomerName("Adesuyi");
         customerRegisterRequest.setCustomerGender("female");
         customerRegisterRequest.setCustomerAge("55");
-        String customerAcctNum = utils.generateCustomerAccountNumber(10);
-        customerRegisterRequest.setCustomerAccountNumber(customerAcctNum);
-        System.out.println(customerRegisterRequest.getCustomerAccountNumber());
         Customer customer = customerService.saveNewCustomer(customerRegisterRequest);
         assertThat(customer.getCustomerId()).isNotNull();
         assertEquals(2, customerService.totalNumberOfCustomer());
@@ -98,9 +85,14 @@ class CustomerServiceImplTest {
 
     @Test
     public void findAllCustomer() {
-        customerService.findAllCustomers();
-        assertEquals("Adesuyi", customerService.findAllCustomers().get(0).getCustomerName());
-        assertEquals("55", customerService.findAllCustomers().get(0).getCustomerAge());
+        FindAllCustomerRequest findAllCustomerRequest = FindAllCustomerRequest.builder()
+                .numberOfPages(1)
+                .pageNumber(2)
+                .build();
+      Page<Customer> customerPage=  customerService.findAllCustomers(findAllCustomerRequest);
+        assertThat(customerPage).isNotNull();
+        assertThat(customerPage.getTotalElements()).isGreaterThan(0);
+
     }
 
     @Test
@@ -113,7 +105,7 @@ class CustomerServiceImplTest {
     }
 
     @Test
-    public void findAllCustomerCanBeDeleted() {
+    public void AllCustomerCanBeDeleted() {
         customerService.deleteAll();
         assertEquals(0, customerService.totalNumberOfCustomer());
     }
@@ -122,68 +114,49 @@ class CustomerServiceImplTest {
     public void findAllCustomerProfileCanBeUpdated() {
         UpdateCustomerProfileRequest updateCustomerProfileRequest = UpdateCustomerProfileRequest.builder()
                 .customerName("Ololade")
+                .customerId(savedCustomer.getCustomerId())
                 .customerGender("transgender")
                 .customerAge("28")
                 .build();
-        updateCustomerProfileRequest.setCustomerId(savedCustomer.getCustomerId());
-        customerService.updateCustomerProfile(updateCustomerProfileRequest);
-        assertEquals("28", customerService.findAllCustomers().get(0).getCustomerAge());
-        assertEquals("Ololade", customerService.findAllCustomers().get(0).getCustomerName());
-        assertEquals("transgender", customerService.findAllCustomers().get(0).getCustomerGender());
+     Customer customer =   customerService.updateCustomerProfile(updateCustomerProfileRequest);
+      assertEquals("Ololade", customer.getCustomerName());
+
     }
 
+//    @Test
+//    void customerCanFindAccountById() {
+//        FindAccountRequest findAccountRequest = FindAccountRequest
+//                .builder()
+//                .accoundId(savedAccount.getId())
+//                .customerId(savedCustomer.getCustomerId())
+//                .build();
+//        Account foundAccount = customerService.findAccountById(findAccountRequest);
+//        assertThat(foundAccount.getId()).isEqualTo(savedAccount.getId());
+//        System.out.println(foundAccount);
+//        System.out.println(savedAccount);
+//    }
 
+//    @Test
+//    public void testThatCustomerCanFindAllAccounts() {
+//        FindAllAccountRequest findAllAccountRequest = FindAllAccountRequest.builder()
+//                .customerId(savedCustomer.getCustomerId())
+//                .accountId(savedAccount.getId())
+//                .build();
+//        List<Account> foundAccounts = customerService.findAllAccounts(findAllAccountRequest);
+//        assertEquals("Adesuyi", customerService.findAllAccounts(findAllAccountRequest).get(0).getAccountName());
+//        assertEquals("female", customerService.findAllAccounts(findAllAccountRequest).get(0).getGender());
+//        assertThat(foundAccounts.get(0).getId()).isEqualTo(savedAccount.getId());
+//    }
 
-
-    @Test
-    void customerCanDeleteAllAccounts() {
-        customerService.deleteAllAccounts();
-        assertEquals(0, customerService.totalNumberOfAccount());
-    }
-
-    @Test
-    void customerCanFindAccountById() {
-        FindAccountRequest findAccountRequest = FindAccountRequest
-                .builder()
-                .accoundId(savedAccount.getId())
-                .customerId(savedCustomer.getCustomerId())
-                .build();
-        Account foundAccount = customerService.findAccountById(findAccountRequest);
-        assertThat(foundAccount.getId()).isEqualTo(savedAccount.getId());
-        System.out.println(foundAccount);
-        System.out.println(savedAccount);
-    }
-
-    @Test
-    public void testThatCustomerCanFindAllAccounts() {
-        FindAllAccountRequest findAllAccountRequest = FindAllAccountRequest.builder()
-                .customerId(savedCustomer.getCustomerId())
-                .accountId(savedAccount.getId())
-                .build();
-        List<Account> foundAccounts = customerService.findAllAccounts(findAllAccountRequest);
-        assertEquals("Adesuyi", customerService.findAllAccounts(findAllAccountRequest).get(0).getAccountName());
-        assertEquals("female", customerService.findAllAccounts(findAllAccountRequest).get(0).getGender());
-        assertThat(foundAccounts.get(0).getId()).isEqualTo(savedAccount.getId());
-    }
-
-
-    @Test
-    public void testThatCustomerCanDeleteAccountById() {
-        DeleteAccountRequest deleteAccountRequest = DeleteAccountRequest.builder()
-                .accountId(savedAccount.getId())
-                .customerId(savedCustomer.getCustomerId())
-                .build();
-        customerService.deleteAccountById(deleteAccountRequest);
-        assertEquals(0, customerService.totalNumberOfAccount());
-    }
 
     @Test
     public void testThatCustomerCanLogin() {
         LoginRest loginRest = new LoginRest();
-        loginRest.setPassword(savedCustomer.getPassword());
+//        loginRest.setPassword(savedCustomer.getPassword());
         loginRest.setEmail(savedCustomer.getCustomerEmail());
         var email = customerService.login(loginRest);
-        assertEquals("Ololadedemilade0909", email.getEmail());
+        assertEquals(200, email.getCode());
+        assertEquals("Login successful", email.getMessage());
     }
 
     @Test

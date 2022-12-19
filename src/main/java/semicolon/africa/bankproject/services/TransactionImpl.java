@@ -1,11 +1,15 @@
 package semicolon.africa.bankproject.services;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import semicolon.africa.bankproject.dao.model.Account;
 import semicolon.africa.bankproject.dao.model.TransactionType;
 import semicolon.africa.bankproject.dao.model.Transactions;
 import semicolon.africa.bankproject.dao.repository.TransactionRepository;
 import semicolon.africa.bankproject.dto.request.DepositFundRequest;
+import semicolon.africa.bankproject.dto.request.FindAllTransaction;
 import semicolon.africa.bankproject.dto.request.TransactionsRequest;
 import semicolon.africa.bankproject.dto.request.WithdrawalFundRequest;
 
@@ -24,7 +28,7 @@ public class TransactionImpl implements TransactionServices {
     public Transactions recordTransactions(TransactionsRequest transactionsRequest) {
         Transactions transactions = Transactions.builder()
                 .accountNumber(transactionsRequest.getAccountNumber())
-                .currentBalance(transactionsRequest.getCurrentBalance())
+//                .currentBalance(transactionsRequest.getCurrentBalance())
                 .transactionAmount(transactionsRequest.getTransactionAmount())
                 .transactionType(transactionsRequest.getTransactionType())
                 .transactionDate(transactionsRequest.getTransactionDate())
@@ -40,8 +44,10 @@ public class TransactionImpl implements TransactionServices {
     }
 
     @Override
-    public List<Transactions> findAllTransactions() {
-        return transactionRepository.findAll();
+    public Page<Transactions> findAllTransactions(FindAllTransaction findAllTransaction) {
+        Pageable pageable = PageRequest.of(findAllTransaction.getPageNumber()-1, findAllTransaction.getNumberOfPerPages());
+        Page<Transactions> transactionsPage = transactionRepository.findAll(pageable);
+        return transactionsPage;
     }
 
     @Override

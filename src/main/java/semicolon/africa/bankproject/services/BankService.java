@@ -1,19 +1,23 @@
 package semicolon.africa.bankproject.services;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import semicolon.africa.bankproject.dao.model.Account;
 import semicolon.africa.bankproject.dao.model.Bank;
 import semicolon.africa.bankproject.dao.model.Customer;
 import semicolon.africa.bankproject.dto.request.*;
 import semicolon.africa.bankproject.dto.response.*;
+import semicolon.africa.bankproject.exception.BankDoesNotExistException;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BankService {
-    BankRegisterResponse registerBank(BankRegisterRequest bankRegisterRequest);
+    BankRegisterResponse registerBank(BankRegisterRequest bankRegisterRequest) throws BankDoesNotExistException;
 
 
-    Bank findBankById(String bankId);
+    Bank findBankById(String bankId) throws BankDoesNotExistException;
+
 
     String deleteAll();
 
@@ -22,7 +26,7 @@ public interface BankService {
 
     CustomerRegisterResponse saveCustomer(CustomerRegisterRequest customerRegisterRequest) throws HttpMessageNotReadableException;
 
-    List<Bank> findAllBanks();
+    Page<Bank> findAllBanks(FindAllBankRequest findAllBankRequest);
 
 
     String deleteById(String bankId);
@@ -31,7 +35,7 @@ public interface BankService {
 
     long findTotalNumbersOfCustomers();
 
-    List<Customer> findAllCustomers(FindAllCustomerRequest findAllCustomerRequest);
+    Page<Customer> findAllCustomers(FindAllCustomerRequest findAllCustomerRequest);
 
 
     String deleteCustomerById(DeleteCustomerRequest deleteCustomerRequest);
@@ -50,11 +54,11 @@ public interface BankService {
     long findTotalNumbersOfAccounts();
 
 
-    Account findAccountById(FindAccountRequest findAccountRequest);
+//    Account findAccountById(FindAccountRequest findAccountRequest);
 
     String deleteAllAccount();
 
-    List<Account> findAllAccounts(FindAllAccountRequest findAllAccountRequest);
+//    List<Account> findAllAccounts(FindAllAccountRequest findAllAccountRequest);
 
     String deleteAccountById(DeleteAccountRequest deleteAccountRequest);
 
@@ -63,5 +67,7 @@ public interface BankService {
     Account findAccountByAccountName(String accountName);
 
     Account findAccountByAccountNUmber(String accountNumber);
+
+    Account findAccountByAccountNames(String accountName);
 }
 
