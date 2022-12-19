@@ -5,10 +5,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import semicolon.africa.bankproject.dao.model.Account;
 import semicolon.africa.bankproject.dao.model.TransactionType;
 import semicolon.africa.bankproject.dto.request.*;
-import semicolon.africa.bankproject.dto.response.DepositFundResponse;
+import semicolon.africa.bankproject.utils.Utils;
 
 
 import java.math.BigDecimal;
@@ -21,6 +22,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class AccountServiceImplTest {
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private Utils utils;
     Account savedAccount;
 
     @BeforeEach
@@ -29,12 +33,11 @@ class AccountServiceImplTest {
                 .phoneNumber("08109093828")
                 .email("adesuyiololade@gmail.com")
                 .AccountName("Adesuyi")
-                .accountNumber("1234455")
-                .balance(BigDecimal.valueOf(30000))
                 .age("23")
+                .balance(BigDecimal.valueOf(10_000))
                 .gender("female")
                 .build();
-        savedAccount = accountService.openAccount(openAccountRequest);
+      savedAccount =  accountService.openAccount(openAccountRequest);
     }
 
     @AfterEach
@@ -62,13 +65,12 @@ class AccountServiceImplTest {
                 .phoneNumber("08109093828")
                 .email("adesuyiololade@gmail.com")
                 .AccountName("Adesuyi")
-                .accountNumber("234677")
                 .age("23")
                 .balance(BigDecimal.valueOf(10_000))
                 .gender("female")
                 .build();
-        savedAccount = accountService.openAccount(openAccountRequest);
         assertThat(savedAccount).isNotNull();
+        accountService.openAccount(openAccountRequest);
         assertEquals(2, accountService.totalNumberOfAccount());
 
     }
@@ -89,7 +91,7 @@ class AccountServiceImplTest {
     }
     @Test
     public void findAccountByAccountNumber() {
-        Account foundAccount = accountService.findAccountByAccountNUmber(savedAccount.getBeneficiaryAccountNumber());
+        Account foundAccount = accountService.findAccountByAccountNUmber(savedAccount.getAccountNumber());
         assertThat(foundAccount).isNotNull();
         assertThat(foundAccount.getId()).isEqualTo(savedAccount.getId());
 
@@ -97,9 +99,14 @@ class AccountServiceImplTest {
 
     @Test
     public void findAllAccount() {
-        accountService.findAllAccount();
-        assertEquals("Adesuyi", accountService.findAllAccount().get(0).getAccountName());
-        assertEquals("adesuyiololade@gmail.com", accountService.findAllAccount().get(0).getEmail());
+        FindAllAccountRequest findAllAccountRequest = FindAllAccountRequest.builder()
+                .pageNumber(3)
+                .numberOfPages(1)
+                .build();
+       Page<Account> accountPage = accountService.findAllAccount(findAllAccountRequest);
+        assertThat(accountPage.getTotalElements()).isNotNull();
+        assertEquals(1L, accountService.findAllAccount(findAllAccountRequest).getTotalElements());
+
     }
 
     @Test
@@ -117,49 +124,39 @@ class AccountServiceImplTest {
     @Test
     public void testThatAccountCanBeUpdated() {
         UpdateAccountRequest updateAccountRequest = UpdateAccountRequest.builder()
+                .accountId(savedAccount.getId())
                 .accountName("Demilade")
                 .email("demilade@gmail.com")
                .phoneNumber("09031807593")
                 .age("70")
                 .build();
-        updateAccountRequest.setAccountNumber(savedAccount.getBeneficiaryAccountNumber());
-        accountService.updateAccount(updateAccountRequest);
-        assertEquals("demilade@gmail.com", accountService.findAllAccount().get(0).getEmail());
-        assertEquals("70", accountService.findAllAccount().get(0).getAge());
+      Account updatedAccount =  accountService.updateAccount(updateAccountRequest);
+      assertEquals("Demilade", updatedAccount.getAccountName());
+
     }
 
     @Test
-    public void customerCanTransfertFundToAnotherCustomerAccount_BeneficairyBalanceIncreases()throws Exception {
+    public void customerCanTransferFundToAnotherCustomerAccount_BeneficairyBalanceIncreases()throws Exception {
         DepositFundRequest depositFundRequest = DepositFundRequest
                 .builder()
-                .beneficiaryAccount(savedAccount.getBeneficiaryAccountNumber())
+                .beneficiaryAccount(savedAccount.getAccountNumber())
                 .transactionAmount(BigDecimal.valueOf(60000))
                 .build();
      BigDecimal depositFundResponse = accountService.depositFundsIntoAccount(depositFundRequest);
-        assertEquals(BigDecimal.valueOf(90000), depositFundResponse);
+        assertEquals(BigDecimal.valueOf(70000), depositFundResponse);
     }
 
     @Test
     public void accountCanTransferFundToAnotherAccount_SenderBalanceDecrease(){
         WithdrawalFundRequest withdrawalFundRequest = WithdrawalFundRequest
                 .builder()
-                .accountNumber(savedAccount.getBeneficiaryAccountNumber())
-                .withdrawalAmount(BigDecimal.valueOf(5000))
+//                .accountNumber(savedAccount.getAccountNumber())
+                .withdrawalAmount(BigDecimal.valueOf(50000))
                 .build();
-      BigDecimal withdrawalFundResponse = accountService.WithdrawFundFromAccount(withdrawalFundRequest);
-        assertEquals(BigDecimal.valueOf(25000), withdrawalFundResponse);
+      BigDecimal withdrawalFundResponse = accountService.WithdrawFundFromAccounts(withdrawalFundRequest.getWithdrawalAmount(), withdrawalFundRequest.getAccountNumber());
+        assertEquals(BigDecimal.valueOf(5000), withdrawalFundResponse);
     }
 
-    @Test
-    void recordTransaction(){
-        TransactionsRequest transactionsRequest = new TransactionsRequest();
-        transactionsRequest.setTransactionAmount(BigDecimal.valueOf(40000));
-        transactionsRequest.setAccountNumber("23456");
-        transactionsRequest.setCurrentBalance(BigDecimal.valueOf(90000));
-        transactionsRequest.setTransactionType(TransactionType.DEPOSIT);
-        accountService.recordTransactions(transactionsRequest);
-
-    }
 
 
 

@@ -10,6 +10,5 @@ import lombok.*;
 @ToString
 public class FindAccountRequest {
     private String bankId;
-    private String customerId;
     private String accoundId;
 }

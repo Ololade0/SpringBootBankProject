@@ -11,7 +11,6 @@ import java.math.BigDecimal;
 @Builder
 public class OpenAccountRequest {
     private String bankId;
-    private String customerId;
     private String AccountName;
     private String accountNumber;
     private BigDecimal balance;

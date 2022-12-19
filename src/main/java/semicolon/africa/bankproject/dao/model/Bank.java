@@ -26,5 +26,7 @@ public class Bank {
     private String bankName;
     @DBRef
     private List<Customer> customers = new ArrayList<>();
+    @DBRef
+    private List<Account>accounts = new ArrayList<>();
 
 }

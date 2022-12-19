@@ -8,8 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class FindAllAccountRequest {
-    private String accountName;
+   private int numberOfPages;
+   private int pageNumber;
     private String bankId;
-    private String customerId;
-    private String accountId;
 }

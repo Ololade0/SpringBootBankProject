@@ -53,11 +53,11 @@ class BankServiceImplTest {
 
         OpenAccountRequest openAccountRequest = OpenAccountRequest.builder()
                 .bankId(savedBank.getBankId())
-                .customerId(savedCustomer.getCustomerId())
+//                .customerId(savedCustomer.getCustomerId())
                 .AccountName("ololade")
-                .age("")
-                .email("")
-                .phoneNumber("")
+                .age("40")
+                .email("Ololadedemilade@gmail.com")
+                .phoneNumber("09031807593")
                 .build();
         savedAccount = bankService.openCustomerAccount(openAccountRequest);
    }
@@ -197,7 +197,6 @@ class BankServiceImplTest {
         DeleteAllCustomerRequest deleteAllCustomerRequest = new DeleteAllCustomerRequest();
         deleteAllCustomerRequest.setCustomerId(savedCustomer.getCustomerId());
         deleteAllCustomerRequest.setBankId(savedBank.getBankId());
-//        deleteAllCustomerRequest.
         String customer = bankService.deleteALLCustomers(deleteAllCustomerRequest);
         assertEquals(0, bankService.findTotalNumbersOfCustomers());
         assertEquals("Customer successfully deleted", customer);
@@ -205,7 +204,6 @@ class BankServiceImplTest {
 
     @Test
     public void testThatBankCanUpdateCustomerProfile() {
-
 
         UpdateCustomerProfileRequest updateCustomerProfileRequest = new UpdateCustomerProfileRequest();
         updateCustomerProfileRequest.setCustomerName("Demilade");
@@ -219,46 +217,44 @@ class BankServiceImplTest {
     }
 
     @Test
-    public void testThatBankCanOpenAccount() {
+    public void testThatBankCanOpenAccountForCustomer() {
         OpenAccountRequest openAccountRequest = OpenAccountRequest.builder()
                 .bankId(savedBank.getBankId())
-                .customerId(savedCustomer.getCustomerId())
+//                .customerId(savedCustomer.getCustomerId())
                 .AccountName(savedCustomer.getCustomerName())
                 .age("60")
                 .email("ololade@gmail.com")
                 .phoneNumber("08109093828")
-                .accountNumber("0782807561")
+//                .accountNumber("0782807561")
                 .build();
         OpenAccountResponse foundAccount = bankService.openCustomerAccount(openAccountRequest);
+        System.out.println(foundAccount);
         assertThat(foundAccount).isNotNull();
         assertEquals(2, bankService.findTotalNumbersOfAccounts());
     }
 
-//    @Test
-//    public void testThatBankCanFindAccountById() {
-//        FindAccountRequest findAccountRequest = FindAccountRequest
-//                .builder()
-//                .accoundId(savedAccount.getId())
-//                .bankId(savedBank.getBankId())
-//                .customerId(savedCustomer.getCustomerId())
-//                .build();
-//        Account foundAccount = bankService.findAccountById(findAccountRequest);
-//        assertThat(foundAccount.getId()).isEqualTo(savedAccount.getId());
-//        assertThat(foundAccount.getId()).isNotNull();
-//
-//    }
+    @Test
+    public void testThatBankCanFindAccountById() {
+        FindAccountRequest findAccountRequest = FindAccountRequest
+                .builder()
+                .accoundId(savedAccount.getId())
+                .bankId(savedBank.getBankId())
+                .build();
+        Account foundAccount = bankService.findAccountById(findAccountRequest);
+        assertThat(foundAccount.getId()).isEqualTo(savedAccount.getId());
+        assertThat(foundAccount.getId()).isNotNull();
 
-//    @Test
-//    public void testThatBankCanFindAllAccounts() {
-//        FindAllAccountRequest findAllAccountRequest = FindAllAccountRequest.builder()
-//                .customerId(savedCustomer.getCustomerId())
-//                .bankId(savedBank.getBankId())
-//              .accountId(savedAccount.getId())
-//                .build();
-//        List<Account> foundAccount = bankService.findAllAccounts(findAllAccountRequest);
-//        assertThat(foundAccount.get(0).getId()).isNotNull();
-//        assertThat(foundAccount.get(0).getId()).isEqualTo(savedAccount.getId());
-//    }
+    }
+
+    @Test
+    public void testThatBankCanFindAllAccounts() {
+        FindAllAccountRequest findAllAccountRequest = FindAllAccountRequest.builder()
+              .bankId(savedBank.getBankId())
+                .numberOfPages(3)
+                .pageNumber(2)
+                .build();
+        Page<Account> foundAccount = bankService.findAllAccounts(findAllAccountRequest);
+    }
 
     @Test
     void bankCanDeleteAccount() {
@@ -302,24 +298,17 @@ class BankServiceImplTest {
 
     @Test
     public void testThatBankCanUpdateAccountProfile() {
-        FindAllAccountRequest findAllAccountRequest = FindAllAccountRequest.builder()
-                .customerId(savedCustomer.getCustomerId())
-                .bankId(savedBank.getBankId())
-                .accountId(savedAccount.getId())
-                .build();
-//        List<Account> foundAccount = bankService.findAllAccounts(findAllAccountRequest);
-
-              UpdateAccountRequest updateAccountRequest = UpdateAccountRequest.builder()
+           UpdateAccountRequest updateAccountRequest = UpdateAccountRequest.builder()
                       .email("Adesuyiololade@gmail.com")
-//                      ("Ololade~Demilade")
-                      .phoneNumber("08034752394")
+                   .accountName("Ololade~Demilade")
+                     .phoneNumber("08034752394")
                       .age("100")
-                      .customerId(savedCustomer.getCustomerId())
                       .bankId(savedBank.getBankId())
-                      .accountName(savedAccount.getId())
+                   .accountId(savedAccount.getId())
                       .build();
-//              bankService.updateAccountProfile(updateAccountRequest);
-//        assertEquals("Ololade~Demilade", bankService.findAllAccounts(findAllAccountRequest).get(0).getAccountName());
+           UpdateAccountResponse updatedAccount =   bankService.updateAccountProfile(updateAccountRequest);
+              assertEquals("Ololade~Demilade", updatedAccount.getAccountName());
+
 
     }
 

@@ -20,8 +20,7 @@ public class Account {
     @Id
     private String id;
     private String accountName;
-    private String beneficiaryAccountNumber;
-//    private String senderAccountNumber;
+    private String accountNumber;
     private int pin;
     private String age;
     private String phoneNumber;

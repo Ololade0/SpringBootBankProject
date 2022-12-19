@@ -69,5 +69,9 @@ public interface BankService {
     Account findAccountByAccountNUmber(String accountNumber);
 
     Account findAccountByAccountNames(String accountName);
+
+    Account findAccountById(FindAccountRequest findAccountRequest);
+
+    Page<Account> findAllAccounts(FindAllAccountRequest findAllAccountRequest);
 }
 

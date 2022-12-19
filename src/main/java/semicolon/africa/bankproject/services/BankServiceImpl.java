@@ -16,6 +16,7 @@ import semicolon.africa.bankproject.dao.repository.BankRepository;
 import semicolon.africa.bankproject.dto.request.*;
 
 import semicolon.africa.bankproject.dto.response.*;
+import semicolon.africa.bankproject.exception.AccountCannotBeFound;
 import semicolon.africa.bankproject.exception.BankDoesNotExistException;
 import semicolon.africa.bankproject.exception.EXceptionHandler.ErrorMessage;
 import semicolon.africa.bankproject.utils.Utils;
@@ -195,12 +196,10 @@ public class BankServiceImpl implements BankService {
 
     @Override
     public OpenAccountResponse openCustomerAccount(OpenAccountRequest openAccountRequest) {
-        Bank foundBank = bankRepository.findBankById(openAccountRequest.getBankId());
-        Customer foundCustomer = customerService.findCustomerById(openAccountRequest.getCustomerId());
         Account newAccount = accountService.openAccount(openAccountRequest);
+        Bank foundBank = bankRepository.findBankById(openAccountRequest.getBankId());
         if (foundBank != null) {
-            foundBank.getCustomers().add(foundCustomer);
-            foundCustomer.getAccounts().add(newAccount);
+            foundBank.getAccounts().add(newAccount);
             bankRepository.save(foundBank);
         }
         return OpenAccountResponse.builder()
@@ -215,15 +214,6 @@ public class BankServiceImpl implements BankService {
         return accountService.totalNumberOfAccount();
     }
 
-//    @Override
-//    public Account findAccountById(FindAccountRequest findAccountRequest) {
-//        Bank foundBank = bankRepository.findBankById(findAccountRequest.getBankId());
-//        Customer foundCustomer = customerService.findCustomerById(findAccountRequest.getCustomerId());
-//        if (foundBank != null && foundCustomer != null) {
-//            return customerService.findAccountById(findAccountRequest);
-//        }
-//        return null;
-//    }
 
     @Override
     public String deleteAllAccount() {
@@ -232,15 +222,6 @@ public class BankServiceImpl implements BankService {
         return "All account successfully deleted";
     }
 
-//    @Override
-//    public List<Account> findAllAccounts(FindAllAccountRequest findAllAccountRequest) {
-//        Bank foundBank = bankRepository.findBankById(findAllAccountRequest.getBankId());
-//        Customer foundCustomer = customerService.findCustomerById(findAllAccountRequest.getCustomerId());
-//        if (foundCustomer != null && foundBank != null) {
-//            return customerService.findAllAccounts(findAllAccountRequest);
-//        }
-//        throw new BankDoesNotExistException(foundBank.getBankName() + " does not exist");
-//    }
 
     @Override
     public String deleteAccountById(DeleteAccountRequest deleteAccountRequest) {
@@ -265,15 +246,14 @@ public class BankServiceImpl implements BankService {
     @Override
     public UpdateAccountResponse updateAccountProfile(UpdateAccountRequest updateAccountRequest) {
         Account updatedAccount = accountService.updateAccount(updateAccountRequest);
-        Bank foundBank = bankRepository.findBankById(updateAccountRequest.getBankId());
-        Customer foundCustomer = customerService.findCustomerById(updateAccountRequest.getCustomerId());
-        if(foundBank!= null && foundCustomer!= null){
-            foundBank.getCustomers().add(foundCustomer);
-            foundCustomer.getAccounts().add(updatedAccount);
-            bankRepository.save(foundBank);
+            Bank foundBank = bankRepository.findBankById(updateAccountRequest.getBankId());
+        if(foundBank!= null){
+            foundBank.getAccounts().add(updatedAccount);
         }
+       bankRepository.save(foundBank);
        return UpdateAccountResponse.builder()
                 .message("Account successfully updated")
+               .accountName(updatedAccount.getAccountName())
                 .build();
     }
 
@@ -292,7 +272,29 @@ public class BankServiceImpl implements BankService {
         return accountService.findAccountByAccountNames(accountName);
     }
 
+    @Override
+    public Account findAccountById(FindAccountRequest findAccountRequest) {
+       Account foundAccount = accountService.findAccountById(findAccountRequest.getAccoundId());
+       if(foundAccount!=null){
+           return accountService.findAccountById(findAccountRequest.getAccoundId());
+       }
+       else {
+           throw new AccountCannotBeFound("Account cannot be found");
+       }
 
+    }
+
+    @Override
+    public Page<Account> findAllAccounts(FindAllAccountRequest findAllAccountRequest) {
+        Bank foundBank = bankRepository.findBankById(findAllAccountRequest.getBankId());
+        if (foundBank != null) {
+            return accountService.findAllAccount(findAllAccountRequest);
+
+        } else {
+            throw new BankDoesNotExistException("Bank does not Exist");
+        }
+
+    }
 }
 
 

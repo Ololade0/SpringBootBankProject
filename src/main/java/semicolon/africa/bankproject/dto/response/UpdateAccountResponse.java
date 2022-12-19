@@ -8,5 +8,6 @@ import lombok.Setter;
 @Getter
 @Builder
 public class UpdateAccountResponse {
+    private String accountName;
     private String message;
 }

@@ -10,8 +10,7 @@ import lombok.*;
 @ToString
 public class UpdateAccountRequest {
     private String bankId;
-    private String customerId;
-    private String accountNumber;
+    private String accountId;
     private String accountName;
     private String age;
     private String phoneNumber;
