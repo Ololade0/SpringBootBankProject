@@ -8,9 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 @ToString
-public class DeleteAccountRequest {
-
-    private String accountId;
+public class FindAccountByName {
     private String bankId;
-
+    private String accountName;
 }

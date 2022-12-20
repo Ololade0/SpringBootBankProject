@@ -9,6 +9,7 @@ import semicolon.africa.bankproject.dao.model.Account;
 import semicolon.africa.bankproject.dao.repository.AccountRepository;
 import semicolon.africa.bankproject.dto.request.*;
 import semicolon.africa.bankproject.exception.AccountAmountException;
+import semicolon.africa.bankproject.exception.AccountCannotBeFound;
 import semicolon.africa.bankproject.utils.Utils;
 
 
@@ -107,25 +108,23 @@ public class AccountServiceImpl implements AccountService {
 
 
     @Override
-    public BigDecimal depositFundsIntoAccount(DepositFundRequest depositFundRequest) throws Exception {
-
+    public BigDecimal depositFundsIntoAccount(DepositFundRequest depositFundRequest) {
+        BigDecimal b1 = new BigDecimal(10_000_000);
+        BigDecimal b2 = new BigDecimal(String.valueOf(depositFundRequest.getTransactionAmount()));
         Account foundAccount = accountRepository.findAccountByAccountNumber(depositFundRequest.getBeneficiaryAccount());
-        if ((foundAccount!= null)) {
-            if(depositFundRequest.getTransactionAmount().equals(BigDecimal.valueOf(0))) {
+        if ((foundAccount != null)) {
+            if (depositFundRequest.getTransactionAmount().equals(BigDecimal.valueOf(0))) {
                 throw new AccountAmountException("Transaction Amount must be greater than 0");
             }
-            if(depositFundRequest.getTransactionAmount().compareTo(new BigDecimal(10_000_000)) > 0){
-                throw new AccountAmountException("Transaction Amount must be lesser than 10_000_000");
-
-            }
-
             foundAccount.setCurrentBalance(foundAccount.getCurrentBalance().add(depositFundRequest.getTransactionAmount()));
             accountRepository.save(foundAccount);
             return foundAccount.getCurrentBalance();
+        }
+        else {
+            throw new AccountCannotBeFound("Account Cannot be found");
 
         }
-        throw new RuntimeException("Transaction unsuccessful");
-//
+
     }
 
     //    private void validateWithdrawal(WithdrawRequest withdrawRequest, Account account) {
@@ -156,9 +155,17 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public BigDecimal WithdrawFundFromAccount(WithdrawalFundRequest withdrawalFundRequest) {
         Account foundAccount = accountRepository.findAccountByAccountNumber(withdrawalFundRequest.getAccountNumber());
+        BigDecimal one = new BigDecimal(String.valueOf(withdrawalFundRequest.getWithdrawalAmount()));
+        BigDecimal two = new BigDecimal(String.valueOf(foundAccount.getCurrentBalance()));
+        if(foundAccount!= null){
             foundAccount.setCurrentBalance(foundAccount.getCurrentBalance().subtract(withdrawalFundRequest.getWithdrawalAmount()));
-             accountRepository.save(foundAccount);
+            accountRepository.save(foundAccount);
             return foundAccount.getCurrentBalance();
+        }
+        else {
+            throw new AccountCannotBeFound("Account details cannot be found");
+        }
+
        }
 
 

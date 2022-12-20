@@ -12,8 +12,6 @@ import semicolon.africa.bankproject.dao.model.Customer;
 import semicolon.africa.bankproject.dto.request.*;
 import semicolon.africa.bankproject.dto.response.*;
 
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -53,7 +51,6 @@ class BankServiceImplTest {
 
         OpenAccountRequest openAccountRequest = OpenAccountRequest.builder()
                 .bankId(savedBank.getBankId())
-//                .customerId(savedCustomer.getCustomerId())
                 .AccountName("ololade")
                 .age("40")
                 .email("Ololadedemilade@gmail.com")
@@ -204,7 +201,6 @@ class BankServiceImplTest {
 
     @Test
     public void testThatBankCanUpdateCustomerProfile() {
-
         UpdateCustomerProfileRequest updateCustomerProfileRequest = new UpdateCustomerProfileRequest();
         updateCustomerProfileRequest.setCustomerName("Demilade");
         updateCustomerProfileRequest.setCustomerGender("male");
@@ -220,15 +216,13 @@ class BankServiceImplTest {
     public void testThatBankCanOpenAccountForCustomer() {
         OpenAccountRequest openAccountRequest = OpenAccountRequest.builder()
                 .bankId(savedBank.getBankId())
-//                .customerId(savedCustomer.getCustomerId())
-                .AccountName(savedCustomer.getCustomerName())
+                .AccountName("Ololade")
                 .age("60")
                 .email("ololade@gmail.com")
                 .phoneNumber("08109093828")
 //                .accountNumber("0782807561")
                 .build();
         OpenAccountResponse foundAccount = bankService.openCustomerAccount(openAccountRequest);
-        System.out.println(foundAccount);
         assertThat(foundAccount).isNotNull();
         assertEquals(2, bankService.findTotalNumbersOfAccounts());
     }
@@ -264,19 +258,17 @@ class BankServiceImplTest {
 
     @Test
     public void findAccountByAccountName() {
-        Account foundAccount = bankService.findAccountByAccountName(savedAccount.getAccountName());
-        assertThat(foundAccount).isNotNull();
-//       assertThat(foundAccount.getAccountName()).isEqualTo(savedAccount.getAccountName());
+        FindAccountByName findAccountByName = FindAccountByName
+                .builder()
+                .bankId(savedBank.getBankId())
+                 .accountName(savedAccount.getAccountName())
+                 .build();
+     Account foundAccount =   bankService.findByAccountName(findAccountByName);
+
 
     }
 
-    @Test
-    public void findAccountByAccountNames() {
-        Account foundAccount = bankService.findAccountByAccountNames(savedAccount.getAccountName());
-        assertThat(foundAccount).isNotNull();
-//       assertThat(foundAccount.getAccountName()).isEqualTo(savedAccount.getAccountName());
 
-    }
     @Test
     public void findAccountByAccountNumber() {
         Account foundAccount = bankService.findAccountByAccountNUmber(savedAccount.getAccountNumber());
@@ -288,8 +280,7 @@ class BankServiceImplTest {
     @Test
     public void testThatBankCanDeleteAccountById() {
         DeleteAccountRequest deleteAccountRequest = DeleteAccountRequest.builder()
-                .customerId(savedCustomer.getCustomerId())
-                .bankId(savedBank.getBankId())
+                                .bankId(savedBank.getBankId())
                 .accountId(savedAccount.getId())
                 .build();
         bankService.deleteAccountById(deleteAccountRequest);

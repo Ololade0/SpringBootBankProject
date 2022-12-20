@@ -22,9 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class AccountServiceImplTest {
     @Autowired
     private AccountService accountService;
-
-    @Autowired
-    private Utils utils;
     Account savedAccount;
 
     @BeforeEach
@@ -140,7 +137,7 @@ class AccountServiceImplTest {
         DepositFundRequest depositFundRequest = DepositFundRequest
                 .builder()
                 .beneficiaryAccount(savedAccount.getAccountNumber())
-                .transactionAmount(BigDecimal.valueOf(0))
+                .transactionAmount(BigDecimal.valueOf(60000))
                 .build();
      BigDecimal depositFundResponse = accountService.depositFundsIntoAccount(depositFundRequest);
         assertEquals(BigDecimal.valueOf(70000), depositFundResponse);
@@ -150,11 +147,11 @@ class AccountServiceImplTest {
     public void accountCanTransferFundToAnotherAccount_SenderBalanceDecrease(){
         WithdrawalFundRequest withdrawalFundRequest = WithdrawalFundRequest
                 .builder()
-//                .accountNumber(savedAccount.getAccountNumber())
-                .withdrawalAmount(BigDecimal.valueOf(50000))
+                .accountNumber(savedAccount.getAccountNumber())
+                .withdrawalAmount(BigDecimal.valueOf(5000))
                 .build();
-//      BigDecimal withdrawalFundResponse = accountService.WithdrawFundFromAccounts(withdrawalFundRequest.getWithdrawalAmount(), withdrawalFundRequest.getAccountNumber());
-//        assertEquals(BigDecimal.valueOf(5000), withdrawalFundResponse);
+      BigDecimal withdrawalFundResponse = accountService.WithdrawFundFromAccount(withdrawalFundRequest);
+        assertEquals(BigDecimal.valueOf(5000), withdrawalFundResponse);
     }
 
 

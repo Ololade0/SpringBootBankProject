@@ -217,7 +217,6 @@ public class BankServiceImpl implements BankService {
 
     @Override
     public String deleteAllAccount() {
-//        customerService.deleteAllAccounts();
         accountService.deleteAll();
         return "All account successfully deleted";
     }
@@ -226,20 +225,13 @@ public class BankServiceImpl implements BankService {
     @Override
     public String deleteAccountById(DeleteAccountRequest deleteAccountRequest) {
         Bank foundBank = bankRepository.findBankById(deleteAccountRequest.getBankId());
-        Customer foundCustomer = customerService.findCustomerById(deleteAccountRequest.getCustomerId());
-        if (foundBank != null) {
-            List<Account> accounts = foundCustomer.getAccounts();
-            for (int i = 0; i < accounts.size(); i++) {
-                if (accounts.get(i).getId().equalsIgnoreCase(deleteAccountRequest.getAccountId())) {
-                   // customerService.deleteAccountById(deleteAccountRequest);
-                    accountService.deleteBYId(deleteAccountRequest.getAccountId());
-                    accounts.remove(accounts.get(i));
-                    bankRepository.save(foundBank);
-                    return " Account successfully deleted";
-                }
-            }
+        if(foundBank!= null){
+            accountService.deleteBYId(deleteAccountRequest.getAccountId());
+            return "Account successfully deleted";
         }
-        return "error";
+        else {
+            throw new AccountCannotBeFound("'error', Account cannot be found");
+        }
 
     }
 
@@ -267,10 +259,6 @@ public class BankServiceImpl implements BankService {
         return accountService.findAccountByAccountNUmber(accountNumber);
     }
 
-    @Override
-    public Account findAccountByAccountNames(String accountName) {
-        return accountService.findAccountByAccountNames(accountName);
-    }
 
     @Override
     public Account findAccountById(FindAccountRequest findAccountRequest) {
@@ -293,6 +281,19 @@ public class BankServiceImpl implements BankService {
         } else {
             throw new BankDoesNotExistException("Bank does not Exist");
         }
+
+    }
+
+    @Override
+    public Account findByAccountName(FindAccountByName findAccountByName) {
+        Optional<Bank> foundBank = bankRepository.findById(findAccountByName.getBankId());
+//       Bank foundBank = bankRepository.findBankById(findAccountByName.getBankId());
+        if(foundBank.isPresent()){
+           return accountService.findAccountByAccountName(findAccountByName.getAccountName());
+        }
+       else {
+           throw new AccountCannotBeFound("Account cannot be found");
+       }
 
     }
 }
