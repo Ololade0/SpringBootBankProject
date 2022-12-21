@@ -198,16 +198,16 @@ public class BankController {
     }
 
 
-    @PostMapping(value = "/withdraw")
-//            produces ={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<?> accountCanWithdraw(@RequestBody WithdrawalFundRequest withdrawalFundRequest) {
-        try {
-            BigDecimal openAccountResponse = accountServices.WithdrawFundFromAccount(withdrawalFundRequest);
-            return new ResponseEntity<>(openAccountResponse, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-
-        }
+//    @PostMapping(value = "/withdraw")
+////            produces ={MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_JSON_VALUE}, consumes = {MediaType.APPLICATION_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
+//    public ResponseEntity<?> accountCanWithdraw(@RequestBody WithdrawalFundRequest withdrawalFundRequest) {
+//        try {
+//            BigDecimal openAccountResponse = accountServices.WithdrawFundFromAccounts(withdrawalFundRequest);
+//            return new ResponseEntity<>(openAccountResponse, HttpStatus.CREATED);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+//
+//        }
     }
 
 
@@ -215,4 +215,3 @@ public class BankController {
 
 
 
-}

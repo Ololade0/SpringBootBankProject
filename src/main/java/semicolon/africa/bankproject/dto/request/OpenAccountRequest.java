@@ -14,6 +14,8 @@ public class OpenAccountRequest {
     private String AccountName;
     private String accountNumber;
     private BigDecimal balance;
+    private String password;
+
     private String age;
     private String gender;
     private String email;

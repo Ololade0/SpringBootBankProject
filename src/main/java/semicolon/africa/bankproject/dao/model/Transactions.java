@@ -24,10 +24,7 @@ public class Transactions {
     private String accountNumber;
     private TransactionType transactionType;
 
-    public  boolean pinIsValid(String pin){
-        return this.pin.equals(pin);
 
-    }
 
 }
 

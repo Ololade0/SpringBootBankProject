@@ -21,7 +21,7 @@ public class Account {
     private String id;
     private String accountName;
     private String accountNumber;
-    private int pin;
+    private String password;
     private String age;
     private String phoneNumber;
     private String email;
@@ -31,6 +31,10 @@ public class Account {
     @DBRef
     private List<Transactions> transactions = new ArrayList<>();
 
+    public boolean passwordIsValid(String password) {
+        this.password = password;
 
+        return true;
+    }
 
 }

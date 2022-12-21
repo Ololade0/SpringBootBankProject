@@ -30,6 +30,7 @@ class AccountServiceImplTest {
                 .phoneNumber("08109093828")
                 .email("adesuyiololade@gmail.com")
                 .AccountName("Adesuyi")
+                .password("1234")
                 .age("23")
                 .balance(BigDecimal.valueOf(10_000))
                 .gender("female")
@@ -136,6 +137,7 @@ class AccountServiceImplTest {
     public void customerCanTransferFundToAnotherCustomerAccount_BeneficairyBalanceIncreases()throws Exception {
         DepositFundRequest depositFundRequest = DepositFundRequest
                 .builder()
+
                 .beneficiaryAccount(savedAccount.getAccountNumber())
                 .transactionAmount(BigDecimal.valueOf(60000))
                 .build();
@@ -144,16 +146,14 @@ class AccountServiceImplTest {
     }
 
     @Test
-    public void accountCanTransferFundToAnotherAccount_SenderBalanceDecrease(){
-        WithdrawalFundRequest withdrawalFundRequest = WithdrawalFundRequest
-                .builder()
-                .accountNumber(savedAccount.getAccountNumber())
-                .withdrawalAmount(BigDecimal.valueOf(5000))
-                .build();
-      BigDecimal withdrawalFundResponse = accountService.WithdrawFundFromAccount(withdrawalFundRequest);
-        assertEquals(BigDecimal.valueOf(5000), withdrawalFundResponse);
+    public void accountCanTransferFundToAnotherAccount_SenderBalanceDecreases(){
+        WithdrawalFundRequest withdrawalFundRequest = new WithdrawalFundRequest();
+        withdrawalFundRequest.setWithdrawalAmount(BigDecimal.valueOf(1000));
+        withdrawalFundRequest.setAccountNumber(savedAccount.getAccountNumber());
+         withdrawalFundRequest.setPassword("12345");
+        BigDecimal withdrawalFundResponse = accountService.WithdrawFundFromAccountsss(withdrawalFundRequest, withdrawalFundRequest.getAccount());
+        assertEquals(BigDecimal.valueOf(9000), withdrawalFundResponse);
     }
-
 
 
 

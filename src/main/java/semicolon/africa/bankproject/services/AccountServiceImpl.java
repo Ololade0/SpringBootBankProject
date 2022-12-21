@@ -10,10 +10,12 @@ import semicolon.africa.bankproject.dao.repository.AccountRepository;
 import semicolon.africa.bankproject.dto.request.*;
 import semicolon.africa.bankproject.exception.AccountAmountException;
 import semicolon.africa.bankproject.exception.AccountCannotBeFound;
+import semicolon.africa.bankproject.exception.IncorrectPasswordException;
 import semicolon.africa.bankproject.utils.Utils;
 
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 
 @Service
@@ -27,16 +29,18 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account openAccount(OpenAccountRequest openAccountRequest) {
-        Account newAccount =  Account.builder()
+        Account newAccount = Account.builder()
                 .email(openAccountRequest.getEmail())
                 .phoneNumber(openAccountRequest.getPhoneNumber())
                 .accountName(openAccountRequest.getAccountName())
+                .password(openAccountRequest.getPassword())
                 .accountNumber(openAccountRequest.getAccountNumber())
                 .age(openAccountRequest.getAge())
                 .gender(openAccountRequest.getGender())
                 .currentBalance(openAccountRequest.getBalance())
                 .build();
-        String customerAcctNum = utils.generateCustomerAccountNumber(10);;
+        String customerAcctNum = utils.generateCustomerAccountNumber(10);
+        ;
         openAccountRequest.setAccountNumber(customerAcctNum);
         return accountRepository.save(newAccount);
 
@@ -49,7 +53,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Page<Account> findAllAccount(FindAllAccountRequest findAllAccountRequest) {
-        Pageable pageable = PageRequest.of(findAllAccountRequest.getPageNumber()-1, findAllAccountRequest.getNumberOfPages());
+        Pageable pageable = PageRequest.of(findAllAccountRequest.getPageNumber() - 1, findAllAccountRequest.getNumberOfPages());
         return accountRepository.findAll(pageable);
     }
 
@@ -109,8 +113,6 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public BigDecimal depositFundsIntoAccount(DepositFundRequest depositFundRequest) {
-        BigDecimal b1 = new BigDecimal(10_000_000);
-        BigDecimal b2 = new BigDecimal(String.valueOf(depositFundRequest.getTransactionAmount()));
         Account foundAccount = accountRepository.findAccountByAccountNumber(depositFundRequest.getBeneficiaryAccount());
         if ((foundAccount != null)) {
             if (depositFundRequest.getTransactionAmount().equals(BigDecimal.valueOf(0))) {
@@ -119,57 +121,46 @@ public class AccountServiceImpl implements AccountService {
             foundAccount.setCurrentBalance(foundAccount.getCurrentBalance().add(depositFundRequest.getTransactionAmount()));
             accountRepository.save(foundAccount);
             return foundAccount.getCurrentBalance();
-        }
-        else {
+        } else {
             throw new AccountCannotBeFound("Account Cannot be found");
 
         }
 
     }
 
-    //    private void validateWithdrawal(WithdrawRequest withdrawRequest, Account account) {
-//        if(!account.getAccountPassword().equals(withdrawRequest.getPassword())){
-//            throw new IncorrectPasswordException("Password is incorrect", 400);
-//        }
-//        if(account.getAccountBalance().doubleValue() - withdrawRequest.getWithdrawAmount() < 500){
-//            throw new InsufficientBalanceException("You do not have sufficient balance",400);
-//        }
-//    }
-//private void validateThatAccountDoesNotExist(CreateAccountRequest createAccountRequest) {
-//    if(accountRepository.findAccountByAccountName(createAccountRequest.getAccountName())!= null) {
-//        throw new AccountAlreadyExistException("Account " + createAccountRequest.getAccountName() + " already exist", 400);
-//    }
-//}
-//    private void validateInitialDeposit(CreateAccountRequest createAccountRequest) {
-//        if(createAccountRequest.getInitialDeposit() < 500 || createAccountRequest.getInitialDeposit() >= 1000000) {
-//            throw new DepositNotValidException(createAccountRequest.getInitialDeposit() + " is not within the amount that can be deposited", 400);
-//        }
-//    }
-//
-//    private void validateDeposit(DepositRequest depositRequest) {
-//        if(depositRequest.getAmount() < 1 || depositRequest.getAmount() > 1000000) {
-//            throw new DepositNotValidException(depositRequest.getAmount() + "is not within the amount that can be deposited", 400);
-//        }
-//    }
-//    p
+
     @Override
-    public BigDecimal WithdrawFundFromAccount(WithdrawalFundRequest withdrawalFundRequest) {
-        Account foundAccount = accountRepository.findAccountByAccountNumber(withdrawalFundRequest.getAccountNumber());
-        BigDecimal one = new BigDecimal(String.valueOf(withdrawalFundRequest.getWithdrawalAmount()));
-        BigDecimal two = new BigDecimal(String.valueOf(foundAccount.getCurrentBalance()));
-        if(foundAccount!= null){
+    public BigDecimal WithdrawFundFromAccountss(String accountNumber, WithdrawalFundRequest withdrawalFundRequest, String password) {
+        Account foundAccount = accountRepository.findAccountByAccountNumber(accountNumber);
+        if (foundAccount != null && withdrawalFundRequest.getPassword().equals(password)) {
             foundAccount.setCurrentBalance(foundAccount.getCurrentBalance().subtract(withdrawalFundRequest.getWithdrawalAmount()));
             accountRepository.save(foundAccount);
             return foundAccount.getCurrentBalance();
-        }
-        else {
-            throw new AccountCannotBeFound("Account details cannot be found");
-        }
 
-       }
+        } else {
+            throw new AccountCannotBeFound("Incorrect password");
+        }
 
 
     }
+
+    @Override
+    public BigDecimal WithdrawFundFromAccountsss(WithdrawalFundRequest withdrawalFundRequest, Account account) {
+        Account foundAccount = accountRepository.findAccountByAccountNumber(withdrawalFundRequest.getAccountNumber());
+        if (foundAccount != null) {
+            if (account.passwordIsValid(String.valueOf(equals(withdrawalFundRequest.getPassword())))) {
+//           if(foundAccount.getPassword().equals(withdrawalFundRequest.getPassword())){
+                foundAccount.setCurrentBalance(foundAccount.getCurrentBalance().subtract(withdrawalFundRequest.getWithdrawalAmount()));
+                accountRepository.save(foundAccount);
+                return foundAccount.getCurrentBalance();
+            }
+        }
+        return null;
+
+
+    }
+}
+
 
 
 

@@ -15,9 +15,10 @@ import java.time.LocalDateTime;
 @ToString
 public class
 WithdrawalFundRequest {
-private  int pin;
-    private BigDecimal withdrawalAmount;
+    private  String password;
+    private Account account;
     private String accountNumber;
+    private BigDecimal withdrawalAmount;
 
 
 }
