@@ -10,7 +10,6 @@ import semicolon.africa.bankproject.dao.repository.AccountRepository;
 import semicolon.africa.bankproject.dto.request.*;
 import semicolon.africa.bankproject.exception.AccountAmountException;
 import semicolon.africa.bankproject.exception.AccountCannotBeFound;
-import semicolon.africa.bankproject.exception.IncorrectPasswordException;
 import semicolon.africa.bankproject.utils.Utils;
 
 
@@ -148,7 +147,7 @@ public class AccountServiceImpl implements AccountService {
     public BigDecimal WithdrawFundFromAccountsss(WithdrawalFundRequest withdrawalFundRequest, Account account) {
         Account foundAccount = accountRepository.findAccountByAccountNumber(withdrawalFundRequest.getAccountNumber());
         if (foundAccount != null) {
-            if (account.passwordIsValid(String.valueOf(equals(withdrawalFundRequest.getPassword())))) {
+            if (Objects.equals(account.getPassword(), withdrawalFundRequest.getPassword())) {
 //           if(foundAccount.getPassword().equals(withdrawalFundRequest.getPassword())){
                 foundAccount.setCurrentBalance(foundAccount.getCurrentBalance().subtract(withdrawalFundRequest.getWithdrawalAmount()));
                 accountRepository.save(foundAccount);
