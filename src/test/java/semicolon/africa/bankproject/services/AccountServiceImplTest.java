@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import semicolon.africa.bankproject.dao.model.Account;
+import semicolon.africa.bankproject.dao.model.AccountType;
 import semicolon.africa.bankproject.dao.model.TransactionType;
 import semicolon.africa.bankproject.dto.request.*;
 import semicolon.africa.bankproject.utils.Utils;
@@ -31,6 +32,7 @@ class AccountServiceImplTest {
                 .email("adesuyiololade@gmail.com")
                 .AccountName("Adesuyi")
                 .password("1234")
+                .accountType(AccountType.SAVINGS)
                 .age("23")
                 .balance(BigDecimal.valueOf(10_000))
                 .gender("female")

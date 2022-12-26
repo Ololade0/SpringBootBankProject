@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import semicolon.africa.bankproject.dao.model.Account;
 
+import semicolon.africa.bankproject.dao.model.AccountType;
 import semicolon.africa.bankproject.dao.repository.AccountRepository;
 import semicolon.africa.bankproject.dto.request.*;
 import semicolon.africa.bankproject.exception.AccountAmountException;
@@ -37,10 +38,11 @@ public class AccountServiceImpl implements AccountService {
                 .accountNumber(openAccountRequest.getAccountNumber())
                 .age(openAccountRequest.getAge())
                 .gender(openAccountRequest.getGender())
+                .accountType(openAccountRequest.getAccountType())
                 .currentBalance(openAccountRequest.getBalance())
                 .build();
         String customerAcctNum = utils.generateCustomerAccountNumber(10);
-        ;
+
         openAccountRequest.setAccountNumber(customerAcctNum);
         return accountRepository.save(newAccount);
 

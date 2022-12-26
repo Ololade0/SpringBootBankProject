@@ -21,6 +21,7 @@ public class Account {
     private String id;
     private String accountName;
     private String accountNumber;
+    private AccountType accountType;
     private String password;
     private String age;
     private String phoneNumber;

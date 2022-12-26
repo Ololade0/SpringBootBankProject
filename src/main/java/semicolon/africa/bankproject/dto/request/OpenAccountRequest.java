@@ -1,6 +1,7 @@
 package semicolon.africa.bankproject.dto.request;
 
 import lombok.*;
+import semicolon.africa.bankproject.dao.model.AccountType;
 
 import java.math.BigDecimal;
 
@@ -15,7 +16,7 @@ public class OpenAccountRequest {
     private String accountNumber;
     private BigDecimal balance;
     private String password;
-
+    private AccountType accountType;
     private String age;
     private String gender;
     private String email;
