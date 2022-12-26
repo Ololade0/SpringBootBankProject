@@ -11,6 +11,7 @@ import semicolon.africa.bankproject.dao.model.Bank;
 import semicolon.africa.bankproject.dao.model.Customer;
 import semicolon.africa.bankproject.dto.request.*;
 import semicolon.africa.bankproject.dto.response.*;
+import semicolon.africa.bankproject.exception.BankNameAlreadyExistException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,13 +28,13 @@ class BankServiceImplTest {
     OpenAccountResponse savedAccount;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws BankNameAlreadyExistException {
         BankRegisterRequest bankRegisterRequest = new BankRegisterRequest();
         BankRegisterRequest bankRegisterRequest1 = new BankRegisterRequest();
-        bankRegisterRequest.setBankName("Access Bank");
+        bankRegisterRequest.setBankName("Ores Bank");
         bankRegisterRequest.setBanklocation("Sabo");
         bankRegisterRequest.setCustomerRegisterRequestList(bankRegisterRequest.getCustomerRegisterRequestList());
-        bankRegisterRequest1.setBankName("GT Bank");
+        bankRegisterRequest1.setBankName("Ore Bank");
         bankRegisterRequest1.setBanklocation("Lekki");
         savedBank = bankService.registerBank(bankRegisterRequest);
         savedBank1 = bankService.registerBank(bankRegisterRequest1);
@@ -78,7 +79,7 @@ class BankServiceImplTest {
     }
 
     @Test
-    public void testThatBankCanBeRegister() {
+    public void testThatBankCanBeRegister() throws BankNameAlreadyExistException {
         BankRegisterRequest bankRegisterRequest = new BankRegisterRequest();
         BankRegisterRequest bankRegisterRequest1 = new BankRegisterRequest();
         savedBank = bankService.registerBank(bankRegisterRequest);

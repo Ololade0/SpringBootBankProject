@@ -8,12 +8,13 @@ import semicolon.africa.bankproject.dao.model.Customer;
 import semicolon.africa.bankproject.dto.request.*;
 import semicolon.africa.bankproject.dto.response.*;
 import semicolon.africa.bankproject.exception.BankDoesNotExistException;
+import semicolon.africa.bankproject.exception.BankNameAlreadyExistException;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface BankService {
-    BankRegisterResponse registerBank(BankRegisterRequest bankRegisterRequest) throws BankDoesNotExistException;
+    BankRegisterResponse registerBank(BankRegisterRequest bankRegisterRequest) throws BankDoesNotExistException, BankNameAlreadyExistException;
 
 
     Bank findBankById(String bankId) throws BankDoesNotExistException;

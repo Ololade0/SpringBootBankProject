@@ -150,7 +150,8 @@ class AccountServiceImplTest {
         WithdrawalFundRequest withdrawalFundRequest = new WithdrawalFundRequest();
         withdrawalFundRequest.setWithdrawalAmount(BigDecimal.valueOf(1000));
         withdrawalFundRequest.setAccountNumber(savedAccount.getAccountNumber());
-        BigDecimal withdrawalFundResponse = accountService.WithdrawFundFromAccountsss(withdrawalFundRequest, withdrawalFundRequest.getAccount());
+        withdrawalFundRequest.setPassword("1234");
+        BigDecimal withdrawalFundResponse = accountService.WithdrawFundFromAccount(withdrawalFundRequest);
         assertEquals(BigDecimal.valueOf(9000), withdrawalFundResponse);
     }
 

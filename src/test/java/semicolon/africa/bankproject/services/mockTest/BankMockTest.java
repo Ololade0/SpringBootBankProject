@@ -9,6 +9,7 @@ import semicolon.africa.bankproject.dao.model.Bank;
 import semicolon.africa.bankproject.dao.repository.BankRepository;
 import semicolon.africa.bankproject.dto.request.BankRegisterRequest;
 import semicolon.africa.bankproject.dto.response.BankRegisterResponse;
+import semicolon.africa.bankproject.exception.BankNameAlreadyExistException;
 import semicolon.africa.bankproject.services.AccountService;
 import semicolon.africa.bankproject.services.BankService;
 
@@ -42,7 +43,7 @@ public class BankMockTest {
     }
 
     @Test
-    public void testCanBeRegister(){
+    public void testCanBeRegister() throws BankNameAlreadyExistException {
         BankRegisterRequest bankRegisterRequest = new BankRegisterRequest();
         bankRegisterRequest.setBankName("Access Bank");
         bankRegisterRequest.setBanklocation("Ikeja");

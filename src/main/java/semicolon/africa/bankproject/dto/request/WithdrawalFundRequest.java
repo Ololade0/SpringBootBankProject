@@ -16,9 +16,8 @@ import java.time.LocalDateTime;
 public class
 WithdrawalFundRequest {
     private  String password;
-    private Account account;
-    private String accountNumber;
     private BigDecimal withdrawalAmount;
+    private String accountNumber;
 
 
 }

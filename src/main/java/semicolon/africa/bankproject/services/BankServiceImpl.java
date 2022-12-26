@@ -18,6 +18,7 @@ import semicolon.africa.bankproject.dto.request.*;
 import semicolon.africa.bankproject.dto.response.*;
 import semicolon.africa.bankproject.exception.AccountCannotBeFound;
 import semicolon.africa.bankproject.exception.BankDoesNotExistException;
+import semicolon.africa.bankproject.exception.BankNameAlreadyExistException;
 import semicolon.africa.bankproject.exception.EXceptionHandler.ErrorMessage;
 import semicolon.africa.bankproject.utils.Utils;
 
@@ -34,22 +35,26 @@ public class BankServiceImpl implements BankService {
     private final Utils utils;
 
     @Override
-    public BankRegisterResponse registerBank(BankRegisterRequest bankRegisterRequest) throws BankDoesNotExistException{
-        Bank bank = new Bank();
-        bank.setBankName(bankRegisterRequest.getBankName());
-        bank.setBankLocation(bankRegisterRequest.getBanklocation());
-        Bank savedBank = bankRepository.save(bank);
-        BankRegisterResponse bankRegisterResponse = new BankRegisterResponse();
-        bankRegisterResponse.setMessage("Bank successfully registered");
-        bankRegisterResponse.setBankId(savedBank.getId());
-        bankRegisterResponse.setBankLocation(savedBank.getBankLocation());
-        return bankRegisterResponse;
+    public BankRegisterResponse registerBank(BankRegisterRequest bankRegisterRequest) throws BankNameAlreadyExistException {
+//        Bank foundBank = bankRepository.findBankByBankName(bankRegisterRequest.getBankName());
+//        if (foundBank != null) {
+//            throw new BankNameAlreadyExistException();
+//        }
+//        else {
+            Bank bank = new Bank();
+            bank.setBankName(bankRegisterRequest.getBankName());
+            bank.setBankLocation(bankRegisterRequest.getBanklocation());
+            Bank savedBank = bankRepository.save(bank);
+            BankRegisterResponse bankRegisterResponse = new BankRegisterResponse();
+            bankRegisterResponse.setMessage("Bank successfully registered");
+            bankRegisterResponse.setBankId(savedBank.getId());
+            bankRegisterResponse.setBankLocation(savedBank.getBankLocation());
+            return bankRegisterResponse;
+//        }
     }
-
 
     @Override
     public Bank  findBankById(String bankId) throws BankDoesNotExistException{
-//
         Bank foundBank = bankRepository.findBankById(bankId);
         if (foundBank != null){
             return foundBank;

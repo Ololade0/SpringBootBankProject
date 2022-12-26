@@ -12,6 +12,7 @@ import semicolon.africa.bankproject.dto.request.*;
 import semicolon.africa.bankproject.dto.response.*;
 import semicolon.africa.bankproject.exception.AccountCannotBeFound;
 import semicolon.africa.bankproject.exception.BankDoesNotExistException;
+import semicolon.africa.bankproject.exception.BankNameAlreadyExistException;
 import semicolon.africa.bankproject.exception.CustomerCannotBeFound;
 import semicolon.africa.bankproject.services.AccountService;
 import semicolon.africa.bankproject.services.BankService;
@@ -34,6 +35,8 @@ public class BankController {
             return new ResponseEntity<>(bankRegisterResponse, HttpStatus.CREATED);
         } catch (BankDoesNotExistException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (BankNameAlreadyExistException e) {
+            throw new RuntimeException(e);
         }
     }
 
