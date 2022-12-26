@@ -9,11 +9,13 @@ import org.springframework.data.domain.Page;
 import semicolon.africa.bankproject.dao.model.Account;
 import semicolon.africa.bankproject.dao.model.AccountType;
 import semicolon.africa.bankproject.dao.model.TransactionType;
+import semicolon.africa.bankproject.dao.model.Transactions;
 import semicolon.africa.bankproject.dto.request.*;
 import semicolon.africa.bankproject.utils.Utils;
 
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,6 +25,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class AccountServiceImplTest {
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private Utils utils;
     Account savedAccount;
 
     @BeforeEach
@@ -37,7 +41,10 @@ class AccountServiceImplTest {
                 .balance(BigDecimal.valueOf(10_000))
                 .gender("female")
                 .build();
-      savedAccount =  accountService.openAccount(openAccountRequest);
+        String customerAcctNum = utils.generateCustomerAccountNumber(10);
+        openAccountRequest.setAccountNumber(customerAcctNum);
+        savedAccount = accountService.openAccount(openAccountRequest);
+        System.out.println(openAccountRequest);
     }
 
     @AfterEach
@@ -82,6 +89,7 @@ class AccountServiceImplTest {
         assertThat(foundAccount.getId()).isEqualTo(savedAccount.getId());
 
     }
+
     @Test
     public void findAccountByAccountName() {
         Account foundAccount = accountService.findAccountByAccountName(savedAccount.getAccountName());
@@ -89,6 +97,7 @@ class AccountServiceImplTest {
         assertThat(foundAccount.getAccountName()).isEqualTo(savedAccount.getAccountName());
 
     }
+
     @Test
     public void findAccountByAccountNumber() {
         Account foundAccount = accountService.findAccountByAccountNUmber(savedAccount.getAccountNumber());
@@ -103,7 +112,7 @@ class AccountServiceImplTest {
                 .pageNumber(3)
                 .numberOfPages(1)
                 .build();
-       Page<Account> accountPage = accountService.findAllAccount(findAllAccountRequest);
+        Page<Account> accountPage = accountService.findAllAccount(findAllAccountRequest);
         assertThat(accountPage.getTotalElements()).isNotNull();
         assertEquals(1L, accountService.findAllAccount(findAllAccountRequest).getTotalElements());
 
@@ -127,28 +136,28 @@ class AccountServiceImplTest {
                 .accountId(savedAccount.getId())
                 .accountName("Demilade")
                 .email("demilade@gmail.com")
-               .phoneNumber("09031807593")
+                .phoneNumber("09031807593")
                 .age("70")
                 .build();
-      Account updatedAccount =  accountService.updateAccount(updateAccountRequest);
-      assertEquals("Demilade", updatedAccount.getAccountName());
+        Account updatedAccount = accountService.updateAccount(updateAccountRequest);
+        assertEquals("Demilade", updatedAccount.getAccountName());
 
     }
 
     @Test
-    public void customerCanTransferFundToAnotherCustomerAccount_BeneficairyBalanceIncreases()throws Exception {
+    public void customerCanTransferFundToAnotherCustomerAccount_BeneficairyBalanceIncreases() throws Exception {
         DepositFundRequest depositFundRequest = DepositFundRequest
                 .builder()
 
                 .beneficiaryAccount(savedAccount.getAccountNumber())
                 .transactionAmount(BigDecimal.valueOf(60000))
                 .build();
-     BigDecimal depositFundResponse = accountService.depositFundsIntoAccount(depositFundRequest);
+        BigDecimal depositFundResponse = accountService.depositFundsIntoAccount(depositFundRequest);
         assertEquals(BigDecimal.valueOf(70000), depositFundResponse);
     }
 
     @Test
-    public void accountCanTransferFundToAnotherAccount_SenderBalanceDecreases(){
+    public void accountCanTransferFundToAnotherAccount_SenderBalanceDecreases() {
         WithdrawalFundRequest withdrawalFundRequest = new WithdrawalFundRequest();
         withdrawalFundRequest.setWithdrawalAmount(BigDecimal.valueOf(1000));
         withdrawalFundRequest.setAccountNumber(savedAccount.getAccountNumber());
@@ -157,6 +166,22 @@ class AccountServiceImplTest {
         assertEquals(BigDecimal.valueOf(9000), withdrawalFundResponse);
     }
 
+    @Test
+    public void AccountTransactionsCanBeRecorded() {
+        TransactionsRequest transactionsRequest = TransactionsRequest.builder()
+                .accountId(savedAccount.getId())
+                .accountNumber(savedAccount.getAccountNumber())
+                .currentBalance(savedAccount.getCurrentBalance())
+                .pin(savedAccount.getPassword())
+                .transactionDate(LocalDateTime.now())
+                .transactionType(TransactionType.DEPOSIT)
+                .transactionAmount(BigDecimal.valueOf(3000))
+                .build();
+        Transactions recordedTransactions = accountService.recordAccountTransaction(transactionsRequest);
+        assertEquals(BigDecimal.valueOf(3000), recordedTransactions.getTransactionAmount());
+        System.out.println(recordedTransactions);
 
+    }
 
 }
+

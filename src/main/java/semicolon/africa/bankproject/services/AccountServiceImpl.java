@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import semicolon.africa.bankproject.dao.model.Account;
 
 import semicolon.africa.bankproject.dao.model.AccountType;
+import semicolon.africa.bankproject.dao.model.Transactions;
 import semicolon.africa.bankproject.dao.repository.AccountRepository;
 import semicolon.africa.bankproject.dto.request.*;
 import semicolon.africa.bankproject.exception.AccountAmountException;
@@ -44,6 +45,7 @@ public class AccountServiceImpl implements AccountService {
         String customerAcctNum = utils.generateCustomerAccountNumber(10);
 
         openAccountRequest.setAccountNumber(customerAcctNum);
+
         return accountRepository.save(newAccount);
 
     }
@@ -143,7 +145,22 @@ public class AccountServiceImpl implements AccountService {
         }
 
         }
+
+    @Override
+    public Transactions recordAccountTransaction(TransactionsRequest transactionsRequest) {
+    Transactions recordedTranscations = transactionServices.recordTransactions(transactionsRequest);
+    Account foundAccount = accountRepository.findAccountById(transactionsRequest.getAccountId());
+    if(foundAccount != null){
+        foundAccount.getTransactions().add(recordedTranscations);
+        accountRepository.save(foundAccount);
+        return transactionServices.recordTransactions(transactionsRequest);
     }
+    else {
+        throw new AccountCannotBeFound(AccountCannotBeFound.AccountCannotBeFound(transactionsRequest.getAccountId()));
+    }
+
+    }
+}
 
 
 

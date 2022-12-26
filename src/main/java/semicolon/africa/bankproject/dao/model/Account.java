@@ -32,10 +32,4 @@ public class Account {
     @DBRef
     private List<Transactions> transactions = new ArrayList<>();
 
-    public boolean passwordIsValid(String password) {
-        this.password = password;
-
-        return true;
-    }
-
 }

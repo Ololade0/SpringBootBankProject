@@ -31,10 +31,11 @@ Transactions savedTransactions;
     void setUp() {
         TransactionsRequest transactionsRequest = TransactionsRequest.builder()
                 .accountNumber("0782384748")
-                .transactionDate(LocalDateTime.now())
                 .currentBalance(BigDecimal.valueOf(10000))
-//                .transactionAmount(BigDecimal.valueOf(90000))
+                .pin("1234")
+                .transactionDate(LocalDateTime.now())
                 .transactionType(TransactionType.DEPOSIT)
+                .transactionAmount(BigDecimal.valueOf(90000))
                 .build();
         savedTransactions = transactionServices.recordTransactions(transactionsRequest);
         System.out.println(savedTransactions.getId());
@@ -67,8 +68,7 @@ public void TransactionCanBeDone(){
             .build();
    Transactions transactions = transactionServices.recordTransactions(transactionsRequest);
    assertThat(transactions).isNotNull();
-    System.out.println(transactions.getCurrentBalance());
-   assertEquals(2, transactionServices.size());
+    assertEquals(2, transactionServices.size());
 }
 
 @Test

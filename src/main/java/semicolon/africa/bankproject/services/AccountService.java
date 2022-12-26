@@ -2,6 +2,7 @@ package semicolon.africa.bankproject.services;
 
 import org.springframework.data.domain.Page;
 import semicolon.africa.bankproject.dao.model.Account;
+import semicolon.africa.bankproject.dao.model.Transactions;
 import semicolon.africa.bankproject.dto.request.*;
 import semicolon.africa.bankproject.dto.response.DepositFundResponse;
 import semicolon.africa.bankproject.dto.response.WithdrawalFundResponse;
@@ -32,4 +33,6 @@ BigDecimal depositFundsIntoAccount(DepositFundRequest depositFundRequest) throws
 
  Account findAccountByAccountNUmber(String beneficiaryAccountNumber);
  BigDecimal WithdrawFundFromAccount(WithdrawalFundRequest withdrawalFundRequest);
+
+ Transactions recordAccountTransaction(TransactionsRequest transactionsRequest);
 }

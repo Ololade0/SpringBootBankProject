@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @Builder
 public class TransactionsRequest {
+    private String accountId;
     private BigDecimal transactionAmount;
     private LocalDateTime transactionDate;
     private BigDecimal currentBalance;

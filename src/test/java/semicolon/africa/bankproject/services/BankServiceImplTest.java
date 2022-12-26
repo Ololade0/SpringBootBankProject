@@ -51,6 +51,7 @@ class BankServiceImplTest {
 
 
         OpenAccountRequest openAccountRequest = OpenAccountRequest.builder()
+
                 .bankId(savedBank.getBankId())
                 .AccountName("ololade")
                 .age("40")
@@ -221,7 +222,6 @@ class BankServiceImplTest {
                 .age("60")
                 .email("ololade@gmail.com")
                 .phoneNumber("08109093828")
-//                .accountNumber("0782807561")
                 .build();
         OpenAccountResponse foundAccount = bankService.openCustomerAccount(openAccountRequest);
         assertThat(foundAccount).isNotNull();
@@ -301,8 +301,9 @@ class BankServiceImplTest {
            UpdateAccountResponse updatedAccount =   bankService.updateAccountProfile(updateAccountRequest);
               assertEquals("Ololade~Demilade", updatedAccount.getAccountName());
 
-
     }
+
+
 
 
 }
