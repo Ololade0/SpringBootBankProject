@@ -17,6 +17,7 @@ import semicolon.africa.bankproject.utils.Utils;
 
 
 import java.math.BigDecimal;
+import java.security.SecureRandom;
 import java.util.Objects;
 
 
@@ -29,6 +30,8 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private Utils utils;
 
+    private SecureRandom secureRandom = new SecureRandom();
+
     @Override
     public Account openAccount(OpenAccountRequest openAccountRequest) {
         Account newAccount = Account.builder()
@@ -36,7 +39,8 @@ public class AccountServiceImpl implements AccountService {
                 .phoneNumber(openAccountRequest.getPhoneNumber())
                 .accountName(openAccountRequest.getAccountName())
                 .password(openAccountRequest.getPassword())
-                .accountNumber(openAccountRequest.getAccountNumber())
+                .accountNumber(String.valueOf(secureRandom.nextInt(10)))
+//                .accountNumber(openAccountRequest.getAccountNumber())
                 .age(openAccountRequest.getAge())
                 .gender(openAccountRequest.getGender())
                 .accountType(openAccountRequest.getAccountType())
@@ -147,13 +151,13 @@ public class AccountServiceImpl implements AccountService {
         }
 
     @Override
-    public Transactions recordAccountTransaction(TransactionsRequest transactionsRequest) {
+    public Account recordAccountTransaction(TransactionsRequest transactionsRequest) {
     Transactions recordedTranscations = transactionServices.recordTransactions(transactionsRequest);
     Account foundAccount = accountRepository.findAccountById(transactionsRequest.getAccountId());
     if(foundAccount != null){
         foundAccount.getTransactions().add(recordedTranscations);
-        accountRepository.save(foundAccount);
-        return transactionServices.recordTransactions(transactionsRequest);
+      return   accountRepository.save(foundAccount);
+//        return transactionServices.recordTransactions(transactionsRequest);
     }
     else {
         throw new AccountCannotBeFound(AccountCannotBeFound.AccountCannotBeFound(transactionsRequest.getAccountId()));

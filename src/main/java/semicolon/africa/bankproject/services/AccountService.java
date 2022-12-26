@@ -23,7 +23,7 @@ public interface AccountService {
 
     long totalNumberOfAccount();
 
-BigDecimal depositFundsIntoAccount(DepositFundRequest depositFundRequest) throws Exception;
+BigDecimal depositFundsIntoAccount(DepositFundRequest depositFundRequest);
 
 
  Account findAccountByAccountName(String accountName);
@@ -34,5 +34,5 @@ BigDecimal depositFundsIntoAccount(DepositFundRequest depositFundRequest) throws
  Account findAccountByAccountNUmber(String beneficiaryAccountNumber);
  BigDecimal WithdrawFundFromAccount(WithdrawalFundRequest withdrawalFundRequest);
 
- Transactions recordAccountTransaction(TransactionsRequest transactionsRequest);
+ Account recordAccountTransaction(TransactionsRequest transactionsRequest);
 }

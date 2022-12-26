@@ -27,7 +27,7 @@ public class Account {
     private String phoneNumber;
     private String email;
     private BigDecimal currentBalance;
-    private BigDecimal funds;
+//    private BigDecimal funds;
     private String gender;
     @DBRef
     private List<Transactions> transactions = new ArrayList<>();

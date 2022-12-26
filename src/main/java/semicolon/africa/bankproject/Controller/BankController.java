@@ -19,7 +19,7 @@ import semicolon.africa.bankproject.services.BankService;
 import java.math.BigDecimal;
 import java.util.List;
 
-@RestController
+//@RestController
 public class BankController {
     @Autowired
     private BankService bankService;
@@ -138,15 +138,15 @@ public class BankController {
 
     }
 
-    @PostMapping("/account")
-    public ResponseEntity<?> openAccountForCustomer(@RequestBody OpenAccountRequest openAccountRequest) {
-        try {
-            OpenAccountResponse openAccountResponse = bankService.openCustomerAccount(openAccountRequest);
-            return new ResponseEntity<>(openAccountResponse, HttpStatus.CREATED);
-        } catch (AccountCannotBeFound e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
+//    @PostMapping("/account")
+//    public ResponseEntity<?> openAccountForCustomer(@RequestBody OpenAccountRequest openAccountRequest) {
+//        try {
+//            OpenAccountResponse openAccountResponse = bankService.openCustomerAccount(openAccountRequest);
+//            return new ResponseEntity<>(openAccountResponse, HttpStatus.CREATED);
+//        } catch (AccountCannotBeFound e) {
+//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
 //    @GetMapping("/accountId")
 //    public ResponseEntity<?> FindAccountById(@RequestBody FindAccountRequest findAccountRequest) {
