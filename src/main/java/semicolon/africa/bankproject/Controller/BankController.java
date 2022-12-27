@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import semicolon.africa.bankproject.dao.model.Account;
 import semicolon.africa.bankproject.dao.model.Customer;
 import semicolon.africa.bankproject.dto.request.*;
 import semicolon.africa.bankproject.dto.response.*;
@@ -19,7 +20,7 @@ import semicolon.africa.bankproject.services.BankService;
 import java.math.BigDecimal;
 import java.util.List;
 
-//@RestController
+@RestController
 public class BankController {
     @Autowired
     private BankService bankService;
@@ -198,6 +199,39 @@ public class BankController {
 
 
     }
+
+
+    @PostMapping("/account")
+    public ResponseEntity<?> OpenAccount(@RequestBody OpenAccountRequest openAccountRequest) {
+        try {
+            Account openAccountResponse= accountServices.openAccount(openAccountRequest);
+            return new ResponseEntity<>(openAccountResponse, HttpStatus.CREATED);
+        } catch (AccountCannotBeFound e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+
+    @PostMapping("/transaction")
+    public ResponseEntity<?> depositTransactions(@RequestBody DepositFundRequest depositFundRequest) {
+        try {
+            BigDecimal transaction= accountServices.depositFundsIntoAccount(depositFundRequest);
+            return new ResponseEntity<>(transaction, HttpStatus.CREATED);
+        } catch (AccountCannotBeFound e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/transactions")
+    public ResponseEntity<?> recordTransactions(@RequestBody TransactionsRequest transactionsRequest) {
+        try {
+            Account transaction= accountServices.recordAccountTransaction(transactionsRequest);
+            return new ResponseEntity<>(transaction, HttpStatus.CREATED);
+        } catch (AccountCannotBeFound e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
 
 
 //    @PostMapping(value = "/withdraw")

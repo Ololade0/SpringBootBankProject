@@ -34,7 +34,7 @@ class AccountServiceImplTest {
         OpenAccountRequest openAccountRequest = OpenAccountRequest.builder()
                 .phoneNumber("08109093828")
                 .email("adesuyiololade@gmail.com")
-                .AccountName("Adesuyi")
+                .accountName("Adesuyi")
                 .password("1234")
                 .accountType(AccountType.SAVINGS)
                 .age("23")
@@ -44,7 +44,7 @@ class AccountServiceImplTest {
         String customerAcctNum = utils.generateCustomerAccountNumber(10);
         openAccountRequest.setAccountNumber(customerAcctNum);
         savedAccount = accountService.openAccount(openAccountRequest);
-        System.out.println(openAccountRequest);
+
     }
 
     @AfterEach
@@ -71,7 +71,7 @@ class AccountServiceImplTest {
         OpenAccountRequest openAccountRequest = OpenAccountRequest.builder()
                 .phoneNumber("08109093828")
                 .email("adesuyiololade@gmail.com")
-                .AccountName("Adesuyi")
+                .accountName("Adesuyi")
                 .age("23")
                 .balance(BigDecimal.valueOf(10_000))
                 .gender("female")

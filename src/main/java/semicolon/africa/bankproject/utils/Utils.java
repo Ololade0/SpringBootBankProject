@@ -1,12 +1,16 @@
 package semicolon.africa.bankproject.utils;
 
 import com.fasterxml.jackson.databind.util.ArrayBuilders;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 import java.security.SecureRandom;
 import java.util.Random;
 
 @Component
+@Setter
+@Getter
 public class Utils {
     private final String accountNumber = "1234567890";
     private final Random RANDOM = new SecureRandom();

@@ -19,6 +19,7 @@ import semicolon.africa.bankproject.utils.Utils;
 import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.util.Objects;
+import java.util.Random;
 
 
 @Service
@@ -34,23 +35,20 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account openAccount(OpenAccountRequest openAccountRequest) {
+        String customerAcctNum =  utils.generateCustomerAccountNumber(10);
         Account newAccount = Account.builder()
                 .email(openAccountRequest.getEmail())
                 .phoneNumber(openAccountRequest.getPhoneNumber())
                 .accountName(openAccountRequest.getAccountName())
                 .password(openAccountRequest.getPassword())
-                .accountNumber(String.valueOf(secureRandom.nextInt(10)))
-//                .accountNumber(openAccountRequest.getAccountNumber())
+                .accountNumber(customerAcctNum)
                 .age(openAccountRequest.getAge())
                 .gender(openAccountRequest.getGender())
                 .accountType(openAccountRequest.getAccountType())
                 .currentBalance(openAccountRequest.getBalance())
                 .build();
-        String customerAcctNum = utils.generateCustomerAccountNumber(10);
 
-        openAccountRequest.setAccountNumber(customerAcctNum);
-
-        return accountRepository.save(newAccount);
+          return accountRepository.save(newAccount);
 
     }
 
@@ -156,8 +154,8 @@ public class AccountServiceImpl implements AccountService {
     Account foundAccount = accountRepository.findAccountById(transactionsRequest.getAccountId());
     if(foundAccount != null){
         foundAccount.getTransactions().add(recordedTranscations);
+        transactionServices.recordTransactions(transactionsRequest);
       return   accountRepository.save(foundAccount);
-//        return transactionServices.recordTransactions(transactionsRequest);
     }
     else {
         throw new AccountCannotBeFound(AccountCannotBeFound.AccountCannotBeFound(transactionsRequest.getAccountId()));

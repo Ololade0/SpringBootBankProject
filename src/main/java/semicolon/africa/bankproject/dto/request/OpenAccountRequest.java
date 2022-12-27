@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @ToString
 public class OpenAccountRequest {
     private String bankId;
-    private String AccountName;
+    private String accountName;
     private String accountNumber;
     private BigDecimal balance;
     private String password;

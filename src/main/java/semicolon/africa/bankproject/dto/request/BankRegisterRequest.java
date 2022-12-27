@@ -15,7 +15,7 @@ public class BankRegisterRequest {
     private String bankId;
     private String bankName;
     private String banklocation;
-   private List<Customer> customerRegisterRequestList;
+//   private List<Customer> customerRegisterRequestList;
 
 
 }
