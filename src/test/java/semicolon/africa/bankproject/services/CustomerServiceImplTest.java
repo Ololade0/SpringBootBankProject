@@ -33,13 +33,13 @@ class CustomerServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        CustomerRegisterRequest customerRegister = new CustomerRegisterRequest();
+        Customer  customerRegister = new Customer ();
         customerRegister.setCustomerName("Adesuyi");
         customerRegister.setCustomerGender("female");
         customerRegister.setCustomerEmail("Ololadedemilade@gmail.com");
         customerRegister.setCustomerAccountNumber("34567");
         customerRegister.setCustomerAge("55");
-        customerRegister.setCustomerPassword("1235");
+//        customerRegister.setCustomerPassword("1235");
         savedCustomer = customerService.saveNewCustomer(customerRegister);
 
     }
@@ -64,7 +64,7 @@ class CustomerServiceImplTest {
 
     @Test
     public void customerCanBeRegister() {
-        CustomerRegisterRequest customerRegisterRequest = new CustomerRegisterRequest();
+        Customer customerRegisterRequest = new Customer ();
         customerRegisterRequest.setCustomerName("Adesuyi");
         customerRegisterRequest.setCustomerGender("female");
         customerRegisterRequest.setCustomerAge("55");

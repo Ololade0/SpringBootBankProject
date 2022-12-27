@@ -20,9 +20,9 @@ import java.util.List;
 public class Customer {
     @Id
     private String customerId;
+    private String bankId;
     private String customerEmail;
     private String customerAccountNumber;
-//    private String bankId;
     private String customerName;
     private String customerAge;
     private String customerGender;

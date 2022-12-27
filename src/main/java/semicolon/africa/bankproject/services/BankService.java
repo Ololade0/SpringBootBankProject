@@ -25,7 +25,7 @@ public interface BankService {
     long totalNumbersOfBanks();
 
 
-    CustomerRegisterResponse saveCustomer(CustomerRegisterRequest customerRegisterRequest) throws HttpMessageNotReadableException;
+    CustomerRegisterResponse saveCustomer(Customer customerRegisterRequest) throws HttpMessageNotReadableException;
 
     Page<Bank> findAllBanks(FindAllBankRequest findAllBankRequest);
 
@@ -76,5 +76,7 @@ public interface BankService {
     Page<Account> findAllAccounts(FindAllAccountRequest findAllAccountRequest);
 
     Account findByAccountName(FindAccountByName findAccountByName);
+
+    Account findAccountByAcctNum(FindAccountBYAccountNUmber findAccountBYAccountNUmber);
 }
 

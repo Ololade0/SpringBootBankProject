@@ -12,7 +12,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CustomerService {
-    Customer saveNewCustomer(CustomerRegisterRequest customerRegisterRequest);
+//    Customer saveNewCustomer(CustomerRegisterRequest customerRegisterRequest);
+        Customer saveNewCustomer(Customer customerRegisterRequest);
 
 
 

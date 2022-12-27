@@ -79,7 +79,7 @@ public class BankController {
 
     }
     @PostMapping("/customer")
-    public ResponseEntity<?> saveCustomers(@RequestBody CustomerRegisterRequest customerRegisterRequest) {
+    public ResponseEntity<?> saveCustomers(@RequestBody Customer customerRegisterRequest) {
         try {
             CustomerRegisterResponse customerRegisterResponse = bankService.saveCustomer(customerRegisterRequest);
             return new ResponseEntity<>(customerRegisterResponse, HttpStatus.CREATED);

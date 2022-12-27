@@ -41,7 +41,7 @@ public class CustomerServiceImpl implements CustomerService {
 
 
     @Override
-    public Customer saveNewCustomer(CustomerRegisterRequest customerRegister) {
+    public Customer saveNewCustomer(Customer customerRegister) {
         ModelMapper modelMapper = new ModelMapper();
      Customer customer =    modelMapper.map(customerRegister, Customer.class);
         return customerRepository.save(customer);

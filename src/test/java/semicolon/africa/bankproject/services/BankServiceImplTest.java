@@ -13,6 +13,8 @@ import semicolon.africa.bankproject.dto.request.*;
 import semicolon.africa.bankproject.dto.response.*;
 import semicolon.africa.bankproject.exception.BankNameAlreadyExistException;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -29,18 +31,23 @@ class BankServiceImplTest {
 
     @BeforeEach
     void setUp() throws BankNameAlreadyExistException {
+        List<Customer> customerList = List.of();
         BankRegisterRequest bankRegisterRequest = new BankRegisterRequest();
         BankRegisterRequest bankRegisterRequest1 = new BankRegisterRequest();
         bankRegisterRequest.setBankName("Ores Bank");
         bankRegisterRequest.setBanklocation("Sabo");
-        bankRegisterRequest.setCustomerRegisterRequestList(bankRegisterRequest.getCustomerRegisterRequestList());
+//        bankRegisterRequest.setCustomerRegisterRequestList(bankRegisterRequest.getCustomerRegisterRequestList());
         bankRegisterRequest1.setBankName("Ore Bank");
         bankRegisterRequest1.setBanklocation("Lekki");
+        bankRegisterRequest.setCustomerRegisterRequestList(customerList);
+        bankRegisterRequest1.setCustomerRegisterRequestList(customerList);
         savedBank = bankService.registerBank(bankRegisterRequest);
         savedBank1 = bankService.registerBank(bankRegisterRequest1);
+//        System.out.println(savedBank);
+//        System.out.println(savedBank);
 
 
-        CustomerRegisterRequest customerRegisterRequest = CustomerRegisterRequest.builder()
+        Customer customerRegisterRequest = Customer.builder()
                 .bankId(savedBank.getBankId())
                 .customerName("Ololade")
                 .customerAccountNumber("65758696")
@@ -53,7 +60,7 @@ class BankServiceImplTest {
         OpenAccountRequest openAccountRequest = OpenAccountRequest.builder()
 
                 .bankId(savedBank.getBankId())
-                .AccountName("ololade")
+                .accountName("ololade")
                 .age("40")
                 .email("Ololadedemilade@gmail.com")
                 .phoneNumber("09031807593")
@@ -81,8 +88,11 @@ class BankServiceImplTest {
 
     @Test
     public void testThatBankCanBeRegister() throws BankNameAlreadyExistException {
+        List<Customer> customerList = List.of();
         BankRegisterRequest bankRegisterRequest = new BankRegisterRequest();
         BankRegisterRequest bankRegisterRequest1 = new BankRegisterRequest();
+        bankRegisterRequest.setCustomerRegisterRequestList(customerList);
+        bankRegisterRequest1.setCustomerRegisterRequestList(customerList);
         savedBank = bankService.registerBank(bankRegisterRequest);
         savedBank1 = bankService.registerBank(bankRegisterRequest1);
         assertEquals(4, bankService.totalNumbersOfBanks());
@@ -146,7 +156,7 @@ class BankServiceImplTest {
 
     @Test
     public void testThatBankCanSaveCustomer() {
-        CustomerRegisterRequest customerRegisterRequest = new CustomerRegisterRequest();
+        Customer customerRegisterRequest = new Customer ();
         customerRegisterRequest.setBankId(savedBank.getBankId());
         customerRegisterRequest.setBankId(savedBank1.getBankId());
         savedCustomer = bankService.saveCustomer(customerRegisterRequest);
@@ -218,7 +228,7 @@ class BankServiceImplTest {
     public void testThatBankCanOpenAccountForCustomer() {
         OpenAccountRequest openAccountRequest = OpenAccountRequest.builder()
                 .bankId(savedBank.getBankId())
-                .AccountName("Ololade")
+                .accountName("Ololade")
                 .age("60")
                 .email("ololade@gmail.com")
                 .phoneNumber("08109093828")
@@ -272,7 +282,12 @@ class BankServiceImplTest {
 
     @Test
     public void findAccountByAccountNumber() {
-        Account foundAccount = bankService.findAccountByAccountNUmber(savedAccount.getAccountNumber());
+        FindAccountBYAccountNUmber findAccountBYAccountNUmber = FindAccountBYAccountNUmber.builder()
+                .accountNumber(savedAccount.getAccountNumber())
+                .bankId(savedBank.getBankId())
+                .build();
+       Account foundAccount = bankService.findAccountByAcctNum(findAccountBYAccountNUmber);
+//        Account foundAccount = bankService.findAccountByAccountNUmber(savedAccount.getAccountNumber());
         assertThat(foundAccount).isNotNull();
         assertThat(foundAccount.getId()).isEqualTo(savedAccount.getId());
 
@@ -281,7 +296,7 @@ class BankServiceImplTest {
     @Test
     public void testThatBankCanDeleteAccountById() {
         DeleteAccountRequest deleteAccountRequest = DeleteAccountRequest.builder()
-                                .bankId(savedBank.getBankId())
+                 .bankId(savedBank.getBankId())
                 .accountId(savedAccount.getId())
                 .build();
         bankService.deleteAccountById(deleteAccountRequest);
