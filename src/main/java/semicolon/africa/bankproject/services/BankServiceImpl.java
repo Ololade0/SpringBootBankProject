@@ -51,6 +51,7 @@ public class BankServiceImpl implements BankService {
             customer.setCustomerAge(bankRegisterRequest.getCustomerRegisterRequestList().get(i).getCustomerAge());
             customer.setCustomerEmail(bankRegisterRequest.getCustomerRegisterRequestList().get(i).getCustomerEmail());
             customer.setCustomerAccountNumber(bankRegisterRequest.getCustomerRegisterRequestList().get(i).getCustomerAccountNumber());
+            customer.setCustomerId(bankRegisterRequest.getCustomerRegisterRequestList().get(i).getCustomerId());
             Customer customer1 = customerService.saveNewCustomer(customer);
             customerList.add(customer1);
 
@@ -60,8 +61,8 @@ public class BankServiceImpl implements BankService {
             bank.setBankLocation(bankRegisterRequest.getBanklocation());
             bank.setCustomers(customerList);
             Bank savedBank = bankRepository.save(bank);
-            BankRegisterResponse bankRegisterResponse = new BankRegisterResponse();
 
+            BankRegisterResponse bankRegisterResponse = new BankRegisterResponse();
             bankRegisterResponse.setMessage("Bank successfully registered");
             bankRegisterResponse.setBankId(savedBank.getId());
             bankRegisterResponse.setBankLocation(savedBank.getBankLocation());

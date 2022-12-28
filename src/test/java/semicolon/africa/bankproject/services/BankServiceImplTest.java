@@ -43,8 +43,9 @@ class BankServiceImplTest {
         bankRegisterRequest1.setCustomerRegisterRequestList(customerList);
         savedBank = bankService.registerBank(bankRegisterRequest);
         savedBank1 = bankService.registerBank(bankRegisterRequest1);
-//        System.out.println(savedBank);
-//        System.out.println(savedBank);
+        System.out.println(savedBank);
+        System.out.println(savedBank1);
+
 
 
         Customer customerRegisterRequest = Customer.builder()
