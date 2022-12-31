@@ -67,7 +67,7 @@ public class BankServiceImpl implements BankService {
             bankRegisterResponse.setBankId(savedBank.getId());
             bankRegisterResponse.setBankLocation(savedBank.getBankLocation());
             return bankRegisterResponse;
-//        }
+
     }
 
     @Override

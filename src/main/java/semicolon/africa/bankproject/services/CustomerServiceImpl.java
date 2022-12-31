@@ -22,6 +22,7 @@ import semicolon.africa.bankproject.exception.CustomerCannotBeFound;
 import semicolon.africa.bankproject.utils.Utils;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import java.util.Optional;
@@ -40,10 +41,33 @@ public class CustomerServiceImpl implements CustomerService {
 //    Utils utils;
 
 
+
+
     @Override
     public Customer saveNewCustomer(Customer customerRegister) {
+        List<Account> accountList = new ArrayList<>();
+        for (int i = 0; i < customerRegister.getAccounts().size(); i++) {
+            OpenAccountRequest account = new OpenAccountRequest();
+//            Account account = new Account();
+//            account.setId(String.valueOf(i));
+            account.setPassword(customerRegister.getAccounts().get(i).getPassword());
+            account.setAccountName(customerRegister.getAccounts().get(i).getAccountName());
+            account.setAccountNumber(customerRegister.getAccounts().get(i).getAccountNumber());
+//            account.setCurrentBalance(customerRegister.getAccounts().get(i).getCurrentBalance());
+            account.setEmail(customerRegister.getAccounts().get(i).getEmail());
+            account.setPhoneNumber(customerRegister.getAccounts().get(i).getPhoneNumber());
+            account.setAccountType(customerRegister.getAccounts().get(i).getAccountType());
+//            account.setTransactions(customerRegister.getAccounts().get(i).getTransactions());
+            account.setAge(customerRegister.getAccounts().get(i).getAge());
+//            account.setId(customerRegister.getAccounts().get(i).getId());
+            Account account1 = accountService.openAccount(account);
+            accountList.add(account1);
+
+        }
+
         ModelMapper modelMapper = new ModelMapper();
      Customer customer =    modelMapper.map(customerRegister, Customer.class);
+           customer.setAccounts(accountList);
         return customerRepository.save(customer);
 
     }

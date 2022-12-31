@@ -29,11 +29,12 @@ class CustomerServiceImplTest {
     @Autowired
     Utils utils;
     Customer savedCustomer;
-    OpenAccountResponse savedAccount;
-
     @BeforeEach
     void setUp() {
+
+        List<Account> accountList = List.of();
         Customer  customerRegister = new Customer ();
+        customerRegister.setAccounts(accountList);
         customerRegister.setCustomerName("Adesuyi");
         customerRegister.setCustomerGender("female");
         customerRegister.setCustomerEmail("Ololadedemilade@gmail.com");
@@ -64,12 +65,18 @@ class CustomerServiceImplTest {
 
     @Test
     public void customerCanBeRegister() {
-        Customer customerRegisterRequest = new Customer ();
-        customerRegisterRequest.setCustomerName("Adesuyi");
-        customerRegisterRequest.setCustomerGender("female");
-        customerRegisterRequest.setCustomerAge("55");
-        Customer customer = customerService.saveNewCustomer(customerRegisterRequest);
-        assertThat(customer.getCustomerId()).isNotNull();
+
+        List<Account> accountList = List.of();
+        Customer  customerRegister = new Customer ();
+        customerRegister.setAccounts(accountList);
+        customerRegister.setCustomerName("Adesuyi");
+        customerRegister.setCustomerGender("female");
+        customerRegister.setCustomerEmail("Ololadedemilade@gmail.com");
+        customerRegister.setCustomerAccountNumber("34567");
+        customerRegister.setCustomerAge("55");
+        savedCustomer = customerService.saveNewCustomer(customerRegister);
+
+        assertThat(savedCustomer.getCustomerId()).isNotNull();
         assertEquals(2, customerService.totalNumberOfCustomer());
 
 
