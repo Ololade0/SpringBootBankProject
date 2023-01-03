@@ -84,23 +84,6 @@ public class TransactionImpl implements TransactionServices {
 
 
 
-//    @Override
-//    public BigDecimal depositFunds(DepositFundRequest depositFundRequest) {
-////Transactions transactions1 = transactionRepository.findTransactionsById(depositFundRequest.getTransactionId());
-////        Account foundAccount = accountRepository.findAccountByBeneficiaryAccountNumber(depositFundRequest.getBeneficiaryAccount());
-//        Transactions transactions = new Transactions();
-//        transactions.setTransactionAmount(depositFundRequest.getTransactionAmount());
-//        transactions.setAccountNumber(depositFundRequest.getBeneficiaryAccount());
-//        transactions.setCurrentBalance(transactions.getCurrentBalance().add(depositFundRequest.getTransactionAmount()));
-//        System.out.println(transactions.getCurrentBalance());
-//        System.out.println(depositFundRequest.getTransactionAmount());
-//        transactionRepository.save(transactions);
-////        return transactions1.getCurrentBalance();
-////        accountRepository.save(foundAccount);
-//
-//            return null;
-//
-//    }
 
 
 //    @Override
