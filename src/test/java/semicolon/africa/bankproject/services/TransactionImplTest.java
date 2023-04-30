@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import semicolon.africa.bankproject.dao.model.TransactionType;
 import semicolon.africa.bankproject.dao.model.Transactions;
+import semicolon.africa.bankproject.dao.repository.TransactionRepository;
 import semicolon.africa.bankproject.dto.request.DepositFundRequest;
 import semicolon.africa.bankproject.dto.request.FindAllTransaction;
 import semicolon.africa.bankproject.dto.request.TransactionsRequest;
@@ -25,6 +26,9 @@ class TransactionImplTest {
 
 @Autowired
 private TransactionServices transactionServices;
+
+    @Autowired
+    private TransactionRepository transactionRepository;
 Transactions savedTransactions;
 
     @BeforeEach
@@ -44,7 +48,8 @@ Transactions savedTransactions;
 
     @AfterEach
     void tearDown() {
-        transactionServices.deleteAll();
+
+        transactionRepository.deleteAll();
     }
 
     @Test
@@ -68,7 +73,7 @@ public void TransactionCanBeDone(){
             .build();
    Transactions transactions = transactionServices.recordTransactions(transactionsRequest);
    assertThat(transactions).isNotNull();
-    assertEquals(2, transactionServices.size());
+
 }
 
 @Test

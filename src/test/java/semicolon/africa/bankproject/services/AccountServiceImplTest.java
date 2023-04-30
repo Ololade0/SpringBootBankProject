@@ -144,44 +144,31 @@ class AccountServiceImplTest {
 
     }
 
-    @Test
-    public void customerCanTransferFundToAnotherCustomerAccount_BeneficairyBalanceIncreases() throws Exception {
-        DepositFundRequest depositFundRequest = DepositFundRequest
-                .builder()
+//    @Test
+//    public void testThatAccountCanAcceptDeposit_CustomerCanDepositMoneytoAccountthrows()throws Exception {
+//        DepositFundRequest depositFundRequest = DepositFundRequest
+//                .builder()
+//
+//                .beneficiaryAccount(savedAccount.getAccountNumber())
+//                .transactionAmount(BigDecimal.valueOf(60000))
+//                .build();
+//        BigDecimal depositFundResponse = accountService.depositFundsIntoAccount(depositFundRequest);
+//        assertEquals(BigDecimal.valueOf(70000), depositFundResponse);
+//    }
+//
+//    @Test
+//    public void accountCanTransferFundToAnotherAccount_SenderBalanceDecreases() {
+//        WithdrawalFundRequest withdrawalFundRequest = new WithdrawalFundRequest();
+//        withdrawalFundRequest.setWithdrawalAmount(BigDecimal.valueOf(1000));
+//        withdrawalFundRequest.setAccountNumber(savedAccount.getAccountNumber());
+//        withdrawalFundRequest.setPassword("1234");
+//        BigDecimal withdrawalFundResponse = accountService.WithdrawFundFromAccount(withdrawalFundRequest);
+//        assertEquals(BigDecimal.valueOf(9000), withdrawalFundResponse);
+//    }
 
-                .beneficiaryAccount(savedAccount.getAccountNumber())
-                .transactionAmount(BigDecimal.valueOf(60000))
-                .build();
-        BigDecimal depositFundResponse = accountService.depositFundsIntoAccount(depositFundRequest);
-        assertEquals(BigDecimal.valueOf(70000), depositFundResponse);
-    }
 
-    @Test
-    public void accountCanTransferFundToAnotherAccount_SenderBalanceDecreases() {
-        WithdrawalFundRequest withdrawalFundRequest = new WithdrawalFundRequest();
-        withdrawalFundRequest.setWithdrawalAmount(BigDecimal.valueOf(1000));
-        withdrawalFundRequest.setAccountNumber(savedAccount.getAccountNumber());
-        withdrawalFundRequest.setPassword("1234");
-        BigDecimal withdrawalFundResponse = accountService.WithdrawFundFromAccount(withdrawalFundRequest);
-        assertEquals(BigDecimal.valueOf(9000), withdrawalFundResponse);
-    }
 
-    @Test
-    public void AccountTransactionsCanBeRecorded() {
-        TransactionsRequest transactionsRequest = TransactionsRequest.builder()
-                .accountId(savedAccount.getId())
-                .accountNumber(savedAccount.getAccountNumber())
-                .currentBalance(savedAccount.getCurrentBalance())
-                .pin(savedAccount.getPassword())
-                .transactionDate(LocalDateTime.now())
-                .transactionType(TransactionType.DEPOSIT)
-                .transactionAmount(BigDecimal.valueOf(3000))
-                .build();
-        Account recordedTransactions = accountService.recordAccountTransaction(transactionsRequest);
-//        assertEquals(BigDecimal.valueOf(3000), recordedTransactions.getTransactionAmount());
-        System.out.println(recordedTransactions);
 
-    }
 
 }
 

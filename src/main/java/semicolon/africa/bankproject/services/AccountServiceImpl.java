@@ -6,36 +6,37 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import semicolon.africa.bankproject.dao.model.Account;
 
-import semicolon.africa.bankproject.dao.model.AccountType;
+import semicolon.africa.bankproject.dao.model.Customer;
 import semicolon.africa.bankproject.dao.model.Transactions;
 import semicolon.africa.bankproject.dao.repository.AccountRepository;
 import semicolon.africa.bankproject.dto.request.*;
+
+
 import semicolon.africa.bankproject.exception.AccountAmountException;
 import semicolon.africa.bankproject.exception.AccountCannotBeFound;
-import semicolon.africa.bankproject.exception.IncorrectPasswordException;
 import semicolon.africa.bankproject.utils.Utils;
 
-
 import java.math.BigDecimal;
-import java.security.SecureRandom;
-import java.util.Objects;
-import java.util.Random;
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Service
 public class AccountServiceImpl implements AccountService {
     @Autowired
     private AccountRepository accountRepository;
+
     @Autowired
     private TransactionServices transactionServices;
+
     @Autowired
     private Utils utils;
 
-    private SecureRandom secureRandom = new SecureRandom();
 
     @Override
     public Account openAccount(OpenAccountRequest openAccountRequest) {
-        String customerAcctNum =  utils.generateCustomerAccountNumber(10);
+        String customerAcctNum = utils.generateCustomerAccountNumber(10);
         Account newAccount = Account.builder()
                 .email(openAccountRequest.getEmail())
                 .phoneNumber(openAccountRequest.getPhoneNumber())
@@ -48,7 +49,7 @@ public class AccountServiceImpl implements AccountService {
                 .currentBalance(openAccountRequest.getBalance())
                 .build();
 
-          return accountRepository.save(newAccount);
+        return accountRepository.save(newAccount);
 
     }
 
@@ -118,7 +119,7 @@ public class AccountServiceImpl implements AccountService {
 
 
     @Override
-    public BigDecimal depositFundsIntoAccount(DepositFundRequest depositFundRequest) {
+    public BigDecimal depositFundsIntoAccount(DepositFundRequest depositFundRequest ) {
         Account foundAccount = accountRepository.findAccountByAccountNumber(depositFundRequest.getBeneficiaryAccount());
         if ((foundAccount != null)) {
             if (depositFundRequest.getTransactionAmount().equals(BigDecimal.valueOf(0))) {
@@ -137,32 +138,25 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public BigDecimal WithdrawFundFromAccount(WithdrawalFundRequest withdrawalFundRequest) {
         Account foundAccount = accountRepository.findAccountByAccountNumber(withdrawalFundRequest.getAccountNumber());
-        if ( foundAccount != null && foundAccount.getPassword().equals(withdrawalFundRequest.getPassword())) {
+        if (foundAccount != null && foundAccount.getPassword().equals(withdrawalFundRequest.getPassword())) {
             foundAccount.setCurrentBalance(foundAccount.getCurrentBalance().subtract(withdrawalFundRequest.getWithdrawalAmount()));
             accountRepository.save(foundAccount);
             return foundAccount.getCurrentBalance();
-        }
-        else {
+        } else {
             throw new AccountCannotBeFound(AccountCannotBeFound.AccountCannotBeFound(withdrawalFundRequest.getAccountNumber(), withdrawalFundRequest.getPassword()));
         }
 
-        }
-
-    @Override
-    public Account recordAccountTransaction(TransactionsRequest transactionsRequest) {
-    Transactions recordedTranscations = transactionServices.recordTransactions(transactionsRequest);
-    Account foundAccount = accountRepository.findAccountById(transactionsRequest.getAccountId());
-    if(foundAccount != null){
-        foundAccount.getTransactions().add(recordedTranscations);
-        transactionServices.recordTransactions(transactionsRequest);
-      return   accountRepository.save(foundAccount);
-    }
-    else {
-        throw new AccountCannotBeFound(AccountCannotBeFound.AccountCannotBeFound(transactionsRequest.getAccountId()));
     }
 
-    }
+
+
 }
+
+
+
+
+
+
 
 
 

@@ -37,29 +37,13 @@ public class BankServiceImpl implements BankService {
 
     @Override
     public BankRegisterResponse registerBank(BankRegisterRequest bankRegisterRequest) throws BankNameAlreadyExistException {
-//        Bank foundBank = bankRepository.findBankByBankName(bankRegisterRequest.getBankName());
-//        if (foundBank != null) {
-//            throw new BankNameAlreadyExistException();
-//        }
-//        else {
-        List<Customer> customerList = new ArrayList<>();
-        for (int i = 0; i < bankRegisterRequest.getCustomerRegisterRequestList().size() ; i++) {
-            Customer customer = new Customer();
-            customer.setCustomerId(String.valueOf(i));
-            customer.setCustomerGender(bankRegisterRequest.getCustomerRegisterRequestList().get(i).getCustomerGender());
-            customer.setCustomerName(bankRegisterRequest.getCustomerRegisterRequestList().get(i).getCustomerName());
-            customer.setCustomerAge(bankRegisterRequest.getCustomerRegisterRequestList().get(i).getCustomerAge());
-            customer.setCustomerEmail(bankRegisterRequest.getCustomerRegisterRequestList().get(i).getCustomerEmail());
-            customer.setCustomerAccountNumber(bankRegisterRequest.getCustomerRegisterRequestList().get(i).getCustomerAccountNumber());
-            customer.setCustomerId(bankRegisterRequest.getCustomerRegisterRequestList().get(i).getCustomerId());
-            Customer customer1 = customerService.saveNewCustomer(customer);
-            customerList.add(customer1);
-
-        }
+        Bank foundBank = bankRepository.findBankByBankName(bankRegisterRequest.getBankName());
+        if (foundBank != null) {
+            throw new BankNameAlreadyExistException();
+        } else {
             Bank bank = new Bank();
             bank.setBankName(bankRegisterRequest.getBankName());
             bank.setBankLocation(bankRegisterRequest.getBanklocation());
-            bank.setCustomers(customerList);
             Bank savedBank = bankRepository.save(bank);
 
             BankRegisterResponse bankRegisterResponse = new BankRegisterResponse();
@@ -67,6 +51,8 @@ public class BankServiceImpl implements BankService {
             bankRegisterResponse.setBankId(savedBank.getId());
             bankRegisterResponse.setBankLocation(savedBank.getBankLocation());
             return bankRegisterResponse;
+
+        }
 
     }
 
@@ -133,7 +119,7 @@ public class BankServiceImpl implements BankService {
         Bank foundBank = bankRepository.findBankById(customerRegisterRequest.getBankId());
         if (foundBank != null) {
             foundBank.getCustomers().add(customer);
-//            bankRepository.save(foundBank);
+            bankRepository.save(foundBank);
         }
         CustomerRegisterResponse customerRegisterResponse = new CustomerRegisterResponse();
         customerRegisterResponse.setMessage("Customer successfully registered");
